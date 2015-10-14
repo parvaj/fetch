@@ -3,7 +3,6 @@
 
                     <?php
                         if(!empty($products)){
-
                             $groupId="";
                             foreach($products as $product ){
                                 if($groupId==""){
