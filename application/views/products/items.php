@@ -2,7 +2,8 @@
                 <div class="row">
 
                     <?php
-                        if(!empty($products)){
+                        if(!empty($products))
+                        {
                             $groupId="";
                             foreach($products as $product ){
                                 if($groupId==""){
