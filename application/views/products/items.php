@@ -1,5 +1,3 @@
-<header class="intro" style="margin-top:180px;">
-        <div class="intro-body">
             <div class="container">
                 <div class="row">
 
@@ -42,6 +40,3 @@
                     ?>
                 </div>
             </div>
-        </div>
-
-</header>
