@@ -439,7 +439,11 @@ a:focus {
     text-align: center;
 
 }
-
+.img-center{
+    margin: 0 auto;
+}
+.font-bold {
+    font-weight: bold;}
 .follow-fetch{
     font-family:Pacifico ;
     font-size: 36px;

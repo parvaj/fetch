@@ -1,42 +1,90 @@
-            <div class="container">
+<div class="container-fluid" style="margin: 15px 0 0;">
+    <?php
+    if(!empty($products)) {
+        $groupId="";
+        foreach ($products as $product) {
+            if ($groupId == "") {
+                $groupId = $product['group_id']
+
+                ?>
+                <div class="container" >
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-8">
                 <div class="row">
+                <div class="col-md-3">
 
-                    <?php
-                        if(!empty($products))
-                        {
-                            $groupId="";
-                            foreach($products as $product ){
-                                if($groupId==""){
-                                    $groupId= $product['group_id']
+                    <a href="<?php echo base_url() . "product/item/" . $product['group_id']; ?>">
+                        <img class="img-responsive img-center" src="<?php echo base_url();?>img/products1.jpg"
+                             alt="products for fetchdelivers">
+                    </a>
 
-                    ?>
-                                    <div class="col-md-7">
-                                        <div><?php echo $product['manufacturer_name']; ?></div>
-                                        <p><?php echo $product['EXTENDED']; ?></p>
-                                        <p><?php echo $product['ingredients']; ?></p>
-                                    </div>
-                                    <div class="col-md-5">
+                    <div class="p-ratings">
+                        <img src="<?php echo base_url();?>img/rating0.png"
+                             alt="products ratings for fetchdelivers">
+                    </div>
+                    <div class=""> product rating</div>
+                </div>
+                <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-7 text-left" >
+                        <div class=""> <?php echo $product['product_name']; ?> </div>
+                        <div class=""> <?php echo $product['manufacturer_name']; ?> </div>
+                        <div class="font-bold"> Available Delivery Date: <?php echo $nextDelivery; ?></div>
+                    </div>
+                    <div class="col-md-5 text-right">
+                        <div class="our-price">OUR PRICE <span
+                                style="color:#FE5B00;">$<?php echo number_format($product['price'], 2);?> </span>
+                        </div>
+                        <button type="submit" name="BUY" id="btnbuy_<?php echo $product['group_id'];?>"
+                                value="ADD TO CART" class="btn-add">ADD TO CART
+                        </button>
+                    </div>
+                </div>
+                <div class="row font-bold" style="border-bottom: 2px solid #fbb03b;">
+                    <div class="col-md-4 text-left">
+                        Options
+                    </div>
+                    <div class="col-md-4 text-center">
+                        Per Lbs
+                    </div>
+                    <div class="col-md-4 text-right">
+                        Price
+                    </div>
+                </div>
+            <?php }
 
-                                        <img src="" style="width: 320px; height: 225px; border: 1px solid #008080">
-                                        <div>next delivery: <?php echo $nextDelivery; ?></div>
-                                     </div>
-                                    <div class="col-md-12">
-                                        <div><?php echo $product['product_name']; ?></div>
-                                        <h2>variant</h2>
-                    <?php
-                                }
-                    ?>
-                                        <div>
-                                            <?php echo $product['weight']." ".$product['unit'];?> &nbsp;&nbsp;&nbsp;&nbsp;  Price: $<?php echo number_format($product['price'],2);?>
-                                        </div>
-                    <?php
-                            }
-                    ?>
-                                        <div><button name="buy">Add To Cart</button></div>
-                                    </div>
+        }
 
-                    <?php
-                        }
-                    ?>
+            foreach ($products as $productDetails) {
+
+
+
+        ?>
+
+                            <div class="row">
+                                <div class="col-md-4 text-left">
+                                   <?php echo  $productDetails['weight'] ;?>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                   <?php echo $productDetails['unit'];?>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    $<?php echo number_format($productDetails['price'],2);?>
+                                </div>
+                            </div>
+                  <?php  } ?>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+
                 </div>
             </div>
+    <?php
+        }
+    ?>
+</div>

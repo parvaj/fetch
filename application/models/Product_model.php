@@ -83,7 +83,7 @@ class Product_model extends CI_Model{
     }
     public function get_products($departmentId, $classId, $brandId=null, $subClassId=null)
     {
-        $sql = "select
+     echo    $sql = "select
                     distinct products.leadtime,
                     products.fetch_likes,
                     combos.manufacturer_id,
@@ -110,8 +110,8 @@ class Product_model extends CI_Model{
                     products.product_status = 1
                     and combos.department_id='".$departmentId."'
                     ".($classId!=null && $classId>2? " and combos.class_id='".$classId."'":"")."
-                     ".($brandId!=null && $brandId>2?" and combos.manufacturer_id in (".$brandId.")":"")."
-                     ".($subClassId!=null?" and combos.subclass_id  in (".$subClassId.")":"")."
+                    ".($brandId!=null && $brandId>2?" and combos.manufacturer_id in (".$brandId.")":"")."
+                    ".($subClassId!=null?" and combos.subclass_id  in (".$subClassId.")":"")."
 
                 group by
                     products.product_id
@@ -121,7 +121,7 @@ class Product_model extends CI_Model{
     }
     public function get_items($groupId)
     {
-        $sql = "SELECT
+       $sql = "SELECT
                     products.product_id,
                     EXTENDED ,
                     ingredients,

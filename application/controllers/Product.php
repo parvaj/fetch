@@ -84,6 +84,7 @@ class Product extends CI_Controller {
             $data["urlSegment"] = $urls;
             $data["departments"]=$department;
             $data["products"]=$products;
+
             $data["classes"]= $classes;
             $data["subClasses"]= $subClasses;
             $data["brands"]= $brands;
