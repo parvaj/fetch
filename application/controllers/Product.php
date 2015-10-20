@@ -53,7 +53,7 @@ class Product extends CI_Controller {
             $classId = $this->security->xss_clean($this->input->post('category'));
             $brandId = $this->security->xss_clean($this->input->post('brand'));
             $subClassId = $this->security->xss_clean($this->input->post('petType'));
-            echo $subClassId."--" .$brandId." ".$departmentId." ".$classId;
+           // echo $subClassId."--" .$brandId." ".$departmentId." ".$classId;
         }
 
         //$uri
@@ -75,17 +75,22 @@ class Product extends CI_Controller {
 			
 			if($classId != null ){
                 $subClasses = $this->Product_model->get_subclasses($departmentId,$classId,$brandId);
-                $brands = $this->Product_model->get_manufacturers($departmentId,$classId);
-            }
 
+            }
+            $brands = $this->Product_model->get_manufacturers($departmentId,$classId);
             $classes = $this->Product_model->get_classes($departmentId);
             $products = $this->Product_model->get_products($departmentId, $classId, $brandId, $subClassId);
-
+            $productList= array();
+            $i=0;
+            foreach($products as $product){
+                $productList[$i] = array_merge($product,array("nextDeliveryDate"=>$this->fetchfunctions->getNextDeliveryDate($product['group_id'],$product['leadtime'])));
+                $i++;
+            }
 
             $data["urlSegment"] = $urls;
             $data["departments"]=$department;
-            $data["products"]=$products;
-
+            $data["products"]=$productList;
+            $data["departmentName"] = $this->fetchfunctions->getValue("department_name","department","department_id=".$departmentId);
             $data["classes"]= $classes;
             $data["subClasses"]= $subClasses;
             $data["brands"]= $brands;

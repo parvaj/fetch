@@ -48,7 +48,7 @@ class Product_model extends CI_Model{
         $query = $this->db->query($sql);
         return $query->result_array();
     }
-    public function get_manufacturers($departmentId,$classId)
+    public function get_manufacturers($departmentId,$classId=null)
     {
         $sql = "select
                     distinct manufacturer.manufacturer_id,manufacturer.manufacturer_name
@@ -57,13 +57,13 @@ class Product_model extends CI_Model{
                 where
                     combos.department_id='".$departmentId."'
                     and combos.manufacturer_id=manufacturer.manufacturer_id
-                    and combos.class_id='".$classId."'
+                    ".($classId!=null && $classId>2?"  and combos.class_id='".$classId."'":"")."
                 order by
                     manufacturer_name";
         $query = $this->db->query($sql);
         return $query->result_array();
     }
-    public function get_subclasses($departmentId,$classId,$brandId=null)
+    public function get_subclasses($departmentId,$classId=null,$brandId=null)
     {
         $sql = "select
                     distinct subclass.subclass_id,subclass.subclass_name
@@ -73,7 +73,6 @@ class Product_model extends CI_Model{
                     combos.subclass_id=subclass.subclass_id
                     and subclass.subclass_id>1
                     and combos.department_id='".$departmentId."'
-
                     and combos.class_id='".$classId."'
                    ".($brandId!=null && $brandId>2?" and combos.manufacturer_id in (".$brandId.")":"")."
                 order by
@@ -85,7 +84,8 @@ class Product_model extends CI_Model{
     {
         $sql = "select
 
-                    distinct products.leadtime,products.product_id,
+                    distinct products.leadtime,
+                    products.product_id,
                     products.fetch_likes,
                     combos.manufacturer_id,
                     products.group_id,
