@@ -77,9 +77,9 @@
                         if($groupId!=""){
             ?>
 
-                <div class="row" style="margin-top:5px;">
+                <div class="row" style="margin:8px 0px;">
                     <div class="col-md-3 text-left">
-                        Save 2.5% with <br> recurring order
+                        Saves 2.5% with <br> recurring order
                     </div>
                     <div class="col-md-3 text-center">
                         Recurring Order
@@ -97,14 +97,22 @@
                         Quantity  <input type="text" class="p-qty" name="productQty" id="number_qty" value="1">
                     </div>
                     <script language="javascript" type="text/javascript">
-                       // commonCombo(<?php echo $groupId; ?>);
-                       function addPrice(pid){
-                           var price = jQuery( "span#pprice"+pid ).html();
-                           jQuery('#currentPrice'+<?php echo $groupId ;?>).text('$'+price);
-                           jQuery('input#number_qty'+pid).val("1");
+                       // commonCombo(<?php //echo $groupId; ?>);
+                       function addPrice(pid){ //alert(pid);
+                           var price = $( "span#pprice"+pid ).html();
+                           alert(price);
+                            $("span#currentPrice_"+<?php echo $groupId;?>).text('$'+price);
+                         // alert(vv);
+                           //jQuery('input#number_qty'+pid).val("1");
 
                        }
-                       addPrice(<?php echo $groupId ;?>);
+                       //addPrice(<?php //echo $product['product_id'] ;?>);
+                       $(function(){
+                           $("#frequency_<?php echo $product['group_id']; ?>").sexyCombo({
+                               skin: "frequency",
+                               triggerSelected: true
+                           });
+                       });
                     </script>
                 </div>
 
@@ -117,13 +125,13 @@
 
 
             ?>
-                        <div class="container" >
+                        <div class="container">
                         <div class="col-md-1">
 
                         </div>
                         <div class="col-md-10" style="margin-top: 5px; padding-top:5px;">
                         <div class="row" style="border: 1px #c0c0c0 solid;margin-top: 5px; padding-top:5px;">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <a href="<?php echo base_url() . "product/item/" . $product['group_id']; ?>">
                                 <img class="img-responsive img-center"
                                      src="http://www.fetchdelivers.com/images/<?php echo $product['img']?>"
@@ -136,16 +144,15 @@
                             </div>
                             <div class=""> PRODUCT RATING</div>
                         </div>
-                        <div class="col-md-10">
-                            <div class="row">
+                        <div class="col-md-9">
+                            <div class="row" style="min-height:60px;">
                                 <div class="col-md-6 text-left" >
                                     <div class="font-bold"> <?php echo $product['manufacturer_name']; ?> </div>
                                     <div class="font-bold">   <?php echo $product['product_name']; ?> </div>
                                     <div class="font-bold delivery-date"> <span style="color:#fbb03b;">Next available delivery: <?php echo $product['nextDeliveryDate'];?> </span><span style="color:#FE5B00;"><?php //echo $nextDelivery; ?></span></div>
                                 </div>
                                 <div class="col-md-6 text-right" >
-                                    <div class="our-price">OUR PRICE <span
-                                        <span id="currentPrice_<?php echo $product['group_id']; ?>" style="color:#FE5B00;"> <?php echo $product['price']; ?> </span>
+                                    <div class="our-price">OUR PRICE <span id="currentPrice_<?php echo $product['group_id']; ?>" style="color:#FE5B00;">  </span>
                                     </div>
                                     <button type="submit" name="BUY"
                                             id="btnbuy_<?php echo $product['group_id']; ?>"
@@ -169,9 +176,9 @@
                         }
 
             ?>
-                        <div class="row"  style="border-bottom: 1px solid gainsboro;margin-top:5px;">
+                        <div class="row"  style="border-bottom: 1px solid gainsboro;margin:5px 5px;">
                             <div class="col-md-4 text-left">
-                                <input type="radio" name="productid" id="productid_<?php echo $product['product_id'];?>" value="<?php echo $product['product_id'];?>" <?php  echo ($groupId == $product['product_id']?"checked":"");?> onclick="addPrice(<?php echo $product['product_id'] ;?>)" />
+                                <input type="radio" name="productid_<?php echo $product['group_id'];?>" id="productid_<?php echo $product['group_id'];?>" value="<?php echo $product['product_id'];?>" <?php  echo ($groupId == $product['product_id']?"checked":"");?> onclick="addPrice(<?php echo $product['product_id'] ;?>)" />
                                 <?php echo  $product['weight'] ." ".$product['unit'] ;?>
                             </div>
                             <div class="col-md-4 text-center">
@@ -186,7 +193,7 @@
             <?php
                 }
             ?>
-                            <div class="row" style="margin-top:5px;">
+                            <div class="row font-bold" style="margin:8px 0px;">
                                 <div class="col-md-3 text-left">
                                     Save 2.5% with <br> recurring order
                                 </div>
@@ -206,19 +213,12 @@
                                     Quantity  <input type="text" class="p-qty" name="productQty" id="number_qty_<?php echo $groupId; ?>" value="1">
                                 </div>
                                 <script language="javascript" type="text/javascript">
-                                    $(function(){ alert('heloooo');
-                                        $("#frequency_<?php echo $groupId;?>").sexyCombo({
-                                            skin: "frequency",
-                                            triggerSelected: true
+                                    $(function(){
+                                        $("#frequency_<?php echo $product['group_id']; ?>").sexyCombo({
+                                        skin: "frequency",
+                                        triggerSelected: true
                                         });
                                     });
-                                    function addPrice(pid){
-                                        var price = jQuery( "span#pprice"+pid ).html();
-                                        jQuery('#currentPrice'+<?php echo $groupId ;?>).text('$'+price);
-                                        jQuery('input#number_qty'+pid).val("1");
-
-                                    }
-                                    addPrice(<?php echo $groupId ;?>);
                                 </script>
                             </div>
                     </div>

@@ -16,11 +16,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/grayscale.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>font-awesome/css/font-awesome.min">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/frequency/sexy-combo.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/frequency/frequency.css">
     <!-- Custom CSS -->
-
+    <script type = "text/javascript" src = "//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js" ></script>
     <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -274,6 +274,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&sensor=false"></script>
     <!--script type='text/javascript' src="<?php //echo base_url(); ?>js/jquery.sexy-combo-min.js"></script-->
     <script type='text/javascript' src="<?php echo base_url(); ?>js/grayscale.js"></script>
+
     <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery-1.3.2.min.js"></script>
     <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery.sexy-combo.js"></script>
 </body>

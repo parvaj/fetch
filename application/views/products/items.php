@@ -104,9 +104,9 @@ if(!empty($products)) {
 </div>
     <script type="text/javascript">
         function addPrice(pid){
-            var price = jQuery( "span#pprice"+pid ).html();
-            jQuery('#currentPrice').text('$'+price);
-            jQuery('input#number_qty').val("1");
+            var price = $( "span#pprice"+pid ).html();
+            $('#currentPrice').text('$'+price);
+            $('input#number_qty').val("1");
 
         }
         addPrice(<?php echo $productId ;?>);
