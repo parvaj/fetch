@@ -59,6 +59,18 @@ function commonCombo(id){
         triggerSelected: true
     });
 }
+function addPrice(productId,groupId)
+{
+    var price = $( "#pprice"+productId ).html();
+    $("#currentPrice_"+groupId).html('$'+price);
+}
+function loadCustomeCombo(groupId)
+{
+    $("#frequency_"+groupId).sexyCombo({
+        skin: "frequency",
+        triggerSelected: true
+    });
+}
 
 $(document).ready(function(){
     $("#loginButton").click(function(){
