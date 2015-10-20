@@ -1,22 +1,14 @@
-            <?php
-                if( $urlSegment['deptSection']==3 )
-                    $deptName = 'Dog';
-                else if($urlSegment['deptSection']==2)
-                    $deptName = 'Cat';
-                else if($urlSegment['deptSection']==1)
-                    $deptName = 'Bird';
-            ?>
+
 
             <div class="container-fluid" style="margin: 15px 0 0;">
                 <div class="container">
                     <div class="col-md-6">
                         <form method="post" action="<?php echo base_url();?>product/searchproduct/" id="">
-                        <div class="scrolling-font"> <?php echo $deptName; ?> Stuff </div>
+                        <div class="scrolling-font"> <?php echo $departmentName; ?> Stuff </div>
                         <div class="home-text3"> select a category or simply browse this <br> page to find the items you are looking for!</div>
                         <div class="row" style="margin: 10px 0 10px;">
                             <div class="col-md-4 text-center">
                                 <select name="brand" id="brand">
-
                                 <?php
 
                                      foreach($brands as $brand ){ ?>
@@ -149,7 +141,7 @@
                                 <div class="col-md-6 text-left" >
                                     <div class="font-bold"> <?php echo $product['manufacturer_name']; ?> </div>
                                     <div class="font-bold">   <?php echo $product['product_name']; ?> </div>
-                                    <div class="font-bold delivery-date"> <span style="color:#fbb03b;">Next available delivery: </span><span style="color:#FE5B00;"><?php //echo $nextDelivery; ?></span></div>
+                                    <div class="font-bold delivery-date"> <span style="color:#fbb03b;">Next available delivery: <?php echo $product['nextDeliveryDate'];?> </span><span style="color:#FE5B00;"><?php //echo $nextDelivery; ?></span></div>
                                 </div>
                                 <div class="col-md-6 text-right" >
                                     <div class="our-price">OUR PRICE <span

@@ -187,6 +187,22 @@ class Fetchfunctions {
         return $newDate;
     }
 
+    public function getValue($columnname,$tablename,$condition)
+    {
+        $CI =& get_instance();
+        $CI->load->database();
+        $resultValue="";
+        $queryString="SELECT ".$columnname." as colamnName FROM ".$tablename. " WHERE ". (empty($condition)? " 1 ": $condition) ;
+        $query = $CI->db->query($queryString);
+        if($query->num_rows()>0){
+            $row = $query->row_array();
+            $resultValue = $row['colamnName'];
+
+        }
+
+        return $resultValue;
+    }
+
     public function listDeliveryDate($leadTime=3, $frequency_id=1)
     {
         $CI =& get_instance();
