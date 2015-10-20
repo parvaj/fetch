@@ -32,6 +32,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script-->
     <![endif]-->
 
+    <!-- jQuery -->
+    <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery.js"></script>
+    <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
+    <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery.easing.min.js"></script>
+    <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&sensor=false"></script>
+    <!--script type='text/javascript' src="<?php //echo base_url(); ?>js/jquery.sexy-combo-min.js"></script-->
+    <script type='text/javascript' src="<?php echo base_url(); ?>js/grayscale.js"></script>
+
+    <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery-1.3.2.min.js"></script>
+    <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery.sexy-combo.js"></script>
+
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 <!-- Navigation -->
@@ -265,17 +277,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- /.navbar-collapse -->
 
 </footer>
-<!-- jQuery -->
 
-    <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery.js"></script>
-    <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
-    <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery.easing.min.js"></script>
-    <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&sensor=false"></script>
-    <!--script type='text/javascript' src="<?php //echo base_url(); ?>js/jquery.sexy-combo-min.js"></script-->
-    <script type='text/javascript' src="<?php echo base_url(); ?>js/grayscale.js"></script>
 
-    <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery-1.3.2.min.js"></script>
-    <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery.sexy-combo.js"></script>
+
 </body>
 </html>
