@@ -156,7 +156,7 @@
         }
 
 ?>
-                        <div class="row"  style="border-bottom: 1px solid gainsboro;margin:5px 5px;">
+                        <div class="row" style="border-bottom: 2px solid gainsboro;margin:5px 5px;">
                             <div class="col-md-4 text-left">
                                 <input type="radio" name="productid_<?php echo $product['group_id'];?>" id="productid_<?php echo $product['group_id'];?>" value="<?php echo $product['product_id'];?>" <?php  echo ($groupId == $product['product_id']?"checked":"");?> onclick="addPrice(<?php echo $product['product_id'] ;?>,<?php echo $product['group_id'] ;?>)" />
                                 <?php echo  $product['weight'] ." ".$product['unit'] ;?>
