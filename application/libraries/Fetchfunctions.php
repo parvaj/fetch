@@ -187,6 +187,22 @@ class Fetchfunctions {
         return $newDate;
     }
 
+    public function getValue($columnname,$tablename,$condition)
+    {
+        $CI =& get_instance();
+        $CI->load->database();
+        $resultValue="";
+        $queryString="SELECT ".$columnname." as colamnName FROM ".$tablename. " WHERE ". (empty($condition)? " 1 ": $condition) ;
+        $query = $CI->db->query($queryString);
+        if($query->num_rows()>0){
+            $row = $query->row_array();
+            $resultValue = $row['colamnName'];
+
+        }
+
+        return $resultValue;
+    }
+
     public function listDeliveryDate($leadTime=3, $frequency_id=1)
     {
         $CI =& get_instance();
@@ -235,10 +251,52 @@ class Fetchfunctions {
     {
         $CI =& get_instance();
         $CI->load->database();
-        $sql = "SELECT frequency_id, frequency FROM  frequency order by list_order";
+        $sql = "SELECT frequency_id, frequency ,list_order FROM  frequency order by list_order";
         $query = $CI->db->query($sql);
         return $query->result_array();
     }
 
+    public function productDetails($groupId){
+        $sql = "SELECT
+                    products.product_id,
+                    EXTENDED ,
+                    ingredients,
+                    leadtime,
+                    analysis,
+                    upc,
+                    group_id,
+                    weight,
+                    unit,
+                    product_name,
+                    discount_amount,
+                    sales_price_type,
+                    sales_price_applicable,
+                    sales_price,
+                    sales_price_for_duration,
+                    start_date,
+                    end_date,
+                    sales_offer_applicable,
+                    total_sold_limit,
+                    sales_offer_type,
+                    manufacturer_name,
+                    manufacturer.manufacturer_id,
+                    price,
+                    class_id,
+                    img
+                FROM
+                    products, combos, manufacturer, price
+                WHERE
+                    products.group_id =  '".$groupId."'
+                    AND combos.product_id = products.group_id
+                    AND combos.manufacturer_id = manufacturer.manufacturer_id
+                    AND price.product_id = products.product_id
+                GROUP BY
+                    products.product_id
+                order by
+                    price";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+
+    }
 
 }

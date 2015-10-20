@@ -13,6 +13,7 @@ class Checkout extends CI_Controller{
         $this->load->helper('url');
         $this->load->library('fetchfunctions');
         $this->load->model('Checkout_model');
+        $this->fetchfunctions->getSessionID();
     }
 
     public function index(){
@@ -26,12 +27,12 @@ class Checkout extends CI_Controller{
             $data['order_no'] = $this->Checkout_model->getOrderNo($customerId);
         else
             $data['order_id'] = $this->session->userdata('sessionNumber');
-
+        echo $this->session->userdata('sessionNumber');
         $data['product_id'] = $this->input->post('productid');
         $data['price']= $this->Checkout_model->getProductPrice($data['product_id']);
-        $data['price'] = $this->input->post('productPrice');
+        //$data['price'] = $this->input->post('productPrice');
         $data['qty'] = $this->input->post('productQty');
-        $data['frequency_id'] =$this->input->post('productFrequency');
+        $data['frequency_id'] =$this->input->post('frequency');
         $data['manufacturer_id'] = $this->input->post('manufacturerId');
         $data['is_deal'] = '-1';
         $this->Checkout_model->additemoncart($data);

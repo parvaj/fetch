@@ -399,7 +399,7 @@ a:focus {
     font: 11px/ 19px tahoma, arial, helvetica, sans-serif;
     vertical-align: bottom;
     border-left: 3px solid #FE5B00;
-    width: 185px;
+    width: 100%;
     padding-top: 0px;
     border-bottom: 3px solid #FE5B00;
     top: 0px;
@@ -439,7 +439,11 @@ a:focus {
     text-align: center;
 
 }
-
+.img-center{
+    margin: 0 auto;
+}
+.font-bold {
+    font-weight: bold;}
 .follow-fetch{
     font-family:Pacifico ;
     font-size: 36px;
@@ -447,7 +451,15 @@ a:focus {
     text-transform: none;
     margin: -20px 0 0;
 }
-
+.p-qty{
+    width: 40%;
+    border-radius: 8px;
+    border: 3px solid #fcb03b;
+    text-align: right;
+}
+.delivery-date{
+      font-size:11px;
+}
 .intro {
     display: table;
     width: 100%;
@@ -459,7 +471,29 @@ a:focus {
     background-size: cover;
     -o-background-size: cover;
 }
-
+input[type='radio'] {
+    -webkit-appearance: none;
+    padding: 0px;
+    width: 14px;
+    height: 13px;
+    border: 2px solid #fcb03b;
+    border-radius: 50%;
+    outline: none;
+    box-shadow: 0 0 5px 0px #fcb03b inset;
+}
+input[type='radio']:checked:before {
+    background: #fcb03b;
+    width: 12px;
+    height: 11px;
+    margin: -1px;
+}
+input[type='radio']:before {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 60%;
+    border-radius: 50%;
+}
 .intro .intro-body {
     display: table-cell;
     vertical-align: middle;

@@ -48,7 +48,7 @@ class Product_model extends CI_Model{
         $query = $this->db->query($sql);
         return $query->result_array();
     }
-    public function get_manufacturers($departmentId,$classId)
+    public function get_manufacturers($departmentId,$classId=null)
     {
         $sql = "select
                     distinct manufacturer.manufacturer_id,manufacturer.manufacturer_name
@@ -57,13 +57,13 @@ class Product_model extends CI_Model{
                 where
                     combos.department_id='".$departmentId."'
                     and combos.manufacturer_id=manufacturer.manufacturer_id
-                    and combos.class_id='".$classId."'
+                    ".($classId!=null && $classId>2?"  and combos.class_id='".$classId."'":"")."
                 order by
                     manufacturer_name";
         $query = $this->db->query($sql);
         return $query->result_array();
     }
-    public function get_subclasses($departmentId,$classId,$brandId=null)
+    public function get_subclasses($departmentId,$classId=null,$brandId=null)
     {
         $sql = "select
                     distinct subclass.subclass_id,subclass.subclass_name
@@ -73,7 +73,6 @@ class Product_model extends CI_Model{
                     combos.subclass_id=subclass.subclass_id
                     and subclass.subclass_id>1
                     and combos.department_id='".$departmentId."'
-
                     and combos.class_id='".$classId."'
                    ".($brandId!=null && $brandId>2?" and combos.manufacturer_id in (".$brandId.")":"")."
                 order by
@@ -84,7 +83,9 @@ class Product_model extends CI_Model{
     public function get_products($departmentId, $classId, $brandId=null, $subClassId=null)
     {
         $sql = "select
+
                     distinct products.leadtime,
+                    products.product_id,
                     products.fetch_likes,
                     combos.manufacturer_id,
                     products.group_id,
@@ -94,6 +95,7 @@ class Product_model extends CI_Model{
                     products.ingredients,
                     products.analysis,
                     products.upc,
+                    products.weight,
                     products.unit,
                     products.img,
                     price.price,
@@ -101,7 +103,7 @@ class Product_model extends CI_Model{
                     manufacturer.manufacturer_id
                 from
                     combos
-                    inner join products on combos.product_id=products.product_id
+                    inner join products on combos.product_id=products.group_id
                     inner join price on price.product_id=products.product_id
                     left join items on products.product_id=items.product_id
                     left join products_keywords on products_keywords.product_id=combos.product_id
@@ -110,18 +112,20 @@ class Product_model extends CI_Model{
                     products.product_status = 1
                     and combos.department_id='".$departmentId."'
                     ".($classId!=null && $classId>2? " and combos.class_id='".$classId."'":"")."
-                     ".($brandId!=null && $brandId>2?" and combos.manufacturer_id in (".$brandId.")":"")."
-                     ".($subClassId!=null?" and combos.subclass_id  in (".$subClassId.")":"")."
+                    ".($brandId!=null && $brandId>2?" and combos.manufacturer_id in (".$brandId.")":"")."
+                    ".($subClassId!=null?" and combos.subclass_id  in (".$subClassId.")":"")."
 
                 group by
                     products.product_id
+                order by
+                    products.group_id,products.product_id
                 limit 10";
         $query = $this->db->query($sql);
         return $query->result_array();
     }
     public function get_items($groupId)
     {
-        $sql = "SELECT
+       $sql = "SELECT
                     products.product_id,
                     EXTENDED ,
                     ingredients,
@@ -155,7 +159,9 @@ class Product_model extends CI_Model{
                     AND combos.manufacturer_id = manufacturer.manufacturer_id
                     AND price.product_id = products.product_id
                 GROUP BY
-                    products.product_id";
+                    products.product_id
+                order by
+                    price";
         $query = $this->db->query($sql);
         return $query->result_array();
     }
