@@ -1,5 +1,3 @@
-
-
             <div class="container-fluid" style="margin: 15px 0 0;">
                 <div class="container">
                     <div class="col-md-6">
