@@ -81,6 +81,7 @@ class Product extends CI_Controller {
             $classes = $this->Product_model->get_classes($departmentId);
             $products = $this->Product_model->get_products($departmentId, $classId, $brandId, $subClassId);
 
+
             $data["urlSegment"] = $urls;
             $data["departments"]=$department;
             $data["products"]=$products;
@@ -90,6 +91,7 @@ class Product extends CI_Controller {
             $data["brands"]= $brands;
             $data['username'] = array('id' => 'username', 'name' => 'username');
             $data['password'] = array('id' => 'password', 'name' => 'password');
+            $data['frequency'] =  $this->fetchfunctions->frequencyList();
 
             /*  update order number and cust id */
             $customerId = $this->session->userdata('customerId');
@@ -117,6 +119,7 @@ class Product extends CI_Controller {
             $data["products"]= $items;
             $data['username'] = array('id' => 'username', 'name' => 'username');
             $data['password'] = array('id' => 'password', 'name' => 'password');
+            $data['frequency'] =  $this->fetchfunctions->frequencyList();
 
             $customerId = $this->session->userdata('customerId');
             $orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');

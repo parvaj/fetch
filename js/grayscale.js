@@ -52,6 +52,14 @@ function showLoginForm(){
     $(".fetch-login").toggle();
 }
 
+function commonCombo(id){
+    alert("hi");
+    $("#frequency_"+id).sexyCombo({
+        skin: "frequency",
+        triggerSelected: true
+    });
+}
+
 $(document).ready(function(){
     $("#loginButton").click(function(){
        //  $('.fetch-login').css('display','block');
@@ -82,6 +90,13 @@ $(function(){
 
 $(function(){
     $("#petType").sexyCombo({
+        skin: "frequency",
+        triggerSelected: true
+    });
+});
+
+$(function(){
+    $("#frequency").sexyCombo({
         skin: "frequency",
         triggerSelected: true
     });

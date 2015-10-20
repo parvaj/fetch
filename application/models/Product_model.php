@@ -83,8 +83,9 @@ class Product_model extends CI_Model{
     }
     public function get_products($departmentId, $classId, $brandId=null, $subClassId=null)
     {
-     echo    $sql = "select
-                    distinct products.leadtime,
+        $sql = "select
+
+                    distinct products.leadtime,products.product_id,
                     products.fetch_likes,
                     combos.manufacturer_id,
                     products.group_id,
@@ -94,6 +95,7 @@ class Product_model extends CI_Model{
                     products.ingredients,
                     products.analysis,
                     products.upc,
+                    products.weight,
                     products.unit,
                     products.img,
                     price.price,
@@ -101,7 +103,7 @@ class Product_model extends CI_Model{
                     manufacturer.manufacturer_id
                 from
                     combos
-                    inner join products on combos.product_id=products.product_id
+                    inner join products on combos.product_id=products.group_id
                     inner join price on price.product_id=products.product_id
                     left join items on products.product_id=items.product_id
                     left join products_keywords on products_keywords.product_id=combos.product_id
@@ -115,6 +117,8 @@ class Product_model extends CI_Model{
 
                 group by
                     products.product_id
+                order by
+                    products.group_id,products.product_id
                 limit 10";
         $query = $this->db->query($sql);
         return $query->result_array();
@@ -155,7 +159,9 @@ class Product_model extends CI_Model{
                     AND combos.manufacturer_id = manufacturer.manufacturer_id
                     AND price.product_id = products.product_id
                 GROUP BY
-                    products.product_id";
+                    products.product_id
+                order by
+                    price";
         $query = $this->db->query($sql);
         return $query->result_array();
     }
