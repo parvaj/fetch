@@ -26,7 +26,8 @@ if(!empty($products)) {
                     <div class="col-md-7 text-left" >
                         <div class="font-bold"> <?php echo $product['manufacturer_name']; ?> </div>
                         <div class="font-bold"> <?php echo $product['product_name']; ?> </div>
-                        <input type="hidden" name="manufacturerId" id="manufacturerId" value="<?php echo $product['manufacturer_id']; ?>">
+                        <input type="hidden" name="manufacturerId_<?php echo $product['group_id'];?>" id="manufacturerId" value="<?php echo $product['manufacturer_id']; ?>">
+                        <input type="hidden" name="groupId" id="groupId" value="<?php echo $product['group_id']; ?>">
                         <div class="font-bold delivery-date"> <span style="color:#fbb03b;">Next available delivery: </span><span style="color:#FE5B00;"><?php echo $nextDelivery; ?></span></div>
                     </div>
                     <div class="col-md-5 text-right">
@@ -71,7 +72,7 @@ if(!empty($products)) {
         <?php  } ?>
         </div>
 
-        <div class="row" style="margin-top:5px;">
+        <div class="row font-bold" style="margin-top:5px;">
             <div class="col-md-3 text-left">
                 Save 2.5% with <br> recurring order
             </div>
@@ -79,7 +80,7 @@ if(!empty($products)) {
                 Recurring Order
             </div>
             <div class="col-md-4 text-left">
-                <select name="frequency" id="frequency">
+                <select name="frequency_<?php echo $product['group_id']; ?>" id="frequency_<?php echo $product['group_id']; ?>">
                 <?php
                     foreach($frequency as $frequencies){
                 ?>
@@ -88,7 +89,7 @@ if(!empty($products)) {
                </select>
             </div>
             <div class="col-md-3 text-right">
-                Quantity  <input type="text" class="p-qty" name="productQty" id="number_qty" value="1">
+                Quantity  <input type="text" class="p-qty" name="number_qty_<?php echo $product['group_id']; ?>" id="number_qty_<?php echo $product['group_id']; ?>" value="1">
             </div>
         </div>
     </div>
@@ -107,7 +108,7 @@ if(!empty($products)) {
             var price = $( "span#pprice"+pid ).html();
             $('#currentPrice').text('$'+price);
             $('input#number_qty').val("1");
-
         }
         addPrice(<?php echo $productId ;?>);
-</script>
+        loadCustomeCombo(<?php echo $groupId ;?>);
+    </script>

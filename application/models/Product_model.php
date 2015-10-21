@@ -118,8 +118,8 @@ class Product_model extends CI_Model{
                 group by
                     products.product_id
                 order by
-                    products.group_id,products.product_id
-                limit 10";
+                    products.group_id,price.price asc,products.product_id
+                limit 12";
         $query = $this->db->query($sql);
         return $query->result_array();
     }

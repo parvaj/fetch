@@ -27,14 +27,21 @@ class Checkout extends CI_Controller{
             $data['order_no'] = $this->Checkout_model->getOrderNo($customerId);
         else
             $data['order_id'] = $this->session->userdata('sessionNumber');
-        echo $this->session->userdata('sessionNumber');
+        $groupId = $this->input->post('groupId');
         $data['product_id'] = $this->input->post('productid');
         $data['price']= $this->Checkout_model->getProductPrice($data['product_id']);
         //$data['price'] = $this->input->post('productPrice');
-        $data['qty'] = $this->input->post('productQty');
-        $data['frequency_id'] =$this->input->post('frequency');
-        $data['manufacturer_id'] = $this->input->post('manufacturerId');
+        $data['qty'] = $this->input->post('number_qty_'.$groupId);
+        $data['frequency_id'] =$this->input->post('frequency_'.$groupId);
+        echo $this->input->post('frequency_'.$groupId);
+        //$data['frequency_id'] =$this->input->post('frequency');
+        $data['manufacturer_id'] = $this->input->post('manufacturerId_'.$groupId);
+        //$data['manufacturer_id'] = $this->input->post('manufacturerId');
         $data['is_deal'] = '-1';
+        //echo $groupId;
+        //echo "<pre>";
+        //print_r($data);die;
+
         $this->Checkout_model->additemoncart($data);
         redirect($_SERVER['HTTP_REFERER']);
     }
