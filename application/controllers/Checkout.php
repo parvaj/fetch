@@ -30,10 +30,9 @@ class Checkout extends CI_Controller{
         $groupId = $this->input->post('groupId');
         $data['product_id'] = $this->input->post('productid');
         $data['price']= $this->Checkout_model->getProductPrice($data['product_id']);
-        //$data['price'] = $this->input->post('productPrice');
         $data['qty'] = $this->input->post('number_qty_'.$groupId);
         $data['frequency_id'] =$this->input->post('frequency_'.$groupId);
-        echo $this->input->post('frequency_'.$groupId);
+        //echo $this->input->post('frequency_'.$groupId);
         //$data['frequency_id'] =$this->input->post('frequency');
         $data['manufacturer_id'] = $this->input->post('manufacturerId_'.$groupId);
         //$data['manufacturer_id'] = $this->input->post('manufacturerId');
@@ -46,7 +45,7 @@ class Checkout extends CI_Controller{
         redirect($_SERVER['HTTP_REFERER']);
     }
 
-    public function cartItems( )
+    public function cart($loginData=null)
     {
         $customerId = $this->session->userdata('customerId');
         $data['customerDelivery']= $deliveryDate = $this->fetchfunctions->getDeliveryDate();
@@ -60,6 +59,7 @@ class Checkout extends CI_Controller{
             // put the product to customer cart
             $this->Checkout_model->updateCurrentOrderDate($orderNo,$deliveryDate);
         }
+        $data["loginMessage"]=$loginData;
         $data['cartCount'] = $this->Checkout_model->cartAmount($customerId,$orderNo );
         $data['orderNo'] = $orderNo;
         $data['deliveryDayList'] = $this->fetchfunctions->listDeliveryDate();
@@ -68,6 +68,30 @@ class Checkout extends CI_Controller{
         $data['username'] = array('id' => 'username', 'name' => 'username');
         $data['password'] = array('id' => 'password', 'name' => 'password');
         $this->template->load('default','checkout/cartItems', $data);
+
+    }
+    public function orderSummery( )
+    {
+        $customerId = $this->session->userdata('customerId');
+        $data['customerDelivery']= $deliveryDate = $this->fetchfunctions->getDeliveryDate();
+        if (!isset($customerId)){
+
+            $this->cart(0);
+        }
+        else {
+
+            $orderNo = $this->Checkout_model->getOrderNo($customerId);
+            $this->Checkout_model->updateCurrentOrderDate($orderNo, $deliveryDate);
+
+            $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
+            $data['orderNo'] = $orderNo;
+            $data['deliveryDayList'] = $this->fetchfunctions->listDeliveryDate();
+            $data['frequencyList'] = $this->fetchfunctions->frequencyList();
+            $data['itemDetails'] = $this->Checkout_model->getItemInCart($customerId, $orderNo);
+            $data['username'] = array('id' => 'username', 'name' => 'username');
+            $data['password'] = array('id' => 'password', 'name' => 'password');
+            $this->template->load('default', 'checkout/orderSummery', $data);
+        }
 
     }
 

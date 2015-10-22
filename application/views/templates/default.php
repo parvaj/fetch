@@ -134,7 +134,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </ul>
                     <ul class="nav navbar-nav fetch-menu-right pull-right">
                         <li >
-                            <a class="last" style="margin-top:5px;" href="<?php echo base_url();?>checkout/cartItems"> cart<?php echo isset($cartCount)? "(".$cartCount.")":"";?></a>
+                            <a class="last" style="margin-top:5px;" href="<?php echo base_url();?>checkout/cart"> cart<?php echo isset($cartCount)? "(".$cartCount.")":"";?></a>
                         </li>
                         <!--li>
                             <!--a class="last" style="margin:0 38px;" href="<?php //echo base_url();?>checkout/cartItems"> cart<?php //echo isset($cartCount)? "(".$cartCount.")":"";?></a-->
@@ -250,9 +250,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <li>
                             <a class="page-scroll" href="#download">My Account</a>
                         </li>
-                        <li>
-                            <a class="last" href="<?php echo base_url();?>checkout/cartItems"> cart<?php echo isset($cartCount)? "(".$cartCount.")":"";?></a>
-                        </li>
+
 
                     </ul>
                 </div>
