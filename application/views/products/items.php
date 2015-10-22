@@ -69,7 +69,30 @@ if(!empty($products)) {
                     $ <span id="pprice<?php echo $productDetails['product_id'] ;?>"><?php echo number_format($productDetails['price'],2);?></span>
                 </div>
             </div>
-        <?php  } ?>
+        <?php  }
+                if(!empty($largestBagOffer))
+                    {
+                        foreach($largestBagOffer as $largeffer)
+                        {   ?>
+                            <div class="row" style="border-bottom: 1px solid gainsboro;margin-top:5px;">
+                                <div class="col-md-4 text-left">
+                                    <input type="radio" name="productid" id="productid" value="<?php echo $largeffer['product_id'];?>" <?php echo ($productId == $productDetails['product_id']?"checked":"");?> onclick="addPrice(<?php echo $largeffer['product_id'] ;?>)" />
+                                    <?php echo  $largeffer['weight']*2 ." ".$largeffer['unit'] ;?>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <?php  if( $largeffer['unit'] == 'lbs' ) {?>
+                                        $ <?php echo number_format($largeffer['price']/$largeffer['weight'],2);?>
+                                    <?php }?>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    $ <span id="pprice<?php echo $largeffer['product_id'] ;?>"><?php echo number_format($largeffer['price']*2,2);?></span>
+                                </div>
+                            </div>
+        <?php           }
+                    }
+                ?>
+
+
         </div>
 
         <div class="row font-bold" style="margin-top:5px;">
