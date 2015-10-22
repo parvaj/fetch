@@ -145,6 +145,14 @@ a:focus {
     text-transform: uppercase;
     padding: 20px 0px;
 }
+
+.card-info{
+    color: #B0C8EA;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 20px 0px;
+}
 .text-color{
     color:#dd540f;
     font-weight: bold;
@@ -462,6 +470,25 @@ a:focus {
     border-radius: 8px;
     border: 3px solid #fcb03b;
     text-align: right;
+}
+.cart-qty{
+    width: 70%;
+    border-radius: 8px;
+    border: 3px solid #fcb03b;
+    text-align: center;
+}
+.card-info-box{
+    border-radius: 8px;
+    border: 3px solid #253E7E;
+    text-align: center;
+    margin: 5px 0;
+}
+.credit-info-box{
+    width: 45%;
+    border-radius: 8px;
+    border: 3px solid #253E7E;
+    text-align: center;
+    margin: 5px 0;
 }
 .delivery-date{
       font-size:11px;

@@ -71,6 +71,12 @@ function loadCustomeCombo(groupId)
         triggerSelected: true
     });
 }
+function loadDeliveryDate(item){
+    $("#deliveryDate_"+item).sexyCombo({
+        skin: "frequency",
+        triggerSelected: true
+    });
+}
 
 $(document).ready(function(){
     $("#loginButton").click(function(){
