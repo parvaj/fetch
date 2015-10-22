@@ -53,7 +53,6 @@
                         <div class="text-color"> $ <?php echo $items['price']; ?></div>
                     </div>
                     <div class="col-md-3">
-                        <div> <?php echo $items['qty']; ?></div>
                     </div>
                 </div>
     <?php
