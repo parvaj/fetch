@@ -74,7 +74,7 @@
         if($groupId != $product['group_id']) {
             if($groupId!=""){
 ?>
-                <div class="row" style="margin:8px 0px;">
+                <div class="row font-bold" style="margin:8px 0px;min-height: 65px;">
                     <div class="col-md-3 text-left">
                         Saves 2.5% with <br> recurring order
                     </div>
@@ -91,7 +91,7 @@
                         </select>
                     </div>
                     <div class="col-md-3 text-right">
-                        Quantity  <input type="text" class="p-qty" name="productQty" id="number_qty" value="1">
+                        Quantity  <input type="text" class="p-qty" name="number_qty_<?php echo $groupId; ?>" id="number_qty_<?php echo $groupId; ?>" value="1">
                     </div>
 
                 </div>
@@ -104,11 +104,14 @@
                     addPrice(<?php echo $groupId ;?>,<?php echo $groupId ;?>);
                     loadCustomeCombo(<?php echo $groupId ;?>);
                 </script>
+
+                </form>
             </div>
 <?php
         }
 ?>
-        <div class="container">
+        <div class="container" style="min-height:200px;">
+            <form method="post" action="<?php echo base_url();?>checkout/additems/" />
             <div class="col-md-1">
 
             </div>
@@ -137,6 +140,8 @@
                         <div class="col-md-6 text-right" >
                             <div class="our-price">OUR PRICE <span id="currentPrice_<?php echo $product['group_id']; ?>" style="color:#FE5B00;">  </span>
                             </div>
+                            <input type="hidden" name="groupId" id="groupId_<?php echo $product['group_id']; ?>" value="<?php echo $product['group_id']; ?>">
+                            <input type="hidden" name="manufacturerId_<?php echo $product['group_id']; ?>" id="manufacturerId_<?php echo $product['group_id']; ?>" value="<?php echo $product['manufacturer_id']; ?>">
                             <button type="submit" name="BUY"  id="btnbuy_<?php echo $product['group_id']; ?>"  value="ADD TO CART" class="btn-add">ADD TO CART</button>
                         </div>
                     </div>
@@ -157,8 +162,9 @@
 
 ?>
                         <div class="row"  style="border-bottom: 1px solid gainsboro;margin:5px 5px;">
+
                             <div class="col-md-4 text-left">
-                                <input type="radio" name="productid_<?php echo $product['group_id'];?>" id="productid_<?php echo $product['group_id'];?>" value="<?php echo $product['product_id'];?>" <?php  echo ($groupId == $product['product_id']?"checked":"");?> onclick="addPrice(<?php echo $product['product_id'] ;?>,<?php echo $product['group_id'] ;?>)" />
+                                <input type="radio" name="productid" id="productid_<?php echo $product['group_id'];?>" value="<?php echo $product['product_id'];?>" <?php  echo ($groupId == $product['product_id']?"checked":"");?> onclick="addPrice(<?php echo $product['product_id'] ;?>,<?php echo $product['group_id'] ;?>)" />
                                 <?php echo  $product['weight'] ." ".$product['unit'] ;?>
                             </div>
                             <div class="col-md-4 text-center">
@@ -172,7 +178,7 @@
 <?php
     }
 ?>
-                    <div class="row font-bold" style="margin:8px 0px;">
+                    <div class="row font-bold" style="margin:8px 0px;min-height: 65px;">
                         <div class="col-md-3 text-left">
                             Save 2.5% with <br> recurring order
                         </div>
@@ -189,7 +195,7 @@
                             </select>
                         </div>
                         <div class="col-md-3 text-right">
-                            Quantity  <input type="text" class="p-qty" name="productQty" id="number_qty_<?php echo $groupId; ?>" value="1">
+                            Quantitys  <input type="text" class="p-qty" name="number_qty_<?php echo $groupId; ?>" id="number_qty_<?php echo $groupId; ?>" value="1">
                         </div>
                         <script language="javascript" type="text/javascript">
                             addPrice(<?php echo $groupId ;?>,<?php echo $groupId ;?>);
@@ -202,6 +208,7 @@
         <div class="col-md-1">
 
         </div>
+       </form>
     </div>
 </div>
 

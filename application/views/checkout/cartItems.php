@@ -40,7 +40,7 @@
                     </div>
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-4"> <img class="img-responsive" src="<?php echo base_url();?>img/products1.jpg"> </div>
+                            <div class="col-md-4"> <img class="img-responsive" src="http://www.fetchdelivers.com/images/<?php echo $items['img']?>"> </div>
                             <div class="col-md-8 text-left">
                                 <div><?php echo $items['manufacturer_name']; ?></div>
                                 <div><b> <?php echo $items['product_name']; ?></b></div><br>
@@ -53,7 +53,6 @@
                         <div class="text-color"> $ <?php echo $items['price']; ?></div>
                     </div>
                     <div class="col-md-3">
-                        <div> <?php echo $items['qty']; ?></div>
                     </div>
                 </div>
     <?php

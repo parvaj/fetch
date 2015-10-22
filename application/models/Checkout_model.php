@@ -202,6 +202,7 @@ class Checkout_model extends CI_Model{
                         `products`.`product_id`,
                         `products`.`leadtime`,
                         `products`.`group_id`,
+                         products.img,
                         `products`.`product_name`,
                         `products`.`upc`,
                         `products`.`weight`,

@@ -122,9 +122,19 @@ class Product extends CI_Controller {
 
 			$data['nextDelivery'] = $this->fetchfunctions->getNextDeliveryDate($itemId,3);
             $data["products"]= $items;
+            //echo "<pre>";
+            //print_r($data["products"]);die;
             $data['username'] = array('id' => 'username', 'name' => 'username');
             $data['password'] = array('id' => 'password', 'name' => 'password');
             $data['frequency'] =  $this->fetchfunctions->frequencyList();
+
+            if( $data["products"]['0']['class_id'] =='22' || $data["products"]['0']['class_id'] =='31'  ){
+                $data['largestBagOffer'] = $this->Product_model->getLargestBagOffer( $itemId );
+                //echo "<pre>";
+              //  print_r($data['largestBagOffer']);
+            }else{
+                $data['largestBagOffer']='';
+            }
 
             $customerId = $this->session->userdata('customerId');
             $orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');
