@@ -165,4 +165,50 @@ class Product_model extends CI_Model{
         $query = $this->db->query($sql);
         return $query->result_array();
     }
+    public function getLargestBagOffer($groupId){
+
+        $sql = "SELECT
+                    products.product_id,
+                    EXTENDED ,
+                    ingredients,
+                    leadtime,
+                    analysis,
+                    upc,
+                    group_id,
+                    weight,
+                    unit,
+                    product_name,
+                    discount_amount,
+                    sales_price_type,
+                    sales_price_applicable,
+                    sales_price,
+                    sales_price_for_duration,
+                    start_date,
+                    end_date,
+                    sales_offer_applicable,
+                    total_sold_limit,
+                    sales_offer_type,
+                    manufacturer_name,
+                    manufacturer.manufacturer_id,
+                    price,
+                    class_id,
+                    img
+                FROM
+                    products, combos, manufacturer, price
+                WHERE
+                    products.group_id =  '".$groupId."'
+                    AND products.product_status = 1
+                    AND combos.product_id = products.group_id
+                    AND combos.manufacturer_id = manufacturer.manufacturer_id
+                    AND price.product_id = products.product_id
+                GROUP BY
+                    products.product_id
+                order by
+                    price desc
+                limit 1";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+
+
+    }
 } 
