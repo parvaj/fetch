@@ -155,6 +155,7 @@ class Product_model extends CI_Model{
                     products, combos, manufacturer, price
                 WHERE
                     products.group_id =  '".$groupId."'
+                    AND products.product_status = 1
                     AND combos.product_id = products.group_id
                     AND combos.manufacturer_id = manufacturer.manufacturer_id
                     AND price.product_id = products.product_id
