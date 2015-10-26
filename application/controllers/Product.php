@@ -84,12 +84,19 @@ class Product extends CI_Controller {
             $i=0;
             foreach($products as $product){
                 $productList[$i] = array_merge($product,array("nextDeliveryDate"=>$this->fetchfunctions->getNextDeliveryDate($product['group_id'],$product['leadtime'])));
+               // if($product['class_id'] ==22 || $product['class_id'] ==31 ) {
+                 //   $productList[$i] = array_merge($product, array("largeBag" => $this->Product_model->getLargestBagOffer($product['group_id'])));
+                //}
+                //echo   $product['class_id']."my test";
+
                 $i++;
             }
 
             $data["urlSegment"] = $urls;
             $data["departments"]=$department;
             $data["products"]=$productList;
+            //echo "<pre>";
+           // print_r($data["products"]);die;
             $data["departmentName"] = $this->fetchfunctions->getValue("department_name","department","department_id=".$departmentId);
             $data["classes"]= $classes;
             $data["subClasses"]= $subClasses;
@@ -128,7 +135,7 @@ class Product extends CI_Controller {
             if( $data["products"]['0']['class_id'] =='22' || $data["products"]['0']['class_id'] =='31'  ){
                 $data['largestBagOffer'] = $this->Product_model->getLargestBagOffer( $itemId );
                 //echo "<pre>";
-                //  print_r($data['largestBagOffer']);
+                //  print_r($data['largestBagOffer']); die;
             }else{
                 $data['largestBagOffer']='';
             }

@@ -31,7 +31,7 @@ if(!empty($products)) {
                         <div class="font-bold delivery-date"> <span style="color:#fbb03b;">Next available delivery: </span><span style="color:#FE5B00;"><?php echo $nextDelivery; ?></span></div>
                     </div>
                     <div class="col-md-5 text-right">
-                        <div class="our-price">OUR PRICE <span id="currentPrice" style="color:#FE5B00;"> <?php echo $product['price']; ?> </span>
+                        <div class="our-price">OUR PRICE <span id="currentPrice" style="color:#FE5B00;"> <?php //echo $product['price']; ?> </span>
                             <input type="hidden" name="productPrice" id="productPrice" value="">
                         </div>
                         <button type="submit" name="BUY" id="btnbuy_<?php echo $product['group_id'];?>"
@@ -73,19 +73,21 @@ if(!empty($products)) {
                 if(!empty($largestBagOffer))
                     {
                         foreach($largestBagOffer as $largeffer)
-                        {   ?>
+                        {
+                            $largestPrice = ($largeffer['price']*2)-(($largeffer['price']*2)*.025);
+                            ?>
                             <div class="row" style="border-bottom: 1px solid gainsboro;margin-top:5px;">
                                 <div class="col-md-4 text-left">
-                                    <input type="radio" name="productid" id="productid" value="<?php echo $largeffer['product_id'];?>" <?php echo ($productId == $productDetails['product_id']?"checked":"");?> onclick="addPrice(<?php echo $largeffer['product_id'] ;?>)" />
-                                    <?php echo  $largeffer['weight']*2 ." ".$largeffer['unit'] ;?>
+                                    <input type="radio" name="productid" id="productid" value="<?php echo $largeffer['product_id'];?>" onclick="addLPrice(<?php echo $largeffer['product_id'] ;?>,<?php echo $largeffer['group_id'] ;?> );" />
+                                    <?php echo  $largeffer['weight']*2 ." ".$largeffer['unit'] ." "."( 2 *".$largeffer['weight']."-".$largeffer['unit'].") *SAVE MORE*" ;?>
                                 </div>
                                 <div class="col-md-4 text-center">
                                     <?php  if( $largeffer['unit'] == 'lbs' ) {?>
-                                        $ <?php echo number_format($largeffer['price']/$largeffer['weight'],2);?>
+                                        $ <?php echo number_format($largestPrice/($largeffer['weight']*2),2);?>
                                     <?php }?>
                                 </div>
                                 <div class="col-md-4 text-right">
-                                    $ <span id="pprice<?php echo $largeffer['product_id'] ;?>"><?php echo number_format($largeffer['price']*2,2);?></span>
+                                    $ <span id="pLprice<?php echo $largeffer['product_id'] ;?>"><?php echo number_format((($largeffer['price']*2)-(($largeffer['price']*2)*.025)),2);?></span>
                                 </div>
                             </div>
         <?php           }
@@ -129,9 +131,15 @@ if(!empty($products)) {
     <script type="text/javascript">
         function addPrice(pid){
             var price = $( "span#pprice"+pid ).html();
-            $('#currentPrice').text('$'+price);
+            $('#currentPrice').text('$ '+price);
             $('input#number_qty').val("1");
         }
+        function addLPrice(productId){
+            var price = $( "#pLprice"+productId ).html();
+            //alert(price);
+            $("#currentPrice").text('$ '+price);
+        }
         addPrice(<?php echo $productId ;?>);
+      //  addLPrice(<?php echo $productId ;?>);
         loadCustomeCombo(<?php echo $groupId ;?>);
     </script>

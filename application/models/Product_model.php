@@ -100,7 +100,10 @@ class Product_model extends CI_Model{
                     products.img,
                     price.price,
                     manufacturer.manufacturer_name,
-                    manufacturer.manufacturer_id
+                    manufacturer.manufacturer_id,
+                    combos.class_id
+
+
                 from
                     combos
                     inner join products on combos.product_id=products.group_id
@@ -170,11 +173,6 @@ class Product_model extends CI_Model{
 
         $sql = "SELECT
                     products.product_id,
-                    EXTENDED ,
-                    ingredients,
-                    leadtime,
-                    analysis,
-                    upc,
                     group_id,
                     weight,
                     unit,
@@ -189,7 +187,6 @@ class Product_model extends CI_Model{
                     sales_offer_applicable,
                     total_sold_limit,
                     sales_offer_type,
-                    manufacturer_name,
                     manufacturer.manufacturer_id,
                     price,
                     class_id,

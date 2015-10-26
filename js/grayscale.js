@@ -62,8 +62,9 @@ function commonCombo(id){
 function addPrice(productId,groupId)
 {
     var price = $( "#pprice"+productId ).html();
-    $("#currentPrice_"+groupId).html('$'+price);
+    $("#currentPrice_"+groupId).html('$ '+price);
 }
+
 function loadCustomeCombo(groupId)
 {
     $("#frequency_"+groupId).sexyCombo({
@@ -78,6 +79,10 @@ function loadDeliveryDate(item){
     });
 }
 
+function addLPrice(productId,groupId){
+    var price = $( "#pLprice"+productId ).html();
+    $("#currentPrice_"+groupId).text('$ '+price);
+}
 $(document).ready(function(){
     $("#loginButton").click(function(){
        //  $('.fetch-login').css('display','block');

@@ -70,10 +70,32 @@
 
 <?php
     $groupId="";
+    $largePrice ="";
     foreach($products as $product ){
-        if($groupId != $product['group_id']) {
+
+        if($groupId != $product['group_id'] ) {
+            //$largePrice = $product['price'];
             if($groupId!=""){
+                //echo $largePrice." ".$largestProductId;
+                if( $classId == '22' || $classId == '31'  ){
+                    $largestPrice = ($largePrice*2) - ($largePrice*2)*0.025;
 ?>
+                    <div class="row"  style="border-bottom: 1px solid gainsboro;margin:5px 5px;">
+
+                        <div class="col-md-5 text-left">
+                            <input type="radio" name="productid" id="productid_<?php echo $largestProductId;?>" value="<?php echo $largestProductId;?>" <?php // echo ($groupId == $product['product_id']?"checked":"");?> onclick="addLPrice(<?php echo $largestProductId ;?>,<?php echo $groupId ;?>);" />
+                            <?php echo  $productWeight*2 ." ".$productUnit ." "."( 2 *".$productWeight."-".$productUnit.") *SAVE MORE*" ;?>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <?php if($productUnit == 'lbs') { ?>
+                                $<?php echo number_format($largestPrice/($productWeight*2), 2); ?>
+                            <?php  }  ?>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            $ <span id="pLprice<?php echo $largestProductId ;?>"><?php echo number_format($largestPrice,2);?></span>
+                        </div>
+                    </div>
+   <?php } ?>
                 <div class="row font-bold" style="margin:8px 0px;min-height: 65px;">
                     <div class="col-md-3 text-left">
                         Saves 2.5% with <br> recurring order
@@ -108,6 +130,7 @@
                 </form>
             </div>
 <?php
+        //$largePrice = '';
         }
 ?>
         <div class="container" style="min-height:200px;">
@@ -135,7 +158,7 @@
                         <div class="col-md-6 text-left" >
                             <div class="font-bold"> <?php echo $product['manufacturer_name']; ?> </div>
                             <div class="font-bold">   <?php echo $product['product_name']; ?> </div>
-                            <div class="font-bold delivery-date"> <span style="color:#fbb03b;">Next available delivery: <?php echo $product['nextDeliveryDate'];?> </span><span style="color:#FE5B00;"><?php //echo $nextDelivery; ?></span></div>
+                            <div class="font-bold delivery-date"> <span style="color:#fbb03b;">Next available delivery: <span style="color:#FE5B00;"><?php echo $product['nextDeliveryDate'];?> </span></span></div>
                         </div>
                         <div class="col-md-6 text-right" >
                             <div class="our-price">OUR PRICE <span id="currentPrice_<?php echo $product['group_id']; ?>" style="color:#FE5B00;">  </span>
@@ -150,7 +173,7 @@
                             Options
                         </div>
                         <div class="col-md-4 text-center">
-                            Per Lbs
+                            <?php echo ( $product['unit'] == 'lbs' )?"Per Lbs":"" ;?>
                         </div>
                         <div class="col-md-4 text-right">
                             Price
@@ -158,17 +181,29 @@
                     </div>
 <?php
             $groupId = $product['group_id'];
+            //$largePrice = $product['price'];
+        $largePrice = '';
         }
+
+                        if( $largePrice < $product['price'] ){
+                            $largePrice = $product['price'];// ($product['price']*2) - ($product['price']*2)*.025;
+                            $largestProductId = $product['product_id'];
+                            $productWeight = $product['weight'];
+                            $productUnit = $product['unit'];
+                            $classId = $product['class_id'];
+                        }
 
 ?>
                         <div class="row"  style="border-bottom: 1px solid gainsboro;margin:5px 5px;">
 
-                            <div class="col-md-4 text-left">
+                            <div class="col-md-5 text-left">
                                 <input type="radio" name="productid" id="productid_<?php echo $product['group_id'];?>" value="<?php echo $product['product_id'];?>" <?php  echo ($groupId == $product['product_id']?"checked":"");?> onclick="addPrice(<?php echo $product['product_id'] ;?>,<?php echo $product['group_id'] ;?>)" />
                                 <?php echo  $product['weight'] ." ".$product['unit'] ;?>
                             </div>
-                            <div class="col-md-4 text-center">
-                                $<?php echo number_format($product['price'], 2); ?>
+                            <div class="col-md-3 text-center">
+                                <?php  if( $product['unit'] == 'lbs' ) {?>
+                                    $<?php echo number_format($product['price']/$product['weight'], 2); ?>
+                                <?php }?>
                             </div>
                             <div class="col-md-4 text-right">
                                 $ <span id="pprice<?php echo $product['product_id'] ;?>"><?php echo number_format($product['price'],2);?></span>
@@ -176,8 +211,31 @@
                         </div>
 
 <?php
+        $largePrice = $product['price'];
+//echo $largePrice." ".$largestProductId;
     }
+ //echo $largePrice." ".$largestProductId;
+
+if( $classId == '22' || $classId == '31' ){
+    $largestPrice = ($largePrice*2) - ($largePrice*2)*0.025;
 ?>
+
+                    <div class="row"  style="border-bottom: 1px solid gainsboro;margin:5px 5px;">
+
+                        <div class="col-md-5 text-left">
+                            <input type="radio" name="productid" id="productid_<?php echo $largestProductId;?>" value="<?php echo $largestProductId;?>" <?php // echo ($groupId == $product['product_id']?"checked":"");?> onclick="addLPrice(<?php echo $largestProductId ;?>,<?php echo $groupId ;?>);" />
+                            <?php echo  $productWeight*2 ." ".$productUnit ." "."( 2 *".$productWeight."-".$productUnit.") *SAVE MORE*" ;?>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <?php if($productUnit == 'lbs') { ?>
+                                $<?php echo number_format($largestPrice/($productWeight*2), 2); ?>
+                            <?php  }  ?>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            $ <span id="pLprice<?php echo $largestProductId ;?>"><?php echo number_format($largestPrice,2);?></span>
+                        </div>
+                    </div>
+<?php } ?>
                     <div class="row font-bold" style="margin:8px 0px;min-height: 65px;">
                         <div class="col-md-3 text-left">
                             Save 2.5% with <br> recurring order
@@ -211,5 +269,6 @@
        </form>
     </div>
 </div>
+
 
 
