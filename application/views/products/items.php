@@ -117,6 +117,46 @@ if(!empty($products)) {
                 Quantity  <input type="text" class="p-qty" name="number_qty_<?php echo $product['group_id']; ?>" id="number_qty_<?php echo $product['group_id']; ?>" value="1">
             </div>
         </div>
+    <div class="row">
+        <div class="col-md-12" >
+            <div style="padding-top:7px;">
+                <span id="about_tab" style="float:left; text-align:center; width:195px;background-color:#fad49f; vertical-align:bottom;"><a name="acc_tab" id="acc_tab" onclick="showtab(0)" href='javascript:void(0);'  style="float:left; width:135px;color:#000000;font-size:10px;font-weight: bold">ABOUT</a></span>
+                <span id="ingrediants_tab" style="float:left; text-align:center; width:220px;  background-color:#fbb03b; vertical-align:bottom;"><a name="acc_tab" id="acc_tab" onclick="showtab(1)" href='javascript:void(0);'  style="float:left; width:140px;color:#000000;font-size:10px;font-weight: bold">INGREDIENTS</a></span>
+                <span id="guaranted_tab" style="float:left; text-align:center; width:240px;  background-color:#f4921f; vertical-align:bottom;"><a name="acc_tab" id="acc_tab" onclick="showtab(2)" href='javascript:void(0);'  style="float:left; width:200px;color:#000000;font-size:10px;font-weight: bold">GUARANTED ANALYSIS</a></span>
+                <div id="aboutinfo" style="background-color:#fad49f;height:auto;border-radius: 10px;"> <div style="padding:30px 10px 10px 14px;"><span itemprop="description"><?php echo  $product['EXTENDED']; ; ?></span></div></div>
+                <div id="ingrediantsinfo" style="background-color:#fcb03b;height:auto;display:none;border-radius: 10px;"> <div style="padding:30px 10px 10px 14px;"><?php echo htmlentities(stripslashes($product['ingredients'])); ?> </div></div>
+                <div id="guarantedinfo" style="background-color:#f4921f;height:auto;display:none;border-radius: 10px;"> <div style="padding:30px 10px 10px 14px;"><?php echo htmlentities(stripslashes($product['analysis'])); ?></div></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" >
+            <div style="height:100px;background-color:#9191c7;border-radius:12px;margin-top:12px;padding-top:5px;">
+                <div style="text-align:center;font-weight:bold;">CUSTOMER REVIEWS</div>
+                <!--div style="height:30px;padding:10px 25px;overflow:scroll;overflow-x:hidden;">
+                            <?php
+                //$sql = "select * from comments where product_id='".dbsafe($productId)."'";
+                // $result = mysql_query($sql);
+                // while($rowcomments = mysql_fetch_array($result)){  ?>
+                                <p style="padding:10px 0px;font-size:12px;">"<?php //echo $rowcomments['comments'];?>" <?php //echo "- ".$rowcomments['first_name']." ".$rowcomments['city'] ;?></p>
+                            <?php //	} 	?>
+                        </div-->
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" >
+            <div style="float:left;background-color:#b3b3d9;border-radius:12px;margin:12px 0;padding-top:5px;">
+                <div style="text-align:center;font-weight:bold;">WRITE A REVIEW!</div>
+                <div style="float:left;">
+                    <input type="text" placeholder="Enter your comments here." id="comments" style="width:625px;height:50px;background-color:#BEBEE2;border:none;font-size:13px;padding-left:27px;" name="comments" value=""/>
+                </div>
+                <div style="float:left;padding-left:300px;">
+                    <button name="btnsubmit12"  type="button" style="background-color:#FFFFFF;color:#000000;border-radius:5px;" onclick="addcomments();">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 
 </div>
