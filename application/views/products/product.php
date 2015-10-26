@@ -99,7 +99,7 @@
    <?php } ?>
                 <div class="row font-bold" style="margin-top:5px;">
                     <div class="col-md-3 text-left">
-                        Saves 2.5% with <br> recurring order
+                        Save 2.5% with <br> recurring order
                     </div>
                     <div class="col-md-3 text-center">
                         Recurring Order
@@ -254,7 +254,7 @@ if( $classId == '22' || $classId == '31' ){
                             </select>
                         </div>
                         <div class="col-md-3 text-right">
-                            Quantitys  <input type="text" class="p-qty" name="number_qty_<?php echo $groupId; ?>" id="number_qty_<?php echo $groupId; ?>" value="1">
+                            Quantity <input type="text" class="p-qty" name="number_qty_<?php echo $groupId; ?>" id="number_qty_<?php echo $groupId; ?>" value="1">
                         </div>
                         <script language="javascript" type="text/javascript">
                             addPrice(<?php echo $groupId ;?>,<?php echo $groupId ;?>);

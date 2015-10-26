@@ -12,7 +12,7 @@
         <div class="col-md-4">
             </div>
     </div>
-    <div class="row">
+    <div class="row" style="min-height:350px;">
         <div class="col-md-1">
         </div>
         <div class="col-md-8">
@@ -53,7 +53,7 @@
                         <div class="text-color"> $ <?php echo $items['price']; ?></div>
                     </div>
                     <div class="col-md-3">
-                        <div> <?php echo $items['qty']; ?></div>
+                        <input type="text" style="text-align: center;" class="p-qty" name="number_qty" id="number_qty>" value="<?php echo $items['qty']; ?>">
                     </div>
                 </div>
     <?php

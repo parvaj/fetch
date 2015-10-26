@@ -124,3 +124,26 @@ $(function(){
         triggerSelected: true
     });
 });
+
+function showtab(tab)
+{
+    if(tab==0)
+    {
+        $("#aboutinfo").show();
+        $("#ingrediantsinfo").hide();
+        $("#guarantedinfo").hide();
+    }
+    else if(tab==1)
+    {
+        $("#aboutinfo").hide();
+        $("#guarantedinfo").hide();
+        $("#ingrediantsinfo").show();
+    }
+    else if(tab==2)
+    {
+        $("#aboutinfo").hide();
+        $("#ingrediantsinfo").hide();
+        $("#guarantedinfo").show();
+
+    }
+}
