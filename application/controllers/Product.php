@@ -53,7 +53,7 @@ class Product extends CI_Controller {
             $classId = $this->security->xss_clean($this->input->post('category'));
             $brandId = $this->security->xss_clean($this->input->post('brand'));
             $subClassId = $this->security->xss_clean($this->input->post('petType'));
-           // echo $subClassId."--" .$brandId." ".$departmentId." ".$classId;
+           // echo $departmentId."--"." ".$classId."-" .$brandId." ".$subClassId; die;
         }
 
         //$uri
