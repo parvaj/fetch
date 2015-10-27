@@ -34,6 +34,7 @@ class Login extends CI_Controller {
 		$userName = $this->security->xss_clean($this->input->post('username'));
 		$password  = $this->security->xss_clean($this->input->post('password'));
 	    if ($this->Login_model->checkUserLogin($userName,$password)== TRUE){
+
 			$customerInfo=$this->Login_model->getUserInfo($userName);
             $data = array(
                         'customerId' => $customerInfo->cust_id,
