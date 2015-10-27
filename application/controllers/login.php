@@ -10,16 +10,16 @@ class Login extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model("login_model");
+		$this->load->model("Login_model");
 		$this->load->model("Checkout_model");
 
 
 	}
-	function index()
+	public function index()
 	{
 	    if ($this->session->userdata('logged_in') == TRUE)
 	    {
-		        redirect('pages');
+			redirect('pages');
 	    }
 
 	    $data['title'] = 'Login';
@@ -28,15 +28,14 @@ class Login extends CI_Controller {
 	    $this->load->view('login', $data);
 	}
 
-	function process_login()
+	public function process_login()
 	{
 
 		$userName = $this->security->xss_clean($this->input->post('username'));
 		$password  = $this->security->xss_clean($this->input->post('password'));
+	    if ($this->Login_model->checkUserLogin($userName,$password)== TRUE){
 
-	    if ($this->login_model->checkUserLogin($userName,$password)== TRUE){
-
-            $customerInfo=$this->login_model->getUserInfo($userName);
+            $customerInfo=$this->Login_model->getUserInfo($userName);
             $data = array(
                         'customerId' => $customerInfo->cust_id,
                    		'username'  => $customerInfo->email,
