@@ -34,8 +34,7 @@ class Login extends CI_Controller {
 		$userName = $this->security->xss_clean($this->input->post('username'));
 		$password  = $this->security->xss_clean($this->input->post('password'));
 	    if ($this->Login_model->checkUserLogin($userName,$password)== TRUE){
-
-            $customerInfo=$this->Login_model->getUserInfo($userName);
+			$customerInfo=$this->Login_model->getUserInfo($userName);
             $data = array(
                         'customerId' => $customerInfo->cust_id,
                    		'username'  => $customerInfo->email,
@@ -48,11 +47,9 @@ class Login extends CI_Controller {
             $this->session->set_userdata($data);
             $customerId = $this->session->userdata('customerId');
             $deliveryDate = $this->fetchfunctions->getDeliveryDate();
-
-                $orderNo= $this->Checkout_model->getOrderNo($customerId);
-                // put the product to customer cart
-                $this->Checkout_model->updatedOrderCompleted($customerId,$this->session->userdata('sessionNumber'),$orderNo,$deliveryDate);
-                //$this->Checkout_model->updateCurrentOrderDate($orderNo,$deliveryDate);
+			$orderNo= $this->Checkout_model->getOrderNo($customerId);
+			// put the product to customer cart
+			$this->Checkout_model->updatedOrderCompleted($customerId,$this->session->userdata('sessionNumber'),$orderNo,$deliveryDate);
 
             redirect($_SERVER["HTTP_REFERER"]);
         }
@@ -65,7 +62,6 @@ class Login extends CI_Controller {
 	function logout()
 	{
 	    $this->session->sess_destroy();
-
         redirect(base_url());
 	}
 }
