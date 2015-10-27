@@ -37,9 +37,6 @@ class Checkout extends CI_Controller{
         $data['manufacturer_id'] = $this->input->post('manufacturerId_'.$groupId);
         //$data['manufacturer_id'] = $this->input->post('manufacturerId');
         $data['is_deal'] = '-1';
-        //echo $groupId;
-        //echo "<pre>";
-        //print_r($data);die;
 
         $this->Checkout_model->additemoncart($data);
         redirect($_SERVER['HTTP_REFERER']);
