@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2bcd4a90-7622-4a09-8feb-e34e28ee4dbc" name="Default" comment="" />
+    <list default="true" id="2bcd4a90-7622-4a09-8feb-e34e28ee4dbc" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/controllers/Login.php" />
+    </list>
     <list id="fa7a5c83-70c7-4d11-b049-06ccdede1f40" name="New changelist" comment="" />
     <ignored path="fetch_ci.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,11 +48,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="product.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="product.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/views/products/product.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.34593022" vertical-offset="2550" max-vertical-offset="4777">
+            <state vertical-scroll-proportion="-4.576923" vertical-offset="2550" max-vertical-offset="4777">
               <caret line="157" column="62" selection-start-line="157" selection-start-column="62" selection-end-line="157" selection-end-column="62" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Login.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/controllers/Login.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1275">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -312,11 +324,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\xampp\htdocs\fetch\application\controllers" />
       <recent name="D:\xampp\htdocs\fetch_ci\application\views\products" />
       <recent name="D:\xampp\htdocs\fetch_ci\application\views\checkout" />
       <recent name="D:\xampp\htdocs\fetch_ci\application\controllers" />
       <recent name="D:\xampp\htdocs\fetch_ci\application\views" />
-      <recent name="D:\xampp\htdocs\fetch_ci\application\libraries" />
     </key>
   </component>
   <component name="RestoreUpdateTree">
@@ -1009,8 +1021,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/products/product.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34593022" vertical-offset="2550" max-vertical-offset="4777">
+        <state vertical-scroll-proportion="-4.576923" vertical-offset="2550" max-vertical-offset="4777">
           <caret line="157" column="62" selection-start-line="157" selection-start-column="62" selection-end-line="157" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/Login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1275">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
