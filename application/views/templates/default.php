@@ -210,10 +210,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!-- /.body -->
 <header class="intro intro-size">
     <div class="intro-body">
-
-                    <?php echo $body; ?>
-
-
+        <span id="errorflash"></span>
+        <?php echo $body; ?>
     </div>
 </header>
 <!---

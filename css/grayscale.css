@@ -59,6 +59,11 @@ h6 {
     font-family: LightItalic;
     src: url(../fonts/OpenSans-LightItalic.ttf);
 }
+@font-face {
+    font-family: ExtraBold;
+    src: url(../fonts/OpenSans-ExtraBold.ttf);
+}
+
 
 p {
     margin: 0 0 25px;
@@ -217,6 +222,47 @@ a:focus {
     font-size: 35px;
     color:#253E7E;
     margin:-25px 0 0;
+}
+.signup-header{
+    font-family:Pacifico ;
+    font-size: 35px;
+    color:#253E7E;
+}
+.signup-text {
+    font-family:ExtraBold ;
+    font-size:24px;
+    color:#253E7E;
+}
+
+.signup-delivery-info {
+    color:#FE5B00;
+}
+::-webkit-input-placeholder {
+    color: #FE5B00;
+    font-family:ExtraBold ;
+    font-size:14px;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+    color: #FE5B00;
+    font-family:ExtraBold ;
+    font-size:14px;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+    color: #FE5B00;
+    font-family:ExtraBold ;
+    font-size:14px;
+}
+#error_flash{
+    color:green;
+    font-weight: bold;"
+}
+
+:-ms-input-placeholder {
+    color: #FE5B00;
+    font-family:ExtraBold ;
+    font-size:14px;
 }
 
 .home-text-scrolling{

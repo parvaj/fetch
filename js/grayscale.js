@@ -23,6 +23,7 @@ $(window).scroll(function() {
        /* $('.intro').css('margin-top','155px'); */
     }
 });
+var fetchurl = "http://localhost/fetch/";
 /*
 $(function () {
     $('.fetch-menu li ul').hide().removeClass('fallback');
@@ -32,6 +33,7 @@ $(function () {
 });
 */
 // jQuery for page scrolling feature - requires jQuery Easing plugin
+
 $(function() {
     $('a.page-scroll').bind('click', function(event) {
         var $anchor = $(this);
@@ -84,6 +86,7 @@ function addLPrice(productId,groupId){
     $("#currentPrice_"+groupId).text('$ '+price);
 }
 $(document).ready(function(){
+
     $("#loginButton").click(function(){
        //  $('.fetch-login').css('display','block');
         $(".fetch-login").toggle();
@@ -96,9 +99,13 @@ $(document).ready(function(){
     //var x = "Total Width: " + screen.width;
 
    // $(".sub-menu").hide();
+    $("#mytest").change(function(){
+        var addd = $("#mytest").val();
+        alert(addd);
+    });
 });
 $(function(){
-    $("#brand").sexyCombo({
+    $("#pp-brand").sexyCombo({
         skin: "frequency",
         triggerSelected: true
     });
@@ -120,6 +127,13 @@ $(function(){
 
 $(function(){
     $("#frequency").sexyCombo({
+        skin: "frequency",
+        triggerSelected: true
+    });
+});
+
+$(function(){
+    $("#mytest").sexyCombo({
         skin: "frequency",
         triggerSelected: true
     });
@@ -147,3 +161,86 @@ function showtab(tab)
 
     }
 }
+/*  check zipcode price*/
+$(function() {
+    $("#zip_search").focus(function () {
+        $("#zip_search").val('');
+    });
+    $("#zip_search").blur(function () {
+        var zipcode = $("#zip_search").val();
+
+        if ($("#zip_search").val() == '') {
+            $("#zip_search").val("Enter Zip Code");
+            $("#deliveryInfo").hide();
+
+        }
+        else {
+            if ($("#zip_search").val().length < 5) {
+                $("#spnNotice").html("Zip Code must be at least 5 digits.");
+                $("#zip_search").val("Enter Delivery Address ZIP CODE.");
+                $("#zip_search").focus();
+            }
+            else {
+                //var zipcode = $( "#zip_search" ).val();
+                $.ajax({
+                    type: "GET",
+                    url: fetchurl+"signup/checkzip/",
+                    data: 'zipcode=' + $("#zip_search").val(),
+                    complete: function (data) {
+
+                        strdata = JSON.parse(data.responseText);
+                        if (strdata == '') {
+                            $("#deliveryInfo").show();
+                            $("#delivery-available").html('NO');
+                            $("#delivery-fee").html('');
+                            $("#minimum-order").html('');
+                            $("#del-fee-minorder").html('');
+                        } else {
+                            $("#deliveryInfo").show();
+                            $("#delivery-available").html('YES');
+                            if (strdata[0].delivery_price == '0')
+                                deliveryPrice = 'FREE';
+                            else
+                                deliveryPrice = "$ " + strdata[0].delivery_price;
+                            $("#delivery-fee").html(deliveryPrice);
+                            $("#minimum-order").html("$ " + strdata[0].min_order);
+                            $("#del-fee-minorder").html("$ " + strdata[0].low_delivery_price);
+                        }
+
+                    }
+                });
+            }
+        }
+    });
+});
+
+/*  check customer email */
+$(function() {
+    $( "#email" ).blur(function() {
+        var email = $( "#email").val();
+        // var zipCode = $( "#zip_search" ).val();
+        if( email =='') return false;
+        else {
+            $.ajax({
+                type: "GET",
+                url: fetchurl+"signup/signup_process/",
+                dataType: 'json',
+                data: {'email': email,'zipcode':'123' },
+                complete: function (data) { //alert(data);
+                    userdata = JSON.parse(data.responseText);
+                    if(userdata.success =='no'){
+                        $( "#errprmsg" ).html('Please enter valid email address.');
+                    }else{
+
+                        $( "#errorflash").html('Your are successfully subscribed our mail list.');
+                        $("#errorflash").fadeOut('slow');
+                        //$( "#errprmsg" ).html('Your are successfully subscribed our mail list.');
+                        window.location.href = "http://localhost/fetch/product/products/3";
+                    }
+
+                }
+            });
+        }
+    });
+
+});

@@ -6,30 +6,43 @@
             <div class="home-text3"> select a category or simply browse this <br> page to find the items you are looking for!</div>
             <div class="row" style="margin: 10px 0 10px;">
                 <div class="col-md-4 text-center">
-                    <select name="brand" id="brand">
-                    <?php
-                         foreach($brands as $brand ){
-                    ?>
-                            <option value="<?php echo $brand['manufacturer_id'];?>" <?php echo (!empty($urlSegment['brandSection']) && $urlSegment['brandSection'] == $brand['manufacturer_id'])?"selected":"" ;?>><?php echo $brand['manufacturer_name'];?> </option>
-                    <?php
-                         }
-                    ?>
-                     </select>
+                    <!--select name="category" id="category">
+                        <option value=''> Search by Category: </option>
+                        <?php
+                        foreach($classes as $class ){
+                            ?>
+                            <option value="<?php //echo $class['class_id'];?>" <?php //echo (!empty($urlSegment['classSection']) && $urlSegment['classSection'] == $class['class_id'])?"selected":"" ;?>><?php //echo $class['class_name'];?></option>
+                        <?php
+                        }
+                        ?>
+
+                    </select-->
+                            <select name="mytest" id="mytest">
+
+                                <option value="1"> 1 </option>
+                                <option value="2"> 2 </option>
+                                <option value="3"> 3 </option>
+                                <option value="4"> 4 </option>
+                                <option value="5"> 5 </option>
+                            </select>
+
                 </div>
                 <div class="col-md-4">
-                    <select name="category" id="category">
-                    <?php
-                        foreach($classes as $class ){
-                    ?>
-                            <option value="<?php echo $class['class_id'];?>" <?php echo (!empty($urlSegment['classSection']) && $urlSegment['classSection'] == $class['class_id'])?"selected":"" ;?>><?php echo $class['class_name'];?></option>
-                    <?php
-                        }
-                    ?>
+                    <?php //echo $brand['manufacturer_id']; ?>
+                    <select name="pp-brand" id="pp-brand">
 
+                        <?php
+                        foreach($brands as $brand ){
+                            ?>
+                            <option value="<?php echo $brand['manufacturer_id'];?>" <?php //echo (!empty($urlSegment['brandSection']) && $urlSegment['brandSection'] == $brand['manufacturer_id'])?"selected":"" ;?>><?php echo $brand['manufacturer_name'];?> </option>
+                        <?php
+                        }
+                        ?>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <select name="petType" id="petType">
+                        <option value=''> Search by Sub Category: </option>
                     <?php
                         foreach($subClasses as $subClass ) {
                     ?>
@@ -42,7 +55,7 @@
                 </div>
             </div>
             <input type="hidden" name="deptId" id="deptId" value="<?php echo $urlSegment['deptSection'];?>">
-            <button type="submit" class="btn-add"> SUBMIT </button>
+            <button type="submit" id="submit" class="btn-add"> SUBMIT </button>
         </div>
         </form>
         <div class="col-md-6">
@@ -50,6 +63,43 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+
+    // Ajax post
+  //  $(document).ready(function() {
+        $("#submit").click(function(event) { //alert('heloo');
+            //event.preventDefault();
+            var test = $("#mytest").val();
+            alert(test);
+            return false;
+            var subclass = $("select#petType").val();
+           // alert(subclass);
+            var category = $("select#category").val();
+            //alert(category+'ff');
+            var brand = $("select#pp-brand").val();
+            //alert(brand+'ff1');
+            $("#mytest").change(function(){ alert('dxvxc');
+                var addd = $("#mytest").val();
+                alert(addd);
+
+
+            });
+                jQuery.ajax({
+                type: "POST",
+                url: "<?php echo base_url(); ?>" + "product/products/"+<?php echo $urlSegment['deptSection']; ?>,
+                dataType: 'json',
+                data: {brandtest: brand, category: category},
+                success: function(res) {
+                    if (res)
+                    {
+                        alert(res);
+                    }
+                }
+            });
+        });
+   // });
+</script>
+
 
 <div class="container-fluid" style="margin:10px 10px;">
     <div class="container">

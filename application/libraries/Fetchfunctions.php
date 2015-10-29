@@ -192,11 +192,11 @@ class Fetchfunctions {
         $CI =& get_instance();
         $CI->load->database();
         $resultValue="";
-        $queryString="SELECT ".$columnname." as colamnName FROM ".$tablename. " WHERE ". (empty($condition)? " 1 ": $condition) ;
+        $queryString="SELECT ".$columnname." as columnName FROM ".$tablename. " WHERE ". (empty($condition)? " 1 ": $condition) ;
         $query = $CI->db->query($queryString);
         if($query->num_rows()>0){
             $row = $query->row_array();
-            $resultValue = $row['colamnName'];
+            $resultValue = $row['columnName'];
 
         }
 
@@ -299,4 +299,11 @@ class Fetchfunctions {
 
     }
 
+    public function getZipInfo($zipCode){
+        $CI =& get_instance();
+        $CI->load->database();
+        $sql = "select * from delivery_days where zipcode='".$zipCode."'";
+        $query = $CI->db->query($sql);
+        return $query->result_array();
+    }
 }

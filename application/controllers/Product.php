@@ -48,7 +48,10 @@ class Product extends CI_Controller {
     public function products($departmentId=null, $classId=null, $brandId=null, $subClassId=null, $stageId=null)
     {
         if ($_POST) {
-
+            $data1 = array(
+                'brand' => $this->input->post('brand'),
+                'category'=>$this->input->post('category')
+            );
             $departmentId = $this->security->xss_clean($this->input->post('deptId'));
             $classId = $this->security->xss_clean($this->input->post('category'));
             $brandId = $this->security->xss_clean($this->input->post('brand'));
@@ -77,7 +80,10 @@ class Product extends CI_Controller {
                 $subClasses = $this->Product_model->get_subclasses($departmentId,$classId,$brandId);
 
             }
+
             $brands = $this->Product_model->get_manufacturers($departmentId,$classId);
+            //echo "<pre>";
+           // print_r($brands); die;
             $classes = $this->Product_model->get_classes($departmentId);
             $products = $this->Product_model->get_products($departmentId, $classId, $brandId, $subClassId);
             $productList= array();
@@ -109,10 +115,15 @@ class Product extends CI_Controller {
             $customerId = $this->session->userdata('customerId');
             $orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');
             $data['cartCount'] = $this->Checkout_model->cartCount($orderNo,$customerId);
-
-
-            $this->template->load('default','products/product', $data);
-        
+            $this->template->load('default', 'products/product', $data);
+            /*    if($_POST) {
+                        echo json_encode($data1);
+                    //redirect( base_url()."product/products/".$departmentId );
+                    //$this->template->load('default', "products/product/'.$departmentId.'", $data);
+                }else{
+                    $this->template->load('default', 'products/product', $data);
+                }
+            */
         }
     }
     public function item($itemId=null)
