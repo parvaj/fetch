@@ -236,7 +236,7 @@ $(function() {
                 complete: function (data)
                 {
                     userdata = JSON.parse(data.responseText);
-                    alert(userdata.success);
+
                     if(userdata.success =='no'){
                         $("#errprmsg" ).html('Please enter valid email address.');
                         //$("#errorflash").fadeOut('slow');
@@ -247,6 +247,7 @@ $(function() {
                         //window.location.href = "http://localhost/fetch/signup/";
                     }else if(userdata.success =='yes') {
                         $("#errprmsg").html('Your have successfully subscribed our mail list.');
+                        window.location.href = "http://localhost/fetch/product/pets";
                         //$("#errprmsg").fadeOut('slow');
                     }
                 }

@@ -147,7 +147,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                <div class="name-style"> <?php echo $this->session->userdata('firstName'); ?></div>
                             <?php  }else {
                                 ?>
-                                <button name="singupButton" class="orange-button">SIGNUP</button>
+                                <button name="singupButton" class="orange-button" onclick="location.href='<?php echo base_url();?>signup'">SIGNUP</button>
 
                             <?php } ?>
                         </li>

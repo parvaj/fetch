@@ -15,14 +15,14 @@
 
         </div>
         <div class="col-md-2">
-            <a class="" href="<?php echo base_url();?>products/stuffs/2"><img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_3.jpg" width="50%" alt="products for fetchdelivers">
+            <a class="" href="<?php echo base_url();?>product/products/3"><img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_3.jpg" width="50%" alt="products for fetchdelivers"></a>
         </div>
 
         <div class="col-md-2">
-            <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_2.jpg" width="50%" alt="products for fetchdelivers">
+            <a class="" href="<?php echo base_url();?>product/stuffs/2"> <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_2.jpg" width="50%" alt="products for fetchdelivers"></a>
         </div>
         <div class="col-md-2">
-            <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_1.jpg"  width="50%"alt="products for fetchdelivers">
+            <a class="" href="<?php echo base_url();?>products/stuffs/1"> <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_1.jpg"  width="50%"alt="products for fetchdelivers"></a>
         </div>
 
 

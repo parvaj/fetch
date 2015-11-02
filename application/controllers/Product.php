@@ -152,61 +152,70 @@ class Product extends CI_Controller {
         $this->template->load('default','products/pets', $data);
 
     }
-    public function stuffs($departmentId=null, $classId=null, $brandId=null, $subClassId=null, $stageId=null)
+   /* public function stuffs( $departmentId=null, $classId=null, $brandId=null, $subClassId=null, $stageId=null )
     {
-       echo "test";
-
-        //$uri
-        if($departmentId==null){
-            $this->index();
-        }
-        else{
-
-            $department = array();
-            $classes = array();
-            $subClasses = array();
-            $brands = array();
-            $products = array();
-            $urls =array();
-            $urls['deptSection'] = $departmentId;
-            $urls['classSection'] = $classId;
-            $urls['brandSection'] = $brandId;
-            $urls['subClassSection'] = $subClassId;
-
-            if($classId != null ){
-                $subClasses = $this->Product_model->get_subclasses($departmentId,$classId,$brandId);
-            }
-
-            $brands = $this->Product_model->get_manufacturers($departmentId,$classId);
-
-            $classes = $this->Product_model->get_classes($departmentId);
-            $products = $this->Product_model->get_products($departmentId, $classId, $brandId, $subClassId);
-            $productList= array();
-            $i=0;
-            foreach($products as $product){
-                $productList[$i] = array_merge($product,array("nextDeliveryDate"=>$this->fetchfunctions->getNextDeliveryDate($product['group_id'],$product['leadtime'])));
-                $i++;
-            }
-
-            $data["urlSegment"] = $urls;
-            $data["departments"]=$department;
-            $data["products"]=$productList;
-
-            $data["departmentName"] = $this->fetchfunctions->getValue("department_name","department","department_id=".$departmentId);
-            $data['images'] = $this->fetchfunctions->getValue("petimg","department","department_id=".$departmentId);
-            $data["classes"] = $classes;
-            $data["subClasses"]= $subClasses;
-            $data["brands"]= $brands;
-            $data['username'] = array('id' => 'username', 'name' => 'username');
-            $data['password'] = array('id' => 'password', 'name' => 'password');
-            $data['frequency'] =  $this->fetchfunctions->frequencyList();
-            /*  update order number and cust id */
-            $customerId = $this->session->userdata('customerId');
-            $orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');
-            $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
-            $this->template->load('default', 'products/stuffs', $data);
-
-        }
+        $data['title']= "test";
+        $this->template->load('default', 'products/stuffs', $data);
+    }
+*/
+    public function brands( $departmentId=null, $classId=null, $brandId=null, $subClassId=null, $stageId=null )
+    {
+        $data['title']= "test brands";
+        $this->template->load('default', 'products/brands', $data);
     }
 
+     public function stuffs( $departmentId=null, $classId=null, $brandId=null, $subClassId=null, $stageId=null )
+   {
+       //$uri
+       if($departmentId==null){
+           $this->index();
+       }
+       else{
+
+           $department = array();
+           $classes = array();
+           $subClasses = array();
+           $brands = array();
+           $products = array();
+           $urls =array();
+           $urls['deptSection'] = $departmentId;
+           $urls['classSection'] = $classId;
+           $urls['brandSection'] = $brandId;
+           $urls['subClassSection'] = $subClassId;
+
+           if($classId != null ){
+               $subClasses = $this->Product_model->get_subclasses($departmentId,$classId,$brandId);
+           }
+
+           $brands = $this->Product_model->get_manufacturers($departmentId,$classId);
+
+           $classes = $this->Product_model->get_classes($departmentId);
+           $products = $this->Product_model->get_products($departmentId, $classId, $brandId, $subClassId);
+           $productList= array();
+           $i=0;
+           foreach($products as $product){
+               $productList[$i] = array_merge($product,array("nextDeliveryDate"=>$this->fetchfunctions->getNextDeliveryDate($product['group_id'],$product['leadtime'])));
+               $i++;
+           }
+
+           $data["urlSegment"] = $urls;
+           $data["departments"]=$department;
+           $data["products"]=$productList;
+
+           $data["departmentName"] = $this->fetchfunctions->getValue("department_name","department","department_id=".$departmentId);
+           $data['images'] = $this->fetchfunctions->getValue("petimg","department","department_id=".$departmentId);
+           $data["classes"] = $classes;
+           $data["subClasses"]= $subClasses;
+           $data["brands"]= $brands;
+           $data['username'] = array('id' => 'username', 'name' => 'username');
+           $data['password'] = array('id' => 'password', 'name' => 'password');
+           $data['frequency'] =  $this->fetchfunctions->frequencyList();
+           /*  update order number and cust id */
+           $customerId = $this->session->userdata('customerId');
+           $orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');
+           $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
+           $this->template->load('default', 'products/stuffs', $data);
+
+       }
+   }
 } 

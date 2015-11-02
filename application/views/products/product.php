@@ -55,7 +55,7 @@
             <button type="button" id="submit" class="btn-add"> SUBMIT </button>
         </div>
         <div class="col-md-6">
-            <a href="<?php echo base_url();?>product/pets"><img class="img-responsive img-center" src="<?php echo base_url();?>img/pets/<?php echo $images;?>" alt="<?php echo $departmentName; ?> departments"/></a>
+            <a href="<?php echo base_url();?>product/pets"><img class="img-responsive img-center" src="<?php echo base_url();?>img/pets/<?php echo $images;?>" style="margin-left: 50px;" alt="<?php echo $departmentName; ?> departments"/></a>
         </div>
     </div>
 </div>
