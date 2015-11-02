@@ -209,4 +209,14 @@ class Product_model extends CI_Model{
 
 
     }
-} 
+   /* public function getDepartmentImages($deptId){
+        $sql = "select petimg from department where department_id ='".$deptId."'";
+        $query = $this->db->query($sql);
+        if($query->num_rows()>0){
+            $row = $query->row_array();
+            $imageName = $row['petimg'];
+        }else
+            $imageName = 0;
+        return $imageName;
+    } */
+}

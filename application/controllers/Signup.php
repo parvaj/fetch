@@ -12,6 +12,7 @@ class Signup extends CI_Controller{
         parent::__construct();
         $this->load->library('session');
         $this->load->helper('url');
+        $this->load->helper('email');
         $this->load->library('fetchfunctions');
         $this->load->model('Checkout_model');
         $this->fetchfunctions->getSessionID();
@@ -34,17 +35,19 @@ class Signup extends CI_Controller{
 
     }
 
-    public function signup_process(){
-        $this->load->library('fetchfunctions');
+      public function signup_process(){
+
         $emailAddress = $this->security->xss_clean($this->input->get('email'));
-       // $zipCode = $this->security->xss_clean($this->input->get('zip_code'));
+        $zipCode = $this->security->xss_clean($this->input->get('zip_code'));
         $checkUser =  $this->Signup_model->checkUserInfo($emailAddress);
         //$checkUser =  getValue("user_name","users","user_name='".$emailAddress."'");
-        if(!empty($emailAddress)  && empty($checkUser)){
-
-                $custId = $this->Signup_model->addUser( $emailAddress );
+            if( $checkUser > 0){
+                $data['success'] ="exist";
+            }
+            else if(!empty($emailAddress)  && empty($checkUser))
+            {
+                $custId = $this->Signup_model->addUser( $emailAddress, $zipCode );
                 if( !empty($custId)) {
-                    $data['success'] =$custId;
                     $data = array(
                         'customerId' => $custId,
                         'username'  => $emailAddress,
@@ -52,12 +55,14 @@ class Signup extends CI_Controller{
                         'logged_in'  => TRUE
                     );
                     $this->session->set_userdata($data);
-                }else{
-                        $data['success'] ='no';
+                    $data['success'] ='yes';
+                }else
+                {
+                    $data['success'] ='no';
                 }
-        }else{
-            $data['success'] ='no';
-        }
+            }else{
+                $data['success'] ='no';
+            }
         echo json_encode($data);
         exit;
     }

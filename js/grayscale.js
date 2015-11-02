@@ -99,11 +99,18 @@ $(document).ready(function(){
     //var x = "Total Width: " + screen.width;
 
    // $(".sub-menu").hide();
-    $("#mytest").change(function(){
-        var addd = $("#mytest").val();
-        alert(addd);
+});
+
+$(function(){
+    $("#mytest").sexyCombo({
+        skin: "brand",
+        triggerSelected: true,
+        textChangeCallback: function(){
+            console.log(this);
+        }
     });
 });
+
 $(function(){
     $("#pp-brand").sexyCombo({
         skin: "frequency",
@@ -132,12 +139,6 @@ $(function(){
     });
 });
 
-$(function(){
-    $("#mytest").sexyCombo({
-        skin: "frequency",
-        triggerSelected: true
-    });
-});
 
 function showtab(tab)
 {
@@ -217,27 +218,37 @@ $(function() {
 /*  check customer email */
 $(function() {
     $( "#email" ).blur(function() {
+        var zipCode = $("#zip_search").val();
         var email = $( "#email").val();
-        // var zipCode = $( "#zip_search" ).val();
+        var pattern=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+        if(!pattern.test(email)){
+            $( "#errprmsg" ).html('  Please enter valid email address.');
+            //$("#errprmsg").fadeOut('slow');
+                return false;
+            }
         if( email =='') return false;
         else {
             $.ajax({
                 type: "GET",
                 url: fetchurl+"signup/signup_process/",
                 dataType: 'json',
-                data: {'email': email,'zipcode':'123' },
-                complete: function (data) { //alert(data);
+                data: {'email': email,'zip_code':zipCode },
+                complete: function (data)
+                {
                     userdata = JSON.parse(data.responseText);
+                    alert(userdata.success);
                     if(userdata.success =='no'){
-                        $( "#errprmsg" ).html('Please enter valid email address.');
-                    }else{
-
-                        $( "#errorflash").html('Your are successfully subscribed our mail list.');
-                        $("#errorflash").fadeOut('slow');
+                        $("#errprmsg" ).html('Please enter valid email address.');
+                        //$("#errorflash").fadeOut('slow');
+                    }else if(userdata.success =='exist') {
+                        $("#errprmsg").html('Exist this user name. Please chose another user name.');
+                        //$("#errprmsg").fadeOut('slow');
                         //$( "#errprmsg" ).html('Your are successfully subscribed our mail list.');
-                        window.location.href = "http://localhost/fetch/product/products/3";
+                        //window.location.href = "http://localhost/fetch/signup/";
+                    }else if(userdata.success =='yes') {
+                        $("#errprmsg").html('Your have successfully subscribed our mail list.');
+                        //$("#errprmsg").fadeOut('slow');
                     }
-
                 }
             });
         }

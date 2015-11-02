@@ -376,4 +376,12 @@ class Fetchfunctions {
         $query = $CI->db->query($sql);
         return $query->result_array();
     }
+    public function departmentList()
+    {
+        $CI =& get_instance();
+        $CI->load->database();
+        $sql = "SELECT * from department where petimg !=''";
+        $query = $CI->db->query($sql);
+        return $query->result_array();
+    }
 }

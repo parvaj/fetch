@@ -54,9 +54,8 @@
             <input type="hidden" name="deptId" id="deptId" value="<?php echo $urlSegment['deptSection'];?>">
             <button type="button" id="submit" class="btn-add"> SUBMIT </button>
         </div>
-
         <div class="col-md-6">
-            <img class="img-responsive" src="<?php echo base_url();?>img/dog_stuff.jpg" alt="Signup button for fetchdelivers.com">
+            <a href="<?php echo base_url();?>product/pets"><img class="img-responsive img-center" src="<?php echo base_url();?>img/pets/<?php echo $images;?>" alt="<?php echo $departmentName; ?> departments"/></a>
         </div>
     </div>
 </div>

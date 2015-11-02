@@ -17,20 +17,46 @@ class Signup_model extends CI_Model{
         $sql = "select user_name from users where user_name='".$emailAddress."'";
         $query = $this->db->query($sql);
         if($query->num_rows()>0){
-            $row = $query->row_array();
-            $resultValue = $row['user_name'];
+            //$row = $query->row_array();
+            $resultValue = $query->num_rows();
         }else
             $resultValue = 0;
         //return $query->result_array();
         return $resultValue;
     }
-    public function addUser($emailAddress){
+    public function addUser($emailAddress, $zipCode){
         $sql = "insert into users set user_name='".$emailAddress."'";
         $query = $this->db->query($sql);
-       //$custId = $this->db->insert_id();
-        //$sql2 = "insert into customer set cust_id='".$custId."' and email ='".$emailAddress."' and zipcode='".$zipcode."'";
-        //$query = $this->db->query($sql2);
-        return $this->db->insert_id();
+        $custId =  $this->db->insert_id();
+        $insertCustomerQuery="insert into
+								customer
+								(
+									cust_id,
+									surname,
+									firstname,
+									email,
+									company_id,
+									cust_type_id,
+									signup_date,
+									zipcode,
+									code,
+									cust_discount_code
+								)
+								values
+								(
+									'".($custId)."',
+									'',
+									'',
+									'".$emailAddress."',
+									'2',
+									'2'	,
+									now(),
+									'".($zipCode)."',
+									'',
+									''
+								)";
+        $query = $this->db->query($insertCustomerQuery);
+        return $custId;
     }
 
 } 

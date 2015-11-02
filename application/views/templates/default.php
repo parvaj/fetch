@@ -19,6 +19,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/frequency/sexy-combo.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/frequency/frequency.css">
+
+    <!--link rel="stylesheet" type="text/css" href="<?php //echo base_url(); ?>css/brand/sexy-combo.css"-->
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/brand/brand.css">
     <!-- Custom CSS -->
     <script type = "text/javascript" src = "//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js" ></script>
     <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">

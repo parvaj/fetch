@@ -259,6 +259,9 @@ a:focus {
     font-weight: bold;"
 }
 
+a .image_hovor :hover {
+    background-color: yellow;
+}
 :-ms-input-placeholder {
     color: #FE5B00;
     font-family:ExtraBold ;

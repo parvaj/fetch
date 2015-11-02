@@ -97,13 +97,13 @@ class Product extends CI_Controller {
             $data["products"]=$productList;
 
             $data["departmentName"] = $this->fetchfunctions->getValue("department_name","department","department_id=".$departmentId);
+            $data['images'] = $this->fetchfunctions->getValue("petimg","department","department_id=".$departmentId);
             $data["classes"] = $classes;
             $data["subClasses"]= $subClasses;
             $data["brands"]= $brands;
             $data['username'] = array('id' => 'username', 'name' => 'username');
             $data['password'] = array('id' => 'password', 'name' => 'password');
             $data['frequency'] =  $this->fetchfunctions->frequencyList();
-
             /*  update order number and cust id */
             $customerId = $this->session->userdata('customerId');
             $orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');
@@ -143,6 +143,14 @@ class Product extends CI_Controller {
             $this->template->load('default','products/items', $data);
 
         }
+    }
+    public function pets($departmentId=null, $classId=null, $brandId=null, $subClassId=null){
+        $data['title']= "Pet departments";
+        $data['departmentlist'] =  $this->fetchfunctions->departmentList();
+        $data['classes'] = $this->Product_model->get_classes($departmentId);
+        //$products = $this->Product_model->get_products($departmentId, $classId, $brandId, $subClassId);
+        $this->template->load('default','products/pets', $data);
+
     }
 
 } 
