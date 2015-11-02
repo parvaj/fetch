@@ -9,6 +9,11 @@
             </div>
         </div>
     </div>
+    <?php
+    foreach($classes as $class ){
+
+        echo $class['class_name'];
+    } ?>
     <div class="container" style="margin-top: 20px;">
         <div class="col-md-3">
 

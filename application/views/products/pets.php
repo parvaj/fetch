@@ -7,38 +7,30 @@
             <div class="home-text3">
                 Click on the pet you are shopping for and <br> we will help your find your food and other <br> goodless!
             </div>
-            <?php
-            foreach($departmentlist as $department){
 
-                // echo $department['department_name'];
-            }
-
-            ?>
         </div>
     </div>
     <div class="container" style="margin-top: 20px;">
         <div class="col-md-3">
 
         </div>
-        <div class="col-md-6">
-<?php
-        foreach($departmentlist as $department){ ?>
-
-            <a class="" href=""><img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/<?php echo $department['petimg'];?>" width="50%" alt="products for fetchdelivers">
-
-        <?php } ?>
+        <div class="col-md-2">
+            <a class="" href="<?php echo base_url();?>products/stuffs/2"><img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_3.jpg" width="50%" alt="products for fetchdelivers">
         </div>
-        <!--div class="col-md-2">
+
+        <div class="col-md-2">
             <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_2.jpg" width="50%" alt="products for fetchdelivers">
         </div>
         <div class="col-md-2">
             <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_1.jpg"  width="50%"alt="products for fetchdelivers">
-        </div-->
+        </div>
+
+
         <div class="col-md-3">
 
         </div>
     </div>
-    <!--div class="container" style="margin-top: 20px;">
+    <div class="container" style="margin-top: 20px;">
         <div class="col-md-3">
 
         </div>
@@ -56,7 +48,7 @@
 
         </div>
     </div>
-    <!--div class="container" style="margin-top: 20px;margin-bottom: 20px;">
+    <div class="container" style="margin-top: 20px;margin-bottom: 20px;">
         <div class="col-md-3">
 
         </div>
@@ -73,7 +65,7 @@
         <div class="col-md-3">
 
         </div>
-    </div-->
+    </div>
 
 
 </div>
