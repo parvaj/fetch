@@ -26,7 +26,11 @@ class Product extends CI_Controller {
 
         $data['username'] = array('id' => 'username', 'name' => 'username');
         $data['password'] = array('id' => 'password', 'name' => 'password');
-        $data['cartCount'] = $this->Checkout_model->cartCount($this->session->userdata('sessionNumber'));
+        $customerId = $this->session->userdata('customerId');
+        /*  update order number and cust id */
+        $customerId = $this->session->userdata('customerId');
+        $orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');
+        $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
         $this->load->view( 'header',$data );
         $this->load->view('products/department',$data);
         $this->load->view('footer');
@@ -39,24 +43,21 @@ class Product extends CI_Controller {
             $classId = $this->security->xss_clean($this->input->post('category'));
             $brandId = $this->security->xss_clean($this->input->post('brand'));
             $subClassId = $this->security->xss_clean($this->input->post('petType'));
-            echo $departmentId."  ".$classId." ".$subClassId."--" .$brandId;
+            $departmentId."  ".$classId." ".$subClassId."--" .$brandId;
              $products = $this->Product_model->get_products($departmentId, $classId, $brandId, $subClassId);
-             echo "<pre>";
-             print_r($products); die;
+
         }
     }
     public function products($departmentId=null, $classId=null, $brandId=null, $subClassId=null, $stageId=null)
     {
         if ($_POST) {
-            $data1 = array(
-                'brand' => $this->input->post('brand'),
-                'category'=>$this->input->post('category')
-            );
-            $departmentId = $this->security->xss_clean($this->input->post('deptId'));
-            $classId = $this->security->xss_clean($this->input->post('category'));
-            $brandId = $this->security->xss_clean($this->input->post('brand'));
-            $subClassId = $this->security->xss_clean($this->input->post('petType'));
-           // echo $departmentId."--"." ".$classId."-" .$brandId." ".$subClassId; die;
+
+            echo $departmentId = $this->security->xss_clean($this->input->post('deptId'));
+            echo $classId = $this->security->xss_clean($this->input->post('category'));
+            echo $brandId = $this->security->xss_clean($this->input->get('brand'));
+            echo $subClassId = $this->security->xss_clean($this->input->post('petType'));
+            die();
+
         }
 
         //$uri
@@ -78,33 +79,25 @@ class Product extends CI_Controller {
 			
 			if($classId != null ){
                 $subClasses = $this->Product_model->get_subclasses($departmentId,$classId,$brandId);
-
             }
 
             $brands = $this->Product_model->get_manufacturers($departmentId,$classId);
-            //echo "<pre>";
-           // print_r($brands); die;
+
             $classes = $this->Product_model->get_classes($departmentId);
             $products = $this->Product_model->get_products($departmentId, $classId, $brandId, $subClassId);
             $productList= array();
             $i=0;
             foreach($products as $product){
                 $productList[$i] = array_merge($product,array("nextDeliveryDate"=>$this->fetchfunctions->getNextDeliveryDate($product['group_id'],$product['leadtime'])));
-               // if($product['class_id'] ==22 || $product['class_id'] ==31 ) {
-                 //   $productList[$i] = array_merge($product, array("largeBag" => $this->Product_model->getLargestBagOffer($product['group_id'])));
-                //}
-                //echo   $product['class_id']."my test";
-
                 $i++;
             }
 
             $data["urlSegment"] = $urls;
             $data["departments"]=$department;
             $data["products"]=$productList;
-            //echo "<pre>";
-           // print_r($data["products"]);die;
+
             $data["departmentName"] = $this->fetchfunctions->getValue("department_name","department","department_id=".$departmentId);
-            $data["classes"]= $classes;
+            $data["classes"] = $classes;
             $data["subClasses"]= $subClasses;
             $data["brands"]= $brands;
             $data['username'] = array('id' => 'username', 'name' => 'username');
@@ -114,16 +107,9 @@ class Product extends CI_Controller {
             /*  update order number and cust id */
             $customerId = $this->session->userdata('customerId');
             $orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');
-            $data['cartCount'] = $this->Checkout_model->cartCount($orderNo,$customerId);
+            $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
             $this->template->load('default', 'products/product', $data);
-            /*    if($_POST) {
-                        echo json_encode($data1);
-                    //redirect( base_url()."product/products/".$departmentId );
-                    //$this->template->load('default', "products/product/'.$departmentId.'", $data);
-                }else{
-                    $this->template->load('default', 'products/product', $data);
-                }
-            */
+
         }
     }
     public function item($itemId=null)
@@ -145,14 +131,13 @@ class Product extends CI_Controller {
             $data['frequency'] =  $this->fetchfunctions->frequencyList();
             if( $data["products"]['0']['class_id'] =='22' || $data["products"]['0']['class_id'] =='31'  ){
                 $data['largestBagOffer'] = $this->Product_model->getLargestBagOffer( $itemId );
-                //echo "<pre>";
-                //  print_r($data['largestBagOffer']); die;
+
             }else{
                 $data['largestBagOffer']='';
             }
             $customerId = $this->session->userdata('customerId');
             $orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');
-            $data['cartCount'] = $this->Checkout_model->cartCount($orderNo,$customerId);
+            $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
 
 
             $this->template->load('default','products/items', $data);

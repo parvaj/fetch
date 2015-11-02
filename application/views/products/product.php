@@ -1,63 +1,60 @@
 <div class="container-fluid" style="margin: 15px 0 0;">
     <div class="container">
         <div class="col-md-6">
-            <form method="post" action="<?php echo base_url();?>product/products/" id="">
+
             <div class="scrolling-font"> <?php echo $departmentName; ?> Stuff </div>
             <div class="home-text3"> select a category or simply browse this <br> page to find the items you are looking for!</div>
             <div class="row" style="margin: 10px 0 10px;">
-                <div class="col-md-4 text-center">
-                    <!--select name="category" id="category">
-                        <option value=''> Search by Category: </option>
+                <div class="col-md-4">
+
+                    <select name="category" id="category">
+                        <option value=''> Search by Category </option>
                         <?php
-                        foreach($classes as $class ){
-                            ?>
-                            <option value="<?php //echo $class['class_id'];?>" <?php //echo (!empty($urlSegment['classSection']) && $urlSegment['classSection'] == $class['class_id'])?"selected":"" ;?>><?php //echo $class['class_name'];?></option>
-                        <?php
-                        }
+                            foreach($classes as $class ){
                         ?>
-
-                    </select-->
-                            <select name="mytest" id="mytest">
-
-                                <option value="1"> 1 </option>
-                                <option value="2"> 2 </option>
-                                <option value="3"> 3 </option>
-                                <option value="4"> 4 </option>
-                                <option value="5"> 5 </option>
-                            </select>
+                                <option value="<?php echo $class['class_id'];?>" <?php echo (!empty($urlSegment['classSection']) && $urlSegment['classSection'] == $class['class_id'])?"selected":"" ;?> ><?php echo $class['class_name'];?></option>
+                        <?php
+                            }
+                        ?>
+                    </select>
+                            </td>
+                        </tr>
+                        </table>
 
                 </div>
                 <div class="col-md-4">
-                    <?php //echo $brand['manufacturer_id']; ?>
-                    <select name="pp-brand" id="pp-brand">
-
+                    <table><tr><td>
+                    <select name="brand" id="pp-brand">
+                        <option value=''> Search by Brand </option>
                         <?php
-                        foreach($brands as $brand ){
-                            ?>
-                            <option value="<?php echo $brand['manufacturer_id'];?>" <?php //echo (!empty($urlSegment['brandSection']) && $urlSegment['brandSection'] == $brand['manufacturer_id'])?"selected":"" ;?>><?php echo $brand['manufacturer_name'];?> </option>
+                            foreach($brands as $brand ){
+                        ?>
+                                <option value="<?php echo $brand['manufacturer_id'];?>" <?php echo (!empty($urlSegment['brandSection']) && $urlSegment['brandSection'] == $brand['manufacturer_id'])?"selected":"" ;?> ><?php echo $brand['manufacturer_name'];?> </option>
                         <?php
-                        }
+                            }
                         ?>
                     </select>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="col-md-4">
                     <select name="petType" id="petType">
-                        <option value=''> Search by Sub Category: </option>
+                        <option value=''> Search by Sub Class </option>
                     <?php
                         foreach($subClasses as $subClass ) {
                     ?>
-                            <option value="<?php echo $subClass['subclass_id'];?>" <?php echo (!empty($urlSegment['subClassSection']) && $urlSegment['subClassSection']== $subClass['subclass_id'])?"selected":"" ;?>> <?php echo $subClass['subclass_name'];?> </option>
+                            <option value="<?php echo $subClass['subclass_id'];?>" <?php echo (!empty($urlSegment['subClassSection']) && $urlSegment['subClassSection']== $subClass['subclass_id'])?"selected":"" ;?> > <?php echo $subClass['subclass_name'];?> </option>
                     <?php
                         }
                     ?>
-
                     </select>
                 </div>
             </div>
             <input type="hidden" name="deptId" id="deptId" value="<?php echo $urlSegment['deptSection'];?>">
-            <button type="submit" id="submit" class="btn-add"> SUBMIT </button>
+            <button type="button" id="submit" class="btn-add"> SUBMIT </button>
         </div>
-        </form>
+
         <div class="col-md-6">
             <img class="img-responsive" src="<?php echo base_url();?>img/dog_stuff.jpg" alt="Signup button for fetchdelivers.com">
         </div>
@@ -65,19 +62,18 @@
 </div>
 <script type="text/javascript">
 
-    // Ajax post
-  //  $(document).ready(function() {
+
         $("#submit").click(function(event) { //alert('heloo');
             //event.preventDefault();
-            var test = $("#mytest").val();
-            alert(test);
-            return false;
-            var subclass = $("select#petType").val();
-           // alert(subclass);
-            var category = $("select#category").val();
-            //alert(category+'ff');
-            var brand = $("select#pp-brand").val();
-            //alert(brand+'ff1');
+            var category = $("#category").val();
+            alert(category+'ff');
+            var brand = $("#pp-brand").val();
+            alert(brand+'ff1');
+            var subclass = $("#petType").val();
+            alert(subclass);
+
+        });
+        /*
             $("#mytest").change(function(){ alert('dxvxc');
                 var addd = $("#mytest").val();
                 alert(addd);
@@ -96,7 +92,7 @@
                     }
                 }
             });
-        });
+        });*/
    // });
 </script>
 

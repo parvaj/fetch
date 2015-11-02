@@ -219,7 +219,9 @@ class Checkout_model extends CI_Model{
                     WHERE
                         `items`.`cust_id` = ?
                         ".($cust_id>1?" AND `items`.`order_no` ":" and items.order_id ")." = ?
-                        AND `items`.`removed` != 'Y'
+                        and items.product_id<>10834
+					    and items.product_id<>0
+					    AND `items`.`removed` != 'Y'
                         AND `items`.`active` = 'Y'
                         and items.invoiced <> 'Y'
                         AND `items`.`confirmed` in ('N', 'P')
@@ -234,6 +236,20 @@ class Checkout_model extends CI_Model{
     }
     public function removeDublicateItems($pID, $custId,$orderType ){
         $sql="delete from items where product_id='".$pID."' and cust_id='".$custId."' and ".($custId>0?"order_no='".getOrderNo($cust_id)."'":"order_id='".dbsafe($_SESSION["sessionNumber"])."'")."";
+
+    }
+
+    /**
+     * @param $itemRowId
+     * @return bool
+     */
+    public function removeOrederItems($itemRowId){
+        if(!empty($itemRowId)) {
+            $sql = "update items set removed = 'Y', next_delivery = NULL, active = 'N', confirmed = 'Y', discount_code = '', ref_id = '' WHERE item_id = ?";
+            return $query = $this->db->query($sql, array($itemRowId));
+        }else{
+            return false;
+        }
 
     }
 

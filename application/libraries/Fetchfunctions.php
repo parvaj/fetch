@@ -255,48 +255,118 @@ class Fetchfunctions {
         $query = $CI->db->query($sql);
         return $query->result_array();
     }
+    public function calculateDeliveryFee($customerId,$deliveryDate)
+    {
+        $CI =& get_instance();
+        $CI->load->database();
 
-    public function productDetails($groupId){
-        $sql = "SELECT
-                    products.product_id,
-                    EXTENDED ,
-                    ingredients,
-                    leadtime,
-                    analysis,
-                    upc,
-                    group_id,
-                    weight,
-                    unit,
-                    product_name,
-                    discount_amount,
-                    sales_price_type,
-                    sales_price_applicable,
-                    sales_price,
-                    sales_price_for_duration,
-                    start_date,
-                    end_date,
-                    sales_offer_applicable,
-                    total_sold_limit,
-                    sales_offer_type,
-                    manufacturer_name,
-                    manufacturer.manufacturer_id,
-                    price,
-                    class_id,
-                    img
-                FROM
-                    products, combos, manufacturer, price
-                WHERE
-                    products.group_id =  '".$groupId."'
-                    AND combos.product_id = products.group_id
-                    AND combos.manufacturer_id = manufacturer.manufacturer_id
-                    AND price.product_id = products.product_id
-                GROUP BY
-                    products.product_id
-                order by
-                    price";
-        $query = $this->db->query($sql);
-        return $query->result_array();
+        $totalDeliveryCharge=0;
+        $deliveryCharge=0;
+        $deliveryType=0;
+        $minOrder=0;
+        $lowDeliveryCharge=0;
+        $maxOrderAmountforWavDelivery=0;
 
+        $deliveryChargeQuery="SELECT
+							customer.cust_id,
+							customer.zipcode,
+							delivery_days.zipcode,
+							delivery_type,
+							ifnull(delivery_price,0) as delivery_price,
+							ifnull(min_order,0) as min_order,
+							ifnull(low_delivery_price,0) as low_delivery_price,
+							min_order_to_wave_deliveryfee
+						FROM
+							`customer`
+							LEFT JOIN delivery_days ON customer.zipcode = delivery_days.zipcode
+						WHERE
+							customer.cust_id = ?";
+        $query = $CI->db->query($deliveryChargeQuery,array($customerId));
+
+        if($query->num_rows()>0){
+            $deliveryRow = $query->result_array();
+            $deliveryType = $deliveryRow[0]['delivery_type'];
+            $deliveryCharge = $deliveryRow[0]['delivery_price'];
+            $minOrder = $deliveryRow[0]['min_order'];
+            $lowDeliveryCharge = $deliveryRow[0]['low_delivery_price'];
+            $maxOrderAmountforWavDelivery = $deliveryRow[0]['min_order_to_wave_deliveryfee'];
+        }
+
+//get the delivery total
+
+        $welcomeKitDeliveryDate = $deliveryDate;//$rowItem['next_delivery'];
+
+
+
+        // get the total order amount
+        $itemsTotalQuery="SELECT
+						sum(a.qty*price) as orderamount
+				from
+					items a
+				where
+					a.cust_id = ?
+					and a.product_id<>10834
+					and a.product_id<>0
+					and a.product_id not in (select product_id from products where group_id=10483)
+					AND a.confirmed = 'Y'
+					AND active = 'Y'
+					AND removed <> 'Y'
+					and locked = 0
+					and discount_code =''
+					and invoiced <> 'Y'
+					AND next_delivery = ?
+				group by
+					 next_delivery
+				order by
+					next_delivery ";
+        $items = $CI->db->query($itemsTotalQuery,array($customerId,$deliveryDate));
+
+        if($items->num_rows()>0) {
+            $rowItemTotal = $items->resutl_array();
+            $orderAmount = $rowItemTotal['orderamount'];
+        }
+        else {
+            $orderAmount = 0;
+        }
+
+        if(($deliveryType==1)){
+            if($minOrder>$orderAmount)
+                $totalDeliveryCharge=$deliveryCharge;
+            else
+                $totalDeliveryCharge=0;
+        }
+
+        if($deliveryType == 2){
+            if($orderAmount >= $maxOrderAmountforWavDelivery && $maxOrderAmountforWavDelivery > 0)
+                $totalDeliveryCharge = 0;
+            else if($orderAmount >= $minOrder)
+                $totalDeliveryCharge = $deliveryCharge;
+            else
+                $totalDeliveryCharge = $lowDeliveryCharge;
+        }
+        return $totalDeliveryCharge;
+
+    }
+    public function setDeliveryFee($customerId,$deliveryDate)
+    {
+        // delete existing delivery fee
+        $deleteDeliveryFee="delete from items where items.cust_id=? and next_delivery = ? and product_id=10834";
+        $CI->db->query($deleteDeliveryFee,array($customerId,$deliveryDate));
+
+        $totalDeliveryCharge = $this->calculateDeliveryFee($customerId,$deliveryDate);
+
+        $Query="update items set delivery_rate=? where items.cust_id = ?  and removed <> 'Y'  and next_delivery = ? ";
+        $CI->db->query($Query,array($totalDeliveryCharge,$customerId,$deliveryDate));
+
+
+        //add or remove the delivery fee as item
+
+        if($orderAmount>0 && $totalDeliveryCharge>0 ){
+            $queryInsertDeliveryFee="insert into items(cust_id,order_id,product_id,qty,price,frequency_id,manufacturer_id,active,confirmed,delivery_rate,next_delivery,order_no) select cust_id,order_id,'10834','1',".$totaldeliverycharge.",frequency_id,'256',active,confirmed,delivery_rate,next_delivery,order_no  from items where items.cust_id='$cust_id' and active='Y' and confirmed='Y'  and next_delivery='".$welcomeKitDeliveryDate."' limit 1";
+            $CI->db->query($queryInsertDeliveryFee,array($totalDeliveryCharge,$customerId,$deliveryDate));
+
+
+        }
     }
 
     public function getZipInfo($zipCode){

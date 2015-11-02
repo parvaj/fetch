@@ -152,7 +152,7 @@
 
             </div>
             <div class="col-md-1">
-                <div style="background-color: #fbb03b;border-radius: 6px;color: #ffffff;">x</div>
+                <a href="<?php echo base_url()."checkout/removeItems/".$items['item_id'];?>" style="background-color: #fbb03b;border-radius: 6px;color: #ffffff; width: 20px;">x</a>
             </div>
 
         </div>
@@ -165,7 +165,7 @@
     $subtotal += $items['price'];
     }
     $tax = $subtotal * 0.0740;
-    $total = $subtotal + $tax;
+    $total = $subtotal + $tax + $deliveryFee;
     ?>
 
 
@@ -224,7 +224,7 @@
                 <div class="cart-summary ">
                     <span class="cart-text"> SUBTOTAL $<?php echo $subtotal; ?> </span><br>
                     <span class="cart-text">  TAX  $<?php echo number_format($tax, 2); ?> </span><br>
-                    <span class="cart-text"> DELIVERY FEE </span><br>
+                    <span class="cart-text"> DELIVERY FEE $<?php echo number_format($deliveryFee,2); ?> </span><br>
                     <span class="cart-text text-color"> TOTAL $<?php echo number_format($total, 2); ?> </span>
                 </div>
                 <button type="button" style="width:100%" name="checkout" id="checkout" value=""
@@ -254,130 +254,3 @@ if(isset($loginMessage) && $loginMessage==0){
     <?php
 }
 ?>
-
-
-<!--div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                       <?php
-                            echo isset($errorMessage)? $errorMessage:"";
-                            echo "Next Delivery:".$customerDelivery;
-                            echo "Order No:".$orderNo;
-                       ?>
-                    </div>
-                </div>
-                <div class="row" style="background-color: aqua;">
-                    <div class="col-md-2">
-                        <div> Product Name </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div>Quantity</div>
-                    </div>
-                    <div class="col-md-2">
-                        <div>Price</div>
-                    </div>
-                    <div class="col-md-2">
-                        <div>Delivery Date</div>
-                    </div>
-                    <div class="col-md-2">
-                        <div>Frequency</div>
-                    </div>
-                </div>
-
-
-                    <?php
-                   // echo "<pre>";
-                   // print_r($itemDetails);
-
-                    $deliveryDayShow= "";
-
-
-                        if(!empty($itemDetails))
-                        {
-                            $subtotal = 0;
-
-                            foreach($itemDetails as $items ){ ?>
-                             <div class="row">
-                                <div class="col-md-2">
-                                    <div><?php echo $items['product_name']; ?></div>
-                                </div>
-                                 <div class="col-md-2">
-                                    <div>
-                                        <select  name=qty_<?php echo $items['item_id']?> id=qty_<?php echo $items['item_id']?> >
-                                        <?php
-                                            for($i=1; $i<=20;$i++){
-                                        ?>
-                                                <option value='<?php echo $i;?>' <?php echo $i == $items['qty']?"Selected":"";?> ><?php echo $i;?></option>
-                                        <?php
-                                            }
-                                        ?>
-                                         </select>
-                                    </div>
-                                 </div>
-                                 <div class="col-md-2">
-                                    <div><?php echo $items['price']; ?></div>
-                                 </div>
-                                 <div class="col-md-2">
-                                     <div>
-                                         <select name="deliveryDate_<?php echo $items['item_id']?>" id="deliveryDate_<?php echo $items['item_id']?>">
-                                            <?php
-                                                foreach($deliveryDayList as $deliveryDay ){
-                                            ?>
-                                                 <option value='<?php echo $deliveryDay["dateValue"];?>' <?php echo $deliveryDay["dateValue"]==$items['next_delivery']?"Selected":"";?> ><?php echo $deliveryDay["dateDisplay"];?></option>
-                                            <?php
-                                                }
-                                                if($items['frequency_id']==0){
-                                            ?>
-                                                    <option value='0000-00-00' >Cancel Order</option>
-                                            <?php
-                                                }
-                                            ?>
-                                         </select>
-                                     </div>
-                                 </div>
-                                 <div class="col-md-2">
-                                     <div>
-                                         <select name="frequency_<?php echo $items['item_id']?>" id="frequency_<?php echo $items['item_id']?>">
-                                             <?php
-                                             foreach($frequencyList as $frequency ){
-                                                 ?>
-                                                 <option value='<?php echo $frequency["frequency_id"];?>' <?php echo $frequency["frequency_id"]==$items['frequency_id']?"Selected":"";?> ><?php echo $frequency["frequency"];?></option>
-                                             <?php
-                                             }
-                                             if($items['frequency_id']==0){
-                                                 ?>
-                                                 <option value='0000-00-00' >Cancel Order</option>
-                                             <?php
-                                             }
-                                             ?>
-                                         </select>
-                                     </div>
-                                 </div>
-                             </div>
-                        <?php
-                         $subtotal += $items['price'];
-                            }
-                    ?>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div></div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div></div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div></div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div> Sub total : <?php echo  $subtotal ; ?></div>
-                                </div>
-
-                            </div>
-
-
-                    <?php
-                        }
-
-                    ?>
-
-            </div>

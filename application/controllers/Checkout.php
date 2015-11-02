@@ -67,6 +67,7 @@ class Checkout extends CI_Controller{
         $this->template->load('default','checkout/cartItems', $data);
 
     }
+
     public function orderSummery( )
     {
         $customerId = $this->session->userdata('customerId');
@@ -79,7 +80,7 @@ class Checkout extends CI_Controller{
 
             $orderNo = $this->Checkout_model->getOrderNo($customerId);
             $this->Checkout_model->updateCurrentOrderDate($orderNo, $deliveryDate);
-
+            $data['deliveryFee'] = $this->fetchfunctions->calculateDeliveryFee($customerId,$deliveryDate);
             $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
             $data['orderNo'] = $orderNo;
             $data['deliveryDayList'] = $this->fetchfunctions->listDeliveryDate();
@@ -89,6 +90,12 @@ class Checkout extends CI_Controller{
             $data['password'] = array('id' => 'password', 'name' => 'password');
             $this->template->load('default', 'checkout/orderSummery', $data);
         }
+
+    }
+    public function removeItems($itemRwoId)
+    {
+        $this->Checkout_model->removeOrederItems($itemRwoId);
+        redirect($_SERVER['HTTP_REFERER']);
 
     }
 
