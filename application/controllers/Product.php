@@ -166,6 +166,11 @@ class Product extends CI_Controller {
 
      public function stuffs( $departmentId=null, $classId=null, $brandId=null, $subClassId=null, $stageId=null )
    {
+       if(isset($_POST['idArray'])){
+           echo $_POST['idArray'];
+           exit;
+
+       }
        //$uri
        if($departmentId==null){
            $this->index();
@@ -205,6 +210,15 @@ class Product extends CI_Controller {
            $data["departmentName"] = $this->fetchfunctions->getValue("department_name","department","department_id=".$departmentId);
            $data['images'] = $this->fetchfunctions->getValue("petimg","department","department_id=".$departmentId);
            $data["classes"] = $classes;
+
+           $i=0;
+           foreach($classes as $class){
+               $classList[$i] = array_merge($class,array("images"=>$this->Product_model->getClassImages($departmentId, $class['class_id'])));
+               $i++;
+           }
+           $data["classes"] = $classList;
+          // echo "<pre>";
+         //  print_r($classList); die;
            $data["subClasses"]= $subClasses;
            $data["brands"]= $brands;
            $data['username'] = array('id' => 'username', 'name' => 'username');

@@ -219,4 +219,25 @@ class Product_model extends CI_Model{
             $imageName = 0;
         return $imageName;
     } */
+
+    public function getClassImages($departmentId, $classId)
+    {
+        $sql ="SELECT
+                  upc,count(item_id) as c ,img
+                FROM
+                  items inner join combos using(product_id) inner join products on products . product_id = items . product_id
+                WHERE
+                  combos . department_id = '".$departmentId."' and combos . class_id = '".$classId."'
+                GROUP BY
+                    upc
+                ORDER BY
+                c desc
+                    LIMIT 0,1";
+            $query = $this->db->query($sql);
+            if($query->num_rows()>0) {
+                $classImage = $query->row()->img;
+            }
+        return $classImage;
+
+    }
 }

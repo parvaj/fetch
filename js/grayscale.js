@@ -256,3 +256,26 @@ $(function() {
     });
 
 });
+
+function getClassList(id){
+    $("#"+id).addClass("intro-1");
+}
+function sendClassId(){
+    var idArray = [];
+    $('.intro-1').each(function (index) {
+        idArray[index] = this.id;
+    });
+
+    var t = idArray.join();
+
+    $.ajax({
+        type: "POST",
+        url: fetchurl+"product/stuffs/2",
+        data: {idArray: t },
+        complete: function (data)
+        {
+           alert(data);
+        }
+    });
+
+}

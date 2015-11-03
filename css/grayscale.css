@@ -262,6 +262,23 @@ a:focus {
 a .image_hovor :hover {
     background-color: yellow;
 }
+/*FOCUS*/
+
+
+.focus:hover {
+    /*border: 1px solid #000;*/
+    border-radius: 100%;
+    width: 200px;
+    height: 200px;
+    background-color: #B8CBF0;
+}
+.intro-1{
+    border-radius: 100%;
+    width: 200px;
+    height: 200px;
+    background-color: #B8CBF0;
+}
+
 :-ms-input-placeholder {
     color: #FE5B00;
     font-family:ExtraBold ;
