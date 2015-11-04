@@ -185,6 +185,7 @@ a:focus {
     font-weight: bold;
     margin: 5px 0;
 }
+
 .product-head{
     width: 100%;
     text-align: center;
@@ -274,11 +275,36 @@ a .image_hovor :hover {
 }
 .intro-1{
     border-radius: 100%;
-    width: 200px;
-    height: 200px;
+    width: 170px;
+    height: 170px;
     background-color: #B8CBF0;
 }
 
+.title_text{
+    color: #253E7E;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-family: ExtraBold;
+}
+.target_button{
+    margin:5px;
+}
+.pic-round{
+    width: 180px;
+    height: 180px;
+    display:block;
+    float:left;
+    margin:20px;
+    padding: 20px;
+}
+.brand-round{
+    width: 160px;
+    height: 160px;
+    display:block;
+    float:left;
+    margin:20px;
+    padding: 20px;
+}
 :-ms-input-placeholder {
     color: #FE5B00;
     font-family:ExtraBold ;

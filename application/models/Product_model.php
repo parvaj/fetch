@@ -51,13 +51,13 @@ class Product_model extends CI_Model{
     public function get_manufacturers($departmentId,$classId=null)
     {
         $sql = "select
-                    distinct manufacturer.manufacturer_id,manufacturer.manufacturer_name
+                    distinct manufacturer.manufacturer_id,manufacturer.manufacturer_name,graphic
                 from
                     combos, manufacturer
                 where
                     combos.department_id='".$departmentId."'
                     and combos.manufacturer_id=manufacturer.manufacturer_id
-                    ".($classId!=null && $classId>2?"  and combos.class_id='".$classId."'":"")."
+                    ".($classId!=null && $classId>2?"  and combos.class_id in(".$classId.")":"")."
                 order by
                     manufacturer_name";
         $query = $this->db->query($sql);
@@ -114,7 +114,7 @@ class Product_model extends CI_Model{
                 where
                     products.product_status = 1
                     and combos.department_id='".$departmentId."'
-                    ".($classId!=null && $classId>2? " and combos.class_id='".$classId."'":"")."
+                    ".($classId!=null && $classId>2? " and combos.class_id in( ".$classId.")":"")."
                     ".($brandId!=null && $brandId>2?" and combos.manufacturer_id in (".$brandId.")":"")."
                     ".($subClassId!=null?" and combos.subclass_id  in (".$subClassId.")":"")."
 

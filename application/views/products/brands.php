@@ -9,63 +9,35 @@
             </div>
         </div>
     </div>
-    <div class="container" style="margin-top: 20px;">
-        <div class="col-md-3">
-
-        </div>
-        <div class="col-md-2">
-            <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_3.jpg" width="50%" alt="products for fetchdelivers">
-        </div>
-
-        <div class="col-md-2">
-            <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_2.jpg" width="50%" alt="products for fetchdelivers">
-        </div>
-        <div class="col-md-2">
-            <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_1.jpg"  width="50%"alt="products for fetchdelivers">
-        </div>
-
-
-        <div class="col-md-3">
-
-        </div>
-    </div>
-    <div class="container" style="margin-top: 20px;">
-        <div class="col-md-3">
-
-        </div>
-        <div class="col-md-2">
-            <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_4.jpg" width="50%" alt="products for fetchdelivers">
-        </div>
-        <div class="col-md-2">
-            <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_5.jpg" width="50%" alt="products for fetchdelivers">
-        </div>
-        <div class="col-md-2">
-            <img class="img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_6.jpg" width="50%" alt="products for fetchdelivers">
-        </div>
-
-        <div class="col-md-3">
-
-        </div>
-    </div>
-    <div class="container" style="margin-top: 20px;margin-bottom: 20px;">
-        <div class="col-md-3">
-
-        </div>
-        <div class="col-md-2">
-            <img class="img-circle img-center" src="<?php echo base_url();?>/img/pets/newanimal_7.jpg" width="50%" alt="products for fetchdelivers">
-        </div>
-        <div class="col-md-2">
-            <img class=" img-circle img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_8.jpg" width="50%" alt="products for fetchdelivers">
-        </div>
-        <div class="col-md-2">
-            <img class="img-circle img-responsive img-center" src="<?php echo base_url();?>/img/pets/newanimal_9.jpg" width="50%" alt="products for fetchdelivers">
-        </div>
-
-        <div class="col-md-3">
-
+    <div class="container" style="min-height:36px;margin:20px;">
+        <div class="col-md-12" id="addbutton">
         </div>
     </div>
 
+    <div class="container title_text" style="margin-top: 20px;">
+        <div class="col-md-2">
 
+        </div>
+        <div class="col-md-8">
+            <?php
+            foreach($brands as $brand ) { ?>
+
+                <div class="brand-round" id="<?php echo $brand['manufacturer_id'] ;?>" style="">
+                    <a class="focus" href="javascript:void(0);" onclick="getClassList('<?php echo $brand['manufacturer_id'];?>','<?php echo $brand['manufacturer_name'];?>');"><img class="img-center " style="" src="http://www.fetchdelivers.com/images/brands/<?php echo $brand['graphic']; ?>" width="75px" height="" alt="<?php echo $brand['manufacturer_name']; ?>"/></a><br>
+                    <div class="text-center" style=""><?php echo $brand['manufacturer_name']; ?></div>
+                </div>
+
+         <?php   } ?>
+
+
+        </div>
+        <div class="col-md-2">
+
+        </div>
+    </div>
+    <div class="container" style="margin:20px;">
+        <div class="col-md-12">
+            <button type="submit" id="submit" class="btn-add" onclick="sendBrandId(<?php echo $_SESSION['department_id'];?>);">&nbsp;&nbsp; NEXT &nbsp;&nbsp;</button>
+        </div>
+    </div>
 </div>
-

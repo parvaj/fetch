@@ -33,6 +33,12 @@ class Fetchfunctions {
         }
     }
 
+public function destroyProductsSession(){
+    $_SESSION['department_id'] ='';
+    $_SESSION['classList'] ='';
+    $_SESSION['brandList'] ='';
+}
+
     public function getDeliveryDate(){
         $dateList = explode(",",$this->getAvailableDeliveryDate());
         $tempExplode=explode(" ",$dateList[0]);

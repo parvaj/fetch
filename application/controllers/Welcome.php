@@ -27,23 +27,17 @@ class Welcome extends CI_Controller {
 		$this->load->helper('url');
 		$this->load->library('template');
 		$this->fetchfunctions->getSessionID();
-		//$this->load->helper('form');
+		$this->fetchfunctions->destroyProductsSession();
 	}
 	public function index()
 	{
-		// $data['segment']= $this->uri->segment(3);
-		//echo $this->uri->segment(1);die;
+
 		$this->load->helper('form');
         $this->load->helper('url');
 		$this->load->helper('fetch');
-		//$this->load->helper('form');
-		//$this->fetchfunctions->updatedOrderCompleted();
 		$data['username'] = array('id' => 'username', 'name' => 'username');
 		$data['password'] = array('id' => 'password', 'name' => 'password');
 		$this->template->load('default','home', $data);
-	//	$this->load->view( 'header',$data );
-	//	$this->load->view('home');
-	//	$this->load->view('footer');
 
 	}
 }

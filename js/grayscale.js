@@ -92,7 +92,7 @@ $(document).ready(function(){
         $(".fetch-login").toggle();
     });
     $(".fetch-login").hide();
-    $(".page-scroll").click(function(){ alert('yes');
+    $(".page-scroll").click(function(){
 
         $(".sub-menu").toggle();
     });
@@ -257,10 +257,31 @@ $(function() {
 
 });
 
-function getClassList(id){
+
+function getClassList(id, classname){
+    var r = $("#btn"+id).val();
+    if( r != id ){
+        var $input = $('<button type="submit" id="btn'+id+'" value="'+id+'" class="btn-add target_button" onclick="removeClassId('+id+');">'+classname+'</button>');
+        $input.appendTo($("#addbutton"));
+    }
     $("#"+id).addClass("intro-1");
+
 }
-function sendClassId(){
+function getBrandList(id, brandname){
+    var r = $("#btn"+id).val();
+    if( r != id ){
+        var $input = $('<button type="submit" id="btn'+id+'" value="'+id+'" class="btn-add target_button" onclick="removeClassId('+id+');">'+brandname+'</button>');
+        $input.appendTo($("#addbutton"));
+    }
+    $("#"+id).addClass("intro-1");
+
+}
+function removeClassId(id){
+    $("#"+id).removeClass("intro-1");
+    $("button#btn"+id).hide();
+
+}
+function sendClassId(id){
     var idArray = [];
     $('.intro-1').each(function (index) {
         idArray[index] = this.id;
@@ -270,11 +291,37 @@ function sendClassId(){
 
     $.ajax({
         type: "POST",
-        url: fetchurl+"product/stuffs/2",
-        data: {idArray: t },
+        url: fetchurl+"product/stuffs/"+id,
+        data: { idArray: t, department:id },
         complete: function (data)
         {
-           alert(data);
+           if(data.responseText == 1){
+               window.location.href = "http://localhost/fetch/product/brands/";
+           }
+        }
+    });
+
+}
+
+function sendBrandId(id){
+
+    var idArray = [];
+    $('.intro-1').each(function (index) {
+        idArray[index] = this.id;
+    });
+
+    var p = idArray.join();
+
+    $.ajax({
+        type: "POST",
+        url: fetchurl+"product/brands/"+id,
+        data: { idArray: p },
+        complete: function (data)
+        {
+
+            if(data.responseText == 1){
+                window.location.href = "http://localhost/fetch/product/products/";
+            }
         }
     });
 
