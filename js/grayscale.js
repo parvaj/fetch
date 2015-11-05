@@ -335,3 +335,26 @@ function removeBrandId(id){
     $("button#btn"+id).remove();
 
 }
+function updateOrderItem(itemRowId) {
+    var itemQuantity = $("#number_qty_" + itemRowId).val();
+    var deliveryDate = $("#deliveryDate_" + itemRowId).val();
+    var itemFrequency = $("#frequency_" + itemRowId).val();
+    // alert(itemQuantity);
+
+    $.ajax({
+        type: "POST",
+        url: fetchurl + "checkout/updateOrderItems/",
+        data: {
+            itemRowId: itemRowId,
+            itemQuantity: itemQuantity,
+            deliveryDate: deliveryDate,
+            itemFrequency: itemFrequency
+        },
+        complete: function (data) {
+            // alert(data.responseText);
+            if (data.responseText == 1) {
+                window.location.href = fetchurl + "checkout/orderSummery";
+            }
+        }
+    });
+}

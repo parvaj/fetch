@@ -166,20 +166,20 @@ class Checkout_model extends CI_Model{
 
     public function getdeliveryDate( $cust_id ){
 
-        $sql="SELECT
-                a.order_no, a.next_delivery
-			FROM
-			    items a
-			where
-			    a.cust_id = ?
-                AND a.confirmed IN ('P', 'N')
-                AND active = 'Y'
-                AND removed <> 'Y'
-                AND locked = 0
-            GROUP BY
-                next_delivery
-            ORDER BY
-                a.next_delivery";
+        $sql = "SELECT
+                    a.order_no, a.next_delivery
+                FROM
+                    items a
+                where
+                    a.cust_id = ?
+                    AND a.confirmed IN ('P', 'N')
+                    AND active = 'Y'
+                    AND removed <> 'Y'
+                    AND locked = 0
+                GROUP BY
+                    next_delivery
+                ORDER BY
+                    a.next_delivery";
         return $this->db->query($sql,array($cust_id))->result_array();
 
     }
@@ -187,46 +187,46 @@ class Checkout_model extends CI_Model{
     public function getItemInCart($cust_id,$orderNo){
 
         $sql = "SELECT
-                        `items`.`item_id`,
-                        `items`.order_no,
-                        `items`.`qty`,
-                        `items`.`price`,
-                        `items`.`frequency_id`,
-                        `items`.`last_delivery`,
-                        `items`.`next_delivery`,
-                        `items`.`active`,
-                        `items`.`edit`,
-                        `items`.`item_type_msg`,
-                        `items`.`locked`,
-                        `items`.`discount_code`,
-                        `products`.`product_id`,
-                        `products`.`leadtime`,
-                        `products`.`group_id`,
-                         products.img,
-                        `products`.`product_name`,
-                        `products`.`upc`,
-                        `products`.`weight`,
-                        `products`.`unit`,
-                         products.taxable,
-                        `manufacturer`.`manufacturer_name`,
-                        `frequency`.`frequency`
-                    FROM `items`
-                        LEFT JOIN `customer` ON `items`.`cust_id` = `customer`.`cust_id`
-                        INNER JOIN `products` ON `items`.`product_id` = `products`.`product_id`
-                        INNER JOIN `manufacturer` ON `items`.`manufacturer_id` = `manufacturer`.`manufacturer_id`
-                        INNER JOIN `frequency` ON `items`.`frequency_id` = `frequency`.`frequency_id`
+                    `items`.`item_id`,
+                    `items`.order_no,
+                    `items`.`qty`,
+                    `items`.`price`,
+                    `items`.`frequency_id`,
+                    `items`.`last_delivery`,
+                    `items`.`next_delivery`,
+                    `items`.`active`,
+                    `items`.`edit`,
+                    `items`.`item_type_msg`,
+                    `items`.`locked`,
+                    `items`.`discount_code`,
+                    `products`.`product_id`,
+                    `products`.`leadtime`,
+                    `products`.`group_id`,
+                     products.img,
+                    `products`.`product_name`,
+                    `products`.`upc`,
+                    `products`.`weight`,
+                    `products`.`unit`,
+                     products.taxable,
+                    `manufacturer`.`manufacturer_name`,
+                    `frequency`.`frequency`
+                FROM `items`
+                    LEFT JOIN `customer` ON `items`.`cust_id` = `customer`.`cust_id`
+                    INNER JOIN `products` ON `items`.`product_id` = `products`.`product_id`
+                    INNER JOIN `manufacturer` ON `items`.`manufacturer_id` = `manufacturer`.`manufacturer_id`
+                    INNER JOIN `frequency` ON `items`.`frequency_id` = `frequency`.`frequency_id`
 
-                    WHERE
-                        `items`.`cust_id` = ?
-                        ".($cust_id>1?" AND `items`.`order_no` ":" and items.order_id ")." = ?
-                        and items.product_id<>10834
-					    and items.product_id<>0
-					    AND `items`.`removed` != 'Y'
-                        AND `items`.`active` = 'Y'
-                        and items.invoiced <> 'Y'
-                        AND `items`.`confirmed` in ('N', 'P')
-                    ORDER BY
-                        `items`.`next_delivery` ASC, locked ASC";
+                WHERE
+                    `items`.`cust_id` = ?
+                    ".($cust_id>1?" AND `items`.`order_no` ":" and items.order_id ")." = ?
+                    and items.product_id<>10834
+                    and items.product_id<>0
+                    AND `items`.`removed` != 'Y'
+                    AND `items`.`active` = 'Y'
+                    and items.invoiced <> 'Y'
+                    AND `items`.`confirmed` in ('N', 'P')
+                ORDER BY
+                    `items`.`next_delivery` ASC, locked ASC";
         return $this->db->query($sql,array($cust_id,$orderNo))->result_array();
     }
 
@@ -251,6 +251,19 @@ class Checkout_model extends CI_Model{
             return false;
         }
 
+    }
+    public function updateOrderItems($itemRowId,$data)
+    {
+        if(!empty($itemRowId)){
+           // $this->db->_compile_select();
+            $this->db->where('item_id', $itemRowId);
+            $this->db->update('items', $data);
+            //echo $this->db->last_query();
+           return $this->db->affected_rows();
+        }
+        else{
+            return false;
+        }
     }
 
 }

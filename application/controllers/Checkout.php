@@ -27,15 +27,14 @@ class Checkout extends CI_Controller{
             $data['order_no'] = $this->Checkout_model->getOrderNo($customerId);
         else
             $data['order_id'] = $this->session->userdata('sessionNumber');
+
         $groupId = $this->input->post('groupId');
         $data['product_id'] = $this->input->post('productid');
         $data['price']= $this->Checkout_model->getProductPrice($data['product_id']);
         $data['qty'] = $this->input->post('number_qty_'.$groupId);
         $data['frequency_id'] =$this->input->post('frequency_'.$groupId);
-        //echo $this->input->post('frequency_'.$groupId);
-        //$data['frequency_id'] =$this->input->post('frequency');
         $data['manufacturer_id'] = $this->input->post('manufacturerId_'.$groupId);
-        //$data['manufacturer_id'] = $this->input->post('manufacturerId');
+
         $data['is_deal'] = '-1';
 
         $this->Checkout_model->additemoncart($data);
@@ -73,14 +72,13 @@ class Checkout extends CI_Controller{
         $customerId = $this->session->userdata('customerId');
         $data['customerDelivery']= $deliveryDate = $this->fetchfunctions->getDeliveryDate();
         if (!isset($customerId)){
-
             $this->cart(0);
         }
         else {
 
             $orderNo = $this->Checkout_model->getOrderNo($customerId);
-            $this->Checkout_model->updateCurrentOrderDate($orderNo, $deliveryDate);
-            $data['deliveryFee'] = $this->fetchfunctions->calculateDeliveryFee($customerId,$deliveryDate);
+            //$this->Checkout_model->updateCurrentOrderDate($orderNo, $deliveryDate);
+            $data['deliveryFee'] = $this->fetchfunctions->calculateDeliveryFee($customerId,$deliveryDate,"'P', 'N'");
             $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
             $data['orderNo'] = $orderNo;
             $data['deliveryDayList'] = $this->fetchfunctions->listDeliveryDate();
@@ -96,6 +94,22 @@ class Checkout extends CI_Controller{
     {
         $this->Checkout_model->removeOrederItems($itemRwoId);
         redirect($_SERVER['HTTP_REFERER']);
+
+    }
+
+
+    public function updateOrderItems()
+    {
+        if($_POST){
+            $itemRowId = $this->security->xss_clean($this->input->post('itemRowId'));
+            $itemQuantity = $this->security->xss_clean($this->input->post('itemQuantity'));
+            $deliveryDate = $this->security->xss_clean($this->input->post('deliveryDate'));
+            $itemFrequency = $this->security->xss_clean($this->input->post('itemFrequency'));
+            $data = array("qty" => $itemQuantity,"next_delivery" => $deliveryDate,"frequency_id" => $itemFrequency);
+            echo $this->Checkout_model->updateOrderItems($itemRowId,$data);
+            exit();
+            //redirect($_SERVER['HTTP_REFERER']);
+        }
 
     }
 

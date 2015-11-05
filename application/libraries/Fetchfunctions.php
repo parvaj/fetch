@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Fetchfunctions {
 
     public function _construct(){
-        $CI =& get_instance();
+        $CI = &get_instance();
         $CI->load->helper('url');
         $CI->load->library('session');
         $CI->config->item('base_url');
@@ -19,7 +19,7 @@ class Fetchfunctions {
 
     public function getSessionID()
     {
-        $CI =& get_instance();
+        $CI = &get_instance();
         if (!($CI->session->has_userdata("sessionNumber"))){
             $CI->load->database();
            // lock table and update current session
@@ -29,7 +29,6 @@ class Fetchfunctions {
             $row = $query->row_array();
             $CI->session->set_userdata(array('sessionNumber'=>$row['sess_id']));
             $CI->db->query("UNLOCK TABLES");
-
         }
     }
 
@@ -45,15 +44,14 @@ public function destroyProductsSession(){
         $tempDate=explode("-",$tempExplode[1]);
         $deliveryDate = date('Y-m-d',mktime(0, 0, 0,  $tempDate[0] , $tempDate[1], $tempDate[2]));
         $newDate = $this->checkHoliday($deliveryDate);
-        if($newDate!="")
-        {
+        if($newDate!=""){
             $deliveryDate = $newDate;
         }
         return $deliveryDate;
     }
 
     public function getAvailableDeliveryDate($iLeadTime = 3){
-        $CI =& get_instance();
+        $CI = &get_instance();
         $CI->load->database();
         $dayNo = date('w');
         $returnstring="";
@@ -110,28 +108,23 @@ public function destroyProductsSession(){
                 $deliveryDate = date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")+$dayNeedToAdd, date("Y")));
 
                 // based on lead time make the string for delivery date
-                if($iLeadTime>3 && $iLeadTime<=7 )
-                {
+                if($iLeadTime>3 && $iLeadTime<=7 ){
                     $deliverdDate=explode("-",$deliveryDate);
                     $sDeliveryDate = date('l m-d-Y', mktime(0, 0, 0, $deliverdDate[1]  , $deliverdDate[2]+7, $deliverdDate[0]));
                 }
-                else if($iLeadTime>7 && $iLeadTime<=14 )
-                {
+                else if($iLeadTime>7 && $iLeadTime<=14 ){
                     $deliverdDate=explode("-",$deliveryDate);
                     $sDeliveryDate = date('l m-d-Y', mktime(0, 0, 0, $deliverdDate[1]  , $deliverdDate[2]+14, $deliverdDate[0]));
                 }
-                else if($iLeadTime>14 && $iLeadTime<=21 )
-                {
+                else if($iLeadTime>14 && $iLeadTime<=21 ){
                     $deliverdDate=explode("-",$deliveryDate);
                     $sDeliveryDate = date('l m-d-Y', mktime(0, 0, 0, $deliverdDate[1]  , $deliverdDate[2]+21, $deliverdDate[0]));
                 }
-                else if($iLeadTime>21 && $iLeadTime<=28 )
-                {
+                else if($iLeadTime>21 && $iLeadTime<=28 ){
                     $deliverdDate=explode("-",$deliveryDate);
                     $sDeliveryDate = date('l m-d-Y', mktime(0, 0, 0, $deliverdDate[1]  , $deliverdDate[2]+28, $deliverdDate[0]));
                 }
-                else
-                {
+                else{
                     $deliverdDate=explode("-",$deliveryDate);
                     $sDeliveryDate = date('l m-d-Y', mktime(0, 0, 0, $deliverdDate[1]  , $deliverdDate[2], $deliverdDate[0]));
                 }
@@ -139,14 +132,12 @@ public function destroyProductsSession(){
             }
         }
 
-        if(is_array($returnstring))
-        {
+        if(is_array($returnstring)){
             ksort($returnstring);
             return $stringDate = implode(',',$returnstring);
 
         }
-        else
-        {
+        else{
             if(date('w')<2)
                 return date('l m-d-Y',strtotime( "next thursday" ));
             else {
@@ -186,7 +177,7 @@ public function destroyProductsSession(){
         $newDate ="";
         $query = $CI->db->get("move_delivery_date where schadule_date='".$deliveryDate."'");
 
-        if($query->num_rows()>0) {
+        if($query->num_rows()>0){
             $newDate = $query->row()->new_date;
         }
 
@@ -261,15 +252,15 @@ public function destroyProductsSession(){
         $query = $CI->db->query($sql);
         return $query->result_array();
     }
-    public function calculateDeliveryFee($customerId,$deliveryDate)
+    public function calculateDeliveryFee($customerId,$deliveryDate,$confirmArrray = "'Y'")
     {
-        $CI =& get_instance();
+        $CI = &get_instance();
         $CI->load->database();
 
-        $totalDeliveryCharge=0;
-        $deliveryCharge=0;
-        $deliveryType=0;
-        $minOrder=0;
+        $totalDeliveryCharge = 0;
+        $deliveryCharge = 0;
+        $deliveryType = 0;
+        $minOrder = 0;
         $lowDeliveryCharge=0;
         $maxOrderAmountforWavDelivery=0;
 
@@ -298,51 +289,44 @@ public function destroyProductsSession(){
             $maxOrderAmountforWavDelivery = $deliveryRow[0]['min_order_to_wave_deliveryfee'];
         }
 
-//get the delivery total
-
-        $welcomeKitDeliveryDate = $deliveryDate;//$rowItem['next_delivery'];
-
-
-
         // get the total order amount
-        $itemsTotalQuery="SELECT
-						sum(a.qty*price) as orderamount
-				from
-					items a
-				where
-					a.cust_id = ?
-					and a.product_id<>10834
-					and a.product_id<>0
-					and a.product_id not in (select product_id from products where group_id=10483)
-					AND a.confirmed = 'Y'
-					AND active = 'Y'
-					AND removed <> 'Y'
-					and locked = 0
-					and discount_code =''
-					and invoiced <> 'Y'
-					AND next_delivery = ?
-				group by
-					 next_delivery
-				order by
-					next_delivery ";
+        $itemsTotalQuery = "SELECT
+                                sum(a.qty*price) as orderamount
+                            from
+                                items a
+                            where
+                                a.cust_id = ?
+                                and a.product_id<>10834
+                                and a.product_id<>0
+                                and a.product_id not in (select product_id from products where group_id=10483)
+                                AND a.confirmed in (".$confirmArrray.")
+                                AND active = 'Y'
+                                AND removed <> 'Y'
+                                and locked = 0
+                                and discount_code =''
+                                and invoiced <> 'Y'
+                                AND next_delivery = ?
+                            group by
+                                 next_delivery
+                            order by
+                                next_delivery ";
         $items = $CI->db->query($itemsTotalQuery,array($customerId,$deliveryDate));
 
         if($items->num_rows()>0) {
-            $rowItemTotal = $items->resutl_array();
-            $orderAmount = $rowItemTotal['orderamount'];
+            $rowItemTotal = $items->result_array();
+            $orderAmount = $rowItemTotal[0]['orderamount'];
         }
         else {
             $orderAmount = 0;
         }
 
-        if(($deliveryType==1)){
-            if($minOrder>$orderAmount)
-                $totalDeliveryCharge=$deliveryCharge;
+        if(($deliveryType == 1)){
+            if($minOrder > $orderAmount)
+                $totalDeliveryCharge = $deliveryCharge;
             else
-                $totalDeliveryCharge=0;
+                $totalDeliveryCharge = 0;
         }
-
-        if($deliveryType == 2){
+        else if($deliveryType == 2){
             if($orderAmount >= $maxOrderAmountforWavDelivery && $maxOrderAmountforWavDelivery > 0)
                 $totalDeliveryCharge = 0;
             else if($orderAmount >= $minOrder)
@@ -356,7 +340,7 @@ public function destroyProductsSession(){
     public function setDeliveryFee($customerId,$deliveryDate)
     {
         // delete existing delivery fee
-        $deleteDeliveryFee="delete from items where items.cust_id=? and next_delivery = ? and product_id=10834";
+        $deleteDeliveryFee = "delete from items where items.cust_id=? and next_delivery = ? and product_id=10834";
         $CI->db->query($deleteDeliveryFee,array($customerId,$deliveryDate));
 
         $totalDeliveryCharge = $this->calculateDeliveryFee($customerId,$deliveryDate);
@@ -367,8 +351,8 @@ public function destroyProductsSession(){
 
         //add or remove the delivery fee as item
 
-        if($orderAmount>0 && $totalDeliveryCharge>0 ){
-            $queryInsertDeliveryFee="insert into items(cust_id,order_id,product_id,qty,price,frequency_id,manufacturer_id,active,confirmed,delivery_rate,next_delivery,order_no) select cust_id,order_id,'10834','1',".$totaldeliverycharge.",frequency_id,'256',active,confirmed,delivery_rate,next_delivery,order_no  from items where items.cust_id='$cust_id' and active='Y' and confirmed='Y'  and next_delivery='".$welcomeKitDeliveryDate."' limit 1";
+        if($totalDeliveryCharge > 0 ){
+            $queryInsertDeliveryFee="insert into items(cust_id,order_id,product_id,qty,price,frequency_id,manufacturer_id,active,confirmed,delivery_rate,next_delivery,order_no) select cust_id,order_id,'10834','1',?,frequency_id,'256',active,confirmed,delivery_rate,next_delivery,order_no  from items where items.cust_id=? and active='Y' and confirmed='Y'  and next_delivery=? limit 1";
             $CI->db->query($queryInsertDeliveryFee,array($totalDeliveryCharge,$customerId,$deliveryDate));
 
 

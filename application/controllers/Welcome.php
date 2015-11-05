@@ -35,6 +35,9 @@ class Welcome extends CI_Controller {
 		$this->load->helper('form');
         $this->load->helper('url');
 		$this->load->helper('fetch');
+		$customerId = $this->session->userdata('customerId');
+		$orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');
+		$data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
 		$data['username'] = array('id' => 'username', 'name' => 'username');
 		$data['password'] = array('id' => 'password', 'name' => 'password');
 		$this->template->load('default','home', $data);

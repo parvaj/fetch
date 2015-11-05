@@ -44,8 +44,7 @@
                         </div>
                         <div class="col-md-5">
                             <div class="row">
-                                <div class="col-md-4"><img class="img-responsive"
-                                                           src="http://www.fetchdelivers.com/images/<?php echo $items['img'] ?>">
+                                <div class="col-md-4"><img class="img-responsive"  src="http://www.fetchdelivers.com/images/<?php echo $items['img'] ?>">
                                 </div>
                                 <div class="col-md-8 text-left">
                                     <div><?php echo $items['manufacturer_name']; ?></div>
@@ -66,7 +65,7 @@
                         </div>
                     </div>
                     <?php
-                    $subtotal += $items['price'];
+                    $subtotal += $items['price'] * $items['qty'];
                 }
                 $tax = $subtotal * 0.0740;
                 $total = $subtotal + $tax;

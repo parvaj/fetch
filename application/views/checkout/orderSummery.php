@@ -88,7 +88,54 @@
 
     <?php
 
-    foreach ($itemDetails as $items){ ?>
+    foreach ($itemDetails as $items){
+        if($tmpDate != strtotime($items['next_delivery']))
+        {
+        ?>
+
+        <div class="row">
+            <div class="customer-info text-center">
+                This products will be delivered on <?php
+                $tmpDate = strtotime($items['next_delivery']);
+                $currentTmpDate = strtotime(date("Y-m-d"));
+                $dayRemaining = $tmpDate - $currentTmpDate;
+                $dno = round($dayRemaining / 86400 )==1?round($dayRemaining / 86400 )." Day":round($dayRemaining / 86400 )." Days";
+
+                $sDeliveryDate_day = date("l, m/d/Y",$tmpDate)." (".$dno.")"; //date("m-d-Y (l)",$tmpDate);
+
+                echo $sDeliveryDate_day ;?>
+            </div>
+        </div>
+
+        <div class="row" style="border-bottom:1px solid #fbb03b;">
+            <div class="col-md-3">
+                ITEM
+            </div>
+            <div class="col-md-1">
+                QTY
+            </div>
+            <div class="col-md-1">
+                UNIT PRICE
+            </div>
+            <div class="col-md-2">
+                SUBTOTAL
+            </div>
+            <div class="col-md-2">
+                DELIVERY DATE
+            </div>
+            <div class="col-md-2">
+                FREQUENCY
+            </div>
+            <div class="col-md-1">
+                REMOVE
+            </div>
+        </div>
+
+
+    <?php
+
+        }
+    ?>
         <div class="row vertical-align" style="border-bottom:1px solid #fbb03b;">
 
             <div class="col-md-3 ">
@@ -102,8 +149,7 @@
 
             </div>
             <div class="col-md-1">
-                <input type="text" class="cart-qty" name="number_qty_<?php echo $items['product_id']; ?>"
-                       id="number_qty_<?php echo $items['product_id']; ?>; ?>" value="<?php echo $items['qty']; ?>">
+                <input type="text" class="cart-qty" name="number_qty_<?php echo $items['item_id']; ?>"   id="number_qty_<?php echo $items['item_id']; ?>" value="<?php echo $items['qty']; ?>" onchange="updateOrderItem(<?php echo $items["item_id"];?>)">
 
             </div>
 
@@ -116,7 +162,7 @@
 
             <div class="col-md-2">
 
-                <select name="deliveryDate_<?php echo $items['item_id'] ?>" id="deliveryDate_<?php echo $items['item_id'] ?>">
+                <select name="deliveryDate_<?php echo $items['item_id'] ?>" id="deliveryDate_<?php echo $items['item_id']; ?>" onchange="updateOrderItem(<?php echo $items["item_id"];?>)">
                     <?php
                     foreach ($deliveryDayList as $deliveryDay) {
                     ?>
@@ -127,14 +173,13 @@
                     if ($items['frequency_id'] == 0) {
                     ?>
                         <option value='0000-00-00'>Cancel Order</option>
-                        <?php
+                    <?php
                     }
                     ?>
                 </select>
-
             </div>
             <div class="col-md-2">
-                <select name="frequency_<?php echo $items['item_id'] ?>" id="frequency_<?php echo $items['item_id'] ?>">
+                <select name="frequency_<?php echo $items['item_id'] ?>" id="frequency_<?php echo $items['item_id'] ?>" onchange="updateOrderItem(<?php echo $items["item_id"];?>)">
                     <?php
                     foreach ($frequencyList as $frequency) {
                         ?>
@@ -162,7 +207,7 @@
         </script>
 
     <?php
-    $subtotal += $items['price'];
+    $subtotal += $items['price'] * $items['qty'];
     }
     $tax = $subtotal * 0.0740;
     $total = $subtotal + $tax + $deliveryFee;

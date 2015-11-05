@@ -35,12 +35,12 @@ class Signup extends CI_Controller{
 
     }
 
-      public function signup_process(){
+    public function signup_process(){
 
         $emailAddress = $this->security->xss_clean($this->input->get('email'));
         $zipCode = $this->security->xss_clean($this->input->get('zip_code'));
         $checkUser =  $this->Signup_model->checkUserInfo($emailAddress);
-        //$checkUser =  getValue("user_name","users","user_name='".$emailAddress."'");
+
             if( $checkUser > 0){
                 $data['success'] ="exist";
             }
