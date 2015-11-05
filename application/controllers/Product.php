@@ -36,32 +36,25 @@ class Product extends CI_Controller {
         $this->load->view('footer');
 
     }
-    public function searchproduct(){
-         if ($_POST) {
 
-            $departmentId = $this->security->xss_clean($this->input->post('deptId'));
-            $classId = $this->security->xss_clean($this->input->post('category'));
-            $brandId = $this->security->xss_clean($this->input->post('brand'));
-            $subClassId = $this->security->xss_clean($this->input->post('petType'));
-            $departmentId."  ".$classId." ".$subClassId."--" .$brandId;
-             $products = $this->Product_model->get_products($departmentId, $classId, $brandId, $subClassId);
-
-        }
-    }
     public function products($departmentId=null, $classId=null, $brandId=null, $subClassId=null, $stageId=null)
     {
-
-        if ( isset( $_SESSION['brandList'] ) && !empty($_SESSION['brandList']) && isset( $_SESSION['department_id'] ) && isset( $_SESSION['classList'] ) ) {
-           $departmentId = $_SESSION['department_id'];
-
+        $segments = $this->uri->segment(3);
+        $data['flag']=0;
+        if(!empty($segments)) {
+            $this->fetchfunctions->destroyProductsSession();
         }
-
-        //$uri
+        if ( isset( $_SESSION['brandList'] ) && !empty($_SESSION['brandList']) && isset( $_SESSION['department_id'] ) && isset( $_SESSION['classList'] ) ) {
+            $departmentId = $_SESSION['department_id'];
+            $classId = $_SESSION['classList'];
+            $brandId = $_SESSION['brandList'];
+            $data['flag'] = 1;
+        }
         if($departmentId==null){
             $this->index();
         }
-        else{
-
+        else
+        {
             $department = array();
             $classes = array();
             $subClasses = array();
@@ -78,12 +71,13 @@ class Product extends CI_Controller {
             }
             if(!empty($_SESSION['brandList'])){
                 $brandId = $_SESSION['brandList'];
-
+                $brands = $this->Product_model->get_manufacturersInfo($brandId);
             }else{
                 $brands = $this->Product_model->get_manufacturers($departmentId,$classId);
             }
             if(!empty($_SESSION['classList'])){
                 $classId = $_SESSION['classList'];
+                $classes = $this->Product_model->get_classesInfo($classId);
             }else{
                 $classes = $this->Product_model->get_classes($departmentId);
             }

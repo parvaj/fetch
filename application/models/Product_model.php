@@ -48,6 +48,23 @@ class Product_model extends CI_Model{
         $query = $this->db->query($sql);
         return $query->result_array();
     }
+
+    public function get_classesInfo($classId)
+    {
+        $sql = "SELECT
+                    DISTINCT class.class_id, class_name
+                FROM
+                    class
+                WHERE
+                    class_id in (".$classId.")
+                GROUP BY
+                    class_name
+                ORDER BY
+                    class_name";
+
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
     public function get_manufacturers($departmentId,$classId=null)
     {
         $sql = "select
@@ -63,6 +80,21 @@ class Product_model extends CI_Model{
         $query = $this->db->query($sql);
         return $query->result_array();
     }
+
+    public function get_manufacturersInfo($brandId)
+    {
+        $sql = "select
+                    manufacturer.manufacturer_id,manufacturer.manufacturer_name,graphic
+                from
+                    manufacturer
+                where
+                    manufacturer_id in (".$brandId.")
+                order by
+                    manufacturer_name";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
     public function get_subclasses($departmentId,$classId=null,$brandId=null)
     {
         $sql = "select
@@ -73,8 +105,8 @@ class Product_model extends CI_Model{
                     combos.subclass_id=subclass.subclass_id
                     and subclass.subclass_id>1
                     and combos.department_id='".$departmentId."'
-                    and combos.class_id='".$classId."'
-                   ".($brandId!=null && $brandId>2?" and combos.manufacturer_id in (".$brandId.")":"")."
+                    ".($classId!=null && $classId>2?" and combos.class_id in (".$classId.")":"")."
+                    ".($brandId!=null && $brandId>2?" and combos.manufacturer_id in (".$brandId.")":"")."
                 order by
                     subclass_name";
         $query = $this->db->query($sql);

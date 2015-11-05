@@ -2,10 +2,13 @@
     <div class="container">
         <div class="col-md-6">
 
-            <div class="scrolling-font"> <?php echo $departmentName; ?> Stuff </div>
-            <div class="home-text3"> select a category or simply browse this <br> page to find the items you are looking for!</div>
+            <div class="scrolling-font"> <?php echo (!empty($flag)?"So many choices!":$departmentName." "."Stuff"); ?>  </div>
+            <?php   if(empty($flag)){ ?>
+                        <div class="home-text3"> select a category or simply browse this <br> page to find the items you are looking for!</div>
+            <?php   } ?>
+
             <div class="row" style="margin: 10px 0 10px;">
-                <div class="col-md-4">
+                <div class="col-md-4" style="margin: 10px 0 10px;">
 
                     <select name="category" id="category">
                         <option value=''> Search by Category </option>
@@ -55,7 +58,20 @@
             <button type="button" id="submit" class="btn-add"> SUBMIT </button>
         </div>
         <div class="col-md-6">
-            <a href="<?php echo base_url();?>product/pets"><img class="img-responsive img-center" src="<?php echo base_url();?>img/pets/<?php echo $images;?>" style="margin-left: 50px;" alt="<?php echo $departmentName; ?> departments"/></a>
+            <?php   if(empty($flag)){ ?>
+                        <a href="<?php echo base_url();?>product/pets"><img class="img-responsive img-center" src="<?php echo base_url();?>img/pets/<?php echo $images;?>" style="margin-left: 50px;" alt="<?php echo $departmentName; ?> departments"/></a>
+            <?php   }else
+                    { ?>
+                        <button type="submit" id="btn117" value="117" class="btn-add target_button" onclick="removeClassId();"><?php echo $departmentName ;?> </button>
+                    <?php    foreach($classes as $class ) { ?>
+                                <button type="submit" id="btn117" value="117" class="btn-add target_button" onclick="removeClassId();"><?php echo $class['class_name'] ;?> </button>
+
+                        <?php  }
+                        foreach($brands as $brand ){ ?>
+                                <button type="submit" id="btn117" value="117" class="btn-add target_button" onclick="removeClassId();"><?php echo $brand['manufacturer_name'] ;?> </button>
+                    <?php   }
+                    }  ?>
+
         </div>
     </div>
 </div>

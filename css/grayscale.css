@@ -288,6 +288,8 @@ a .image_hovor :hover {
 }
 .target_button{
     margin:5px;
+    background: url(../img/cross.jpg) center left 5px no-repeat;
+    padding-left: 20px;
 }
 .pic-round{
     width: 180px;

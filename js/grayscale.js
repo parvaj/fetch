@@ -270,7 +270,7 @@ function getClassList(id, classname){
 function getBrandList(id, brandname){
     var r = $("#btn"+id).val();
     if( r != id ){
-        var $input = $('<button type="submit" id="btn'+id+'" value="'+id+'" class="btn-add target_button" onclick="removeClassId('+id+');">'+brandname+'</button>');
+        var $input = $('<button type="submit" id="btn'+id+'" value="'+id+'" class="btn-add target_button" style="padding-left:5px;" onclick="removeBrandId('+id+');">  '+brandname+'</button>');
         $input.appendTo($("#addbutton"));
     }
     $("#"+id).addClass("intro-1");
@@ -278,7 +278,7 @@ function getBrandList(id, brandname){
 }
 function removeClassId(id){
     $("#"+id).removeClass("intro-1");
-    $("button#btn"+id).hide();
+    $("button#btn"+id).remove();
 
 }
 function sendClassId(id){
@@ -288,7 +288,11 @@ function sendClassId(id){
     });
 
     var t = idArray.join();
-
+    if(!t)
+    {
+        alert('Please select your stuff.');
+        return false;
+    }
     $.ajax({
         type: "POST",
         url: fetchurl+"product/stuffs/"+id,
@@ -311,7 +315,11 @@ function sendBrandId(id){
     });
 
     var p = idArray.join();
-
+    if(!p)
+    {
+        alert('Please select your brands.');
+        return false;
+    }
     $.ajax({
         type: "POST",
         url: fetchurl+"product/brands/"+id,
@@ -324,5 +332,10 @@ function sendBrandId(id){
             }
         }
     });
+
+}
+function removeBrandId(id){
+    $("#"+id).removeClass("intro-1");
+    $("button#btn"+id).remove();
 
 }
