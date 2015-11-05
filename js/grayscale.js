@@ -96,10 +96,7 @@ $(document).ready(function(){
 
         $(".sub-menu").toggle();
     });
-    //var x = "Total Width: " + screen.width;
-
-   // $(".sub-menu").hide();
-});
+ });
 
 $(function(){
     $("#mytest").sexyCombo({
@@ -304,7 +301,6 @@ function sendClassId(id){
            }
         }
     });
-
 }
 
 function sendBrandId(id){
