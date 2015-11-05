@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="container title_text" style="margin-top: 20px;">
+    <div class="container title_text" style="">
         <div class="col-md-2">
 
         </div>

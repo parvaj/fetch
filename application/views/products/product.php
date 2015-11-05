@@ -1,14 +1,13 @@
 <div class="container-fluid" style="margin: 15px 0 0;">
     <div class="container">
         <div class="col-md-6">
-
             <div class="scrolling-font"> <?php echo (!empty($flag)?"So many choices!":$departmentName." "."Stuff"); ?>  </div>
-            <?php   if(empty($flag)){ ?>
-                        <div class="home-text3"> select a category or simply browse this <br> page to find the items you are looking for!</div>
-            <?php   } ?>
+                <?php   if(empty($flag)){ ?>
+                            <div class="home-text3"> select a category or simply browse this <br> page to find the items you are looking for!</div>
+                <?php   } ?>
 
             <div class="row" style="margin: 10px 0 10px;">
-                <div class="col-md-4" style="margin: 10px 0 10px;">
+                <div class="col-md-4">
 
                     <select name="category" id="category">
                         <option value=''> Search by Category </option>

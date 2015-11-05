@@ -307,6 +307,21 @@ a .image_hovor :hover {
     margin:20px;
     padding: 20px;
 }
+.margin-5{
+    margin:5px;
+}
+.margin-10{
+    margin:10px;
+}
+.margin-15{
+    margin:15px;
+}
+.margin-20{
+    margin:20px;
+}
+.margin-top-20{
+    margin:20px;
+}
 :-ms-input-placeholder {
     color: #FE5B00;
     font-family:ExtraBold ;
