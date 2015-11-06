@@ -124,6 +124,12 @@ a:focus {
     margin: 30px 0 40px 0;
 
 }
+.choice-title{
+    font-family: Pacifico;
+    font-size: 52px;
+    color: #253E7E;
+    margin-top:-10px;
+}
 .shopping-cart{
     font-family:Pacifico ;
     font-size: 52px;
@@ -290,6 +296,7 @@ a .image_hovor :hover {
     margin:5px;
     background: url(../img/cross.jpg) center left 5px no-repeat;
     padding-left: 20px;
+    font-size: 10px;
 }
 .pic-round{
     width: 180px;
@@ -306,6 +313,21 @@ a .image_hovor :hover {
     float:left;
     margin:20px;
     padding: 20px;
+}
+.pet-round{
+    width: 160px;
+    height: 160px;
+    display:block;
+    float:left;
+    margin:20px;
+    padding: 20px;
+}
+.pets:hover {
+    /*border: 1px solid #000;*/
+    border-radius: 100%;
+    width: 100px;
+    height: 100px;
+    background-color: #B8CBF0;
 }
 .margin-5{
     margin:5px;
@@ -765,6 +787,8 @@ input[type='radio']:before {
 }
 .p-ratings {
     margin: 3px 0 6px;
+    font-weight: bold;
+    font-size: 10px;
 }
 .cart-text{
     margin:5px 0;

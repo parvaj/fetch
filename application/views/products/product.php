@@ -1,12 +1,15 @@
 <div class="container-fluid" style="margin: 15px 0 0;">
     <div class="container">
         <div class="col-md-6">
-            <div class="scrolling-font"> <?php echo (!empty($flag)?"So many choices!":$departmentName." "."Stuff"); ?>  </div>
-                <?php   if(empty($flag)){ ?>
-                            <div class="home-text3"> select a category or simply browse this <br> page to find the items you are looking for!</div>
-                <?php   } ?>
-
-            <div class="row" style="margin: 10px 0 10px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="choice-title"> <?php echo (!empty($flag)?"So many choices!":$departmentName." "."Stuff"); ?>  </div>
+                    <?php   if(empty($flag)){ ?>
+                                <div class="home-text3"> select a category or simply browse this <br> page to find the items you are looking for!</div>
+                    <?php   } ?>
+                </div>
+            </div>
+            <div class="row" style="margin: 15px 10px;">
                 <div class="col-md-4">
 
                     <select name="category" id="category">
@@ -54,21 +57,21 @@
                 </div>
             </div>
             <input type="hidden" name="deptId" id="deptId" value="<?php echo $urlSegment['deptSection'];?>">
-            <button type="button" id="submit" class="btn-add"> SUBMIT </button>
+            <button type="button" style="margin:10px;" id="submit" class="btn-add"> SUBMIT </button>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" style="margin-top:15px;">
             <?php   if(empty($flag)){ ?>
                         <a href="<?php echo base_url();?>product/pets"><img class="img-responsive img-center" src="<?php echo base_url();?>img/pets/<?php echo $images;?>" style="margin-left: 50px;" alt="<?php echo $departmentName; ?> departments"/></a>
             <?php   }else
                     { ?>
-                        <button type="submit" id="btn117" value="117" class="btn-add target_button" onclick="removeClassId();"><?php echo $departmentName ;?> </button>
-                    <?php    foreach($classes as $class ) { ?>
-                                <button type="submit" id="btn117" value="117" class="btn-add target_button" onclick="removeClassId();"><?php echo $class['class_name'] ;?> </button>
-
+                            <button type="submit" id="department" value="department" class="btn-add target_button" onclick="removeClassId();"><?php echo $departmentName ;?> </button>
+                        <?php
+                            foreach($classes as $class ) { ?>
+                                    <button type="submit" id="classes" value="classes" class="btn-add target_button" onclick="removeClassId();"><?php echo $class['class_name'] ;?> </button>
                         <?php  }
-                        foreach($brands as $brand ){ ?>
-                                <button type="submit" id="btn117" value="117" class="btn-add target_button" onclick="removeClassId();"><?php echo $brand['manufacturer_name'] ;?> </button>
-                    <?php   }
+                            foreach($brands as $brand ){ ?>
+                                    <button type="submit" id="brands" value="brands" class="btn-add target_button" onclick="removeClassId();"><?php echo $brand['manufacturer_name'] ;?> </button>
+                        <?php   }
                     }  ?>
 
         </div>
@@ -211,8 +214,9 @@
                     <div class="p-ratings">
                         <img src="<?php echo base_url();?>img/rating0.png"
                              alt="products ratings for fetchdelivers">
-                    </div>
+
                     <div class=""> PRODUCT RATING</div>
+                    </div>
                 </div>
                 <div class="col-md-9">
                     <div class="row" style="min-height:60px;">
