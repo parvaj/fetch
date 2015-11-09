@@ -52,8 +52,7 @@ class Checkout extends CI_Controller{
         }
         else{
             $orderNo= $this->Checkout_model->getOrderNo($customerId);
-            // put the product to customer cart
-            //$this->Checkout_model->updateCurrentOrderDate($orderNo,$deliveryDate);
+
         }
         $data["loginMessage"]=$loginData;
         $data['cartCount'] = $this->Checkout_model->cartAmount($customerId,$orderNo );
