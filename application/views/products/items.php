@@ -39,6 +39,14 @@ if(!empty($products)) {
                         </button>
                     </div>
                 </div>
+                <?php if( ( $product['class_id'] =='22' || $product['class_id'] =='31') && ($customerId < 1 || empty($isNewCustomer))){ ?>
+                    <div class="row new-customer">
+                        <div class="col-md-12 text-center ">
+                            <div class="save-new-customer"> New Customers Save 50% Off First Bag of Pet Food </div>
+                            <div class="save-new-customer-sec"> Discount will be applied at checkout of your first order</div>
+                        </div>
+                    </div>
+                <?php } ?>
                 <div class="row font-bold" style="border-bottom: 2px solid #fbb03b;">
                     <div class="col-md-4 text-left">
                         Options
@@ -52,7 +60,7 @@ if(!empty($products)) {
                 </div>
 <?php }
 } ?>
-        <div style="min-height: 100px">
+        <div style="min-height: 80px">
         <?php    foreach ($products as $productDetails) {
         ?>
             <div class="row" style="border-bottom: 1px solid gainsboro;margin-top:5px;">

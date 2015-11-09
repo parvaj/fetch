@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <title>Fetch Delivers | Pet Supplies Delivered Right To Your Door</title>
 
     <!-- Bootstrap Core CSS -->
-
+    <link rel="shortcut icon" href="<?php echo base_url(); ?>img/favicon.ico">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/grayscale.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>font-awesome/css/font-awesome.min.css">

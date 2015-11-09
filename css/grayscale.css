@@ -98,7 +98,20 @@ a:focus {
     text-transform: none;
     margin: -14px 0 0;
 }
-
+.new-customer{
+    color: #101F7A;
+    margin-top:8px;
+}
+.save-new-customer{
+    background-color: #fd7c00;
+    padding: 5px;
+    font-size: 14px;
+    font-weight: 800;
+}
+.save-new-customer-sec{
+    padding: 5px;
+    font-size: 15px;
+}
 .home-font{
     font-family:Pacifico ;
     font-size: 70px;
