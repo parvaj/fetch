@@ -103,6 +103,8 @@ class Product extends CI_Controller {
             $data['frequency'] =  $this->fetchfunctions->frequencyList();
             /*  update order number and cust id */
             $customerId = $this->session->userdata('customerId');
+            $data['isNewCustomer'] = $this->fetchfunctions->getValue("count(product_id)","items","cust_id='".$customerId."' and	confirmed ='Y' and invoiced='Y' and removed!='Y'");
+            $data["customerId"]= $customerId;
             $orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');
             $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
             $this->template->load('default', 'products/product', $data);
@@ -117,10 +119,10 @@ class Product extends CI_Controller {
             $this->index();
         }
         else{
-
+            $customerId = $this->session->userdata('customerId');
             $items= array();
             $items = $this->Product_model->get_items($itemId);
-
+            $data['isNewCustomer'] = $this->fetchfunctions->getValue("count(product_id)","items","cust_id='".$customerId."' and	confirmed ='Y' and invoiced='Y' and removed!='Y'");
 			$data['nextDelivery'] = $this->fetchfunctions->getNextDeliveryDate($itemId,3);
             $data["products"]= $items;
             $data['username'] = array('id' => 'username', 'name' => 'username');
@@ -132,7 +134,7 @@ class Product extends CI_Controller {
             }else{
                 $data['largestBagOffer']='';
             }
-            $customerId = $this->session->userdata('customerId');
+            $data["customerId"]= $customerId;
             $orderNo = isset($customerId)?$this->Checkout_model->getOrderNo($customerId): $this->session->userdata('sessionNumber');
             $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
 

@@ -11,7 +11,7 @@
             </div>
             <div class="row" style="margin: 15px 10px;">
                 <div class="col-md-4">
-
+                    <table><tr><td>
                     <select name="category" id="category">
                         <option value=''> Search by Category </option>
                         <?php
@@ -61,7 +61,7 @@
         </div>
         <div class="col-md-6" style="margin-top:15px;">
             <?php   if(empty($flag)){ ?>
-                        <a href="<?php echo base_url();?>product/pets"><img class="img-responsive img-center" src="<?php echo base_url();?>img/pets/<?php echo $images;?>" style="margin-left: 50px;" alt="<?php echo $departmentName; ?> departments"/></a>
+                        <a href="<?php echo base_url();?>product/pets"><img class="img-responsive img-center" src="<?php echo base_url();?>img/pets/<?php echo $images;?>" alt="<?php echo $departmentName; ?> departments"/></a>
             <?php   }else
                     { ?>
                             <button type="submit" id="department" value="department" class="btn-add target_button" onclick="removeClassId();"><?php echo $departmentName ;?> </button>
@@ -73,7 +73,6 @@
                                     <button type="submit" id="brands" value="brands" class="btn-add target_button" onclick="removeClassId();"><?php echo $brand['manufacturer_name'] ;?> </button>
                         <?php   }
                     }  ?>
-
         </div>
     </div>
 </div>
@@ -233,6 +232,14 @@
                             <button type="submit" name="BUY"  id="btnbuy_<?php echo $product['group_id']; ?>"  value="ADD TO CART" class="btn-add">ADD TO CART</button>
                         </div>
                     </div>
+                    <?php if( ( $product['class_id'] =='22' || $product['class_id'] =='31') && ($customerId < 1 || empty($isNewCustomer))){ ?>
+                        <div class="row new-customer">
+                            <div class="col-md-12 text-center">
+                                <div class="save-new-customer"> New Customers Save 50% Off First Bag of Pet Food </div>
+                                <div class="save-new-customer-sec"> Discount will be applied at checkout of your first order</div>
+                            </div>
+                        </div>
+                    <?php } ?>
                     <div class="row font-bold" style="border-bottom: 2px solid #fbb03b;">
                         <div class="col-md-5 text-left">
                             Options
