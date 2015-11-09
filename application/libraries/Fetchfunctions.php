@@ -733,9 +733,6 @@ public function destroyProductsSession(){
                     $discountAmount += $this->getValue("page_discount_parcent/100","product_page_discount","page_discount_id=1")*$totalPrice;
             }
         }
-
         return $discountAmount;
     }
-
-
 }

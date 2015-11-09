@@ -42,7 +42,6 @@ class Signup extends CI_Controller{
         $emailAddress = $this->security->xss_clean($this->input->get('email'));
         $zipCode = $this->security->xss_clean($this->input->get('zip_code'));
         $checkUser =  $this->Signup_model->checkUserInfo($emailAddress);
-
         if( $checkUser > 0){
             $data['success'] ="exist";
         }
