@@ -84,7 +84,9 @@ class Checkout extends CI_Controller{
             $data['orderNo'] = $orderNo;
             $data['deliveryDayList'] = $this->fetchfunctions->listDeliveryDate();
             $data['frequencyList'] = $this->fetchfunctions->frequencyList();
-            $data['itemDetails'] = $this->Checkout_model->getItemInCart($customerId, $orderNo);
+            $data['itemDetails'] = $itemDetails =  $this->Checkout_model->getItemInCart($customerId, $orderNo);
+            $data['foodDiscount'] = $this->fetchfunctions->getFoodDiscount($itemDetails);
+            $data['recurringDiscount'] = $this->fetchfunctions->getRecurringDiscount($itemDetails);
             $data['username'] = array('id' => 'username', 'name' => 'username');
             $data['password'] = array('id' => 'password', 'name' => 'password');
             $this->template->load('default', 'checkout/orderSummery', $data);

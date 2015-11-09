@@ -812,6 +812,7 @@ input[type='radio']:before {
 }
 .cart-text{
     margin:5px 0;
+    text-transform: uppercase;
 }
 
 .vertical-align {

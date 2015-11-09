@@ -13,6 +13,7 @@
             </div>
             <div class="text-center">
                 <?php
+                    $taxRate = number_format($customerDetails[0]['combinedrate'],5);
                     echo $customerDetails[0]['firstname']." ".$customerDetails[0]['surname']."<br />";
                     echo $customerDetails[0]['address']." ".$customerDetails[0]['unit']."<br />";
                     echo $customerDetails[0]['city']." ".$customerDetails[0]['state']." ".$customerDetails[0]['zipcode'];
@@ -214,7 +215,7 @@
     <?php
         $subtotal += $items['price'] * $items['qty'];
     }
-    $tax = $subtotal * 0.0740;
+    $tax = $subtotal * $taxRate;
     $total = $subtotal + $tax + $deliveryFee;
     ?>
 
@@ -274,6 +275,21 @@
                     <span class="cart-text"> SUBTOTAL $<?php echo $subtotal; ?> </span><br>
                     <span class="cart-text">  TAX  $<?php echo number_format($tax, 2); ?> </span><br>
                     <span class="cart-text"> DELIVERY FEE $<?php echo number_format($deliveryFee,2); ?> </span><br>
+                    <?php
+                        if($foodDiscount > 0){
+                    ?>
+                            <span class="cart-text"> FOOD DISCOUNT $<?php echo number_format($foodDiscount,2); ?> </span><br>
+                    <?php
+                            $total = $total-$foodDiscount;
+                        }
+
+                        if($recurringDiscount > 0){
+                    ?>
+                            <span class="cart-text"> Recurring DISCOUNT $<?php echo number_format($recurringDiscount,2); ?> </span><br>
+                    <?php
+                            $total = $total-$recurringDiscount;
+                        }
+                    ?>
                     <span class="cart-text text-color"> TOTAL $<?php echo number_format($total, 2); ?> </span>
                 </div>
                 <button type="button" style="width:100%" name="checkout" id="checkout" value=""

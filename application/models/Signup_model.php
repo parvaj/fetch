@@ -65,6 +65,7 @@ class Signup_model extends CI_Model{
                    *
                 FROM
                     customer
+					INNER JOIN  `zipcode_tax_rate` USING ( zipcode )
                 WHERE
                     cust_id=?";
 		$query = $this->db->query($sql,array($customerId));

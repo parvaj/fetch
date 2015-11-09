@@ -372,9 +372,13 @@ public function destroyProductsSession(){
     }
 
     public function setDiscount($customerId, $orderNumber, $confirmed='Y', $discountCode=''){
+
         $CI =& get_instance();
         $CI->load->database();
+        $CI->load->model('Checkout_model');
+
         $Error = "Faild to set the discount";
+
         //delete all the discount of this order
         $sql = "DELETE FROM items WHERE   order_no = ? AND cust_id = ? and discount_code !='' ";
         $CI->db->query($sql,array($orderNumber,$customerId));
@@ -394,28 +398,28 @@ public function destroyProductsSession(){
             return $sError;
         }
 
-        $sql = "SELECT
+        $sqlDiscountDetails = "SELECT
                     discount_id, code, discount_type_id, discount_value, discount_fixed_value, minimspend, msg, sales_msg, qty, category_id, discount_date_from, discount_date_to, multiple_discount, order_count, manufacturer_id, status, manufacturer_ids,buy_product_id,buy_qty,free_product_id,free_qty,department_id
                 FROM
                     discount
                 WHERE
                     LCASE(code) = LCASE(?) and status = 1";
-
-        $result = mysql_query($sql) or die("get discount info , sql error $sql  :" .mysql_error());
-        if(!$count = mysql_num_rows($result)){
-            $sError = 'Invalid discount ';// . $sql;
-            return $sError;
+        $discountDetails=$CI->db->query($sqlDiscountDetails,array($discountCode));
+        if($CI->db->num_rows() == 0){
+            return $Error;
         }
 
-        $row = mysql_fetch_array($result);
+        $rowDiscount = $discountDetails->result_array();
+
         //check active/inactive discount code
-        if($row[status] == 0){
+        if($rowDiscount['status'] == 0){
             $sError = 'Inactive discount code';
             return $sError;
         }
+
         //check date validate/star discount code
-        if($row[discount_date_from] !='0000-00-00'){
-            $dateArr = explode("-",$row[discount_date_from]);
+        if($rowDiscount['discount_date_from'] !='0000-00-00'){
+            $dateArr = explode("-",$rowDiscount['discount_date_from']);
             $date0Int = mktime(0,0,0,$dateArr[1],$dateArr[2]+1,$dateArr[0]);
             $dateNow = time();
             $dateDiff0 =  $dateNow-$date0Int;
@@ -425,9 +429,10 @@ public function destroyProductsSession(){
                 return $sError; // discount code expire
             }
         }
+
         //check date validate/expire discount code
-        if($row[discount_date_to] !='0000-00-00'){
-            $dateArr = explode("-",$row[discount_date_to]);
+        if($rowDiscount['discount_date_to'] !='0000-00-00'){
+            $dateArr = explode("-",$rowDiscount['discount_date_to']);
             $date1Int = mktime(0,0,0,$dateArr[1],$dateArr[2]+1,$dateArr[0]);
             $dateNow = time();
             $dateDiff = $date1Int - $dateNow;
@@ -438,82 +443,51 @@ public function destroyProductsSession(){
         }
 
         //check is it only for new customer or the customer going to set first order
-        if($row['order_count'] == 1 ){
+        if($rowDiscount['order_count'] == 1 ){
+
             // check the first order offer or this order
-            $checkUsed = getvalue("count(first_order_discount)","items","cust_id='".dbsafe($cust_id)."' and  order_no='".dbsafe($sOrderNo)."' and first_order_discount!=''");
-            if(!empty($checkUsed))
-            {
+            $checkUsed = $this->getValue("count(first_order_discount)","items","cust_id='".$customerId."' and  order_no='".$orderNumber."' and first_order_discount!=''");
+            if(!empty($checkUsed)){
                 $sError = "You have already use the first order offer";
                 return $sError;
             }
 
-            $lastDeliveryDuration = getvalue("DATEDIFF(now(),`last_delivery`)","customercall","cust_id = '".dbsafe($cust_id)."'");
-            $sql = "SELECT count(invoice_id) as count_invoice from invoices where cust_id = '".dbsafe($cust_id)."' ";
-
-            $result_count_invoiced = mysql_query($sql) or die("result_count_invoiced , sql error $sql  :" .mysql_error());
-            $row_count_invoiced = mysql_fetch_array($result_count_invoiced);
-            if( (int)$row_count_invoiced["count_invoice"] >= $row["order_count"] && $lastDeliveryDuration < 365){
-                $sError = "Discount code is valid only for $row[order_count] order(s) , you already placed  $row_count_invoiced[count_invoice] order(s) (Invoiced).";
+            $lastDeliveryDuration = $this->getValue("DATEDIFF(now(),`last_delivery`)","customercall","cust_id = '".$customerId."'");
+            $numberOfInvoiced = $this->getValue(" count(invoice_id)","invoices","cust_id = '".$customerId."'");
+            if( (int)$numberOfInvoiced >= $rowDiscount["order_count"] && $lastDeliveryDuration < 365){
+                $sError = "Discount code is valid only for {$rowDiscount['order_count']} order(s) , you already placed  {$numberOfInvoiced} order(s) (Invoiced).";
                 return $sError;
             }
         }
 
         // qty available
-        if(!empty($row['qty']) && $row['qty'] > 0 )
-        {
-            $sql = "SELECT count(distinct invoice_id) as count_invoice from items where LCASE(discount_code) = LCASE('$discountCode')";
-            $result_count_invoiced = mysql_query($sql) or die("result_count_invoiced , sql error $sql  :" .mysql_error());
-            $row_count_invoiced = mysql_fetch_array($result_count_invoiced);
-            if( (int)$row_count_invoiced["count_invoice"] >= $row["qty"] ){
-                $sError = "Discount code is valid only for $row[qty] order(s) , your  placed  $row_count_invoiced[count_invoice] order(s) (Invoiced).";
+        if(!empty($rowDiscount['qty']) && $rowDiscount['qty'] > 0 ) {
+            $numberOfInvoiced = $this->getValue("count(distinct invoice_id)","items","LCASE(discount_code) = LCASE('$discountCode')");
+            if( (int)$numberOfInvoiced >= $rowDiscount["qty"] ){
+                $sError = "Discount code is valid only for {$rowDiscount['qty']} order(s) , your  placed  {$numberOfInvoiced} order(s) (Invoiced).";
                 return $sError;
             }
         }
 
-        $today = date('Y-m-d');
+
         //check same discount code use multiple
-        if($row[multiple_discount] > 0 ){
-            $sql = "SELECT count(item_id) as count_used_code from items where cust_id = '$cust_id' and removed <> 'Y' AND active = 'Y' and LCASE(discount_code) = LCASE('$discountCode')  "; // next_delivery <= '$today'
-            //change it to invoice table later
-            $result_count_used_code = mysql_query($sql) or die("result_count_used_code , sql error $sql  :" .mysql_error());
-            $row_count_used_code = mysql_fetch_array($result_count_used_code);
-            if( (int)$row_count_used_code[count_used_code] >= $row[multiple_discount] ){
-                $sError = "This Discount code is valid only use once.";
+        if($rowDiscount['multiple_discount'] > 0 ){
+            $discountUsed = $this->getValue("count(item_id)","items","cust_id = '$customerId' and removed <> 'Y' AND active = 'Y' and LCASE(discount_code) = LCASE('$discountCode')");
+            if( (int)$discountUsed >= $rowDiscount['multiple_discount'] ){
+                $sError = "This Discount code is valid only to use {$rowDiscount['multiple_discount']} .";
                 return $sError;
             }
         }
 
         //get all product list of that order
-        $sqlItem="
-			select
-					p.product_id, p.group_id, p.leadtime, i.qty, i.price,
-					i.manufacturer_id, i.next_delivery, i.item_id,i.frequency_id,
-					c.class_id,c.department_id
-			from
-					products p,items i, combos c
-			where
-					p.product_id=i.product_id
-					and c.product_id = p.group_id
-					and p.sales_price_applicable <> 1
-					and i.removed <> 'Y'
-					and cust_id = '".dbsafe($cust_id)."'
-					and order_no = '".dbsafe($sOrderNo)."'
-					and i.next_delivery <> '0000-00-00'
-			group by
-					i.item_id
-			order by
-					i.next_delivery DESC, i.product_id ";
+        $itemDetails = $this->Checkout_model->getItemInCart($customerId,$orderNumber);
 
-        //echo $sqlItem .'--------------';
-        $resultItem=mysql_query($sqlItem) or die($sqlItem .' > ' .mysql_error());
         $n=0;
-        $easydiscount=0;
+        $easyDiscount=0;
         $orderTotal=0;
-        while ($rowItems = mysql_fetch_assoc($resultItem)){
-            if($easydiscount==0 && $rowItems['frequency_id']!=0 && $rowItems['frequency_id']!=14)
-            {
-                $easydiscount=1;
-                //die();
+        foreach($itemDetails as $rowItems){
+            if($easyDiscount == 0 && $rowItems['frequency_id']!=0 && $rowItems['frequency_id']!=14) {
+                $easyDiscount=1;
             }
 
             $freeBagDeliveryDate = $rowItems['next_delivery'];
@@ -533,47 +507,43 @@ public function destroyProductsSession(){
             $orderTotal += 	($rowItems['qty']* $rowItems['price']);
             $n++;
         }
-        //var_dump($aProducts);
-//echo $row['minimspend']." <> ". $orderTotal;
-        // check minimum spend amount
-        if(!empty($row['minimspend']) && $row['minimspend'] > $orderTotal )
-        {
 
-            $sError = "you have to spend minimum amount $".$row['minimspend'];
+        if(!empty($rowDiscount['minimspend']) && $rowDiscount['minimspend'] > $orderTotal ){
+            $sError = "you have to spend minimum amount $".$rowDiscount['minimspend'];
             return $sError;
-
         }
 
         //discount
-        $fDiscountFixedValue = $row['discount_fixed_value'];
-        $discount_value = $row['discount_value'];
-        $class_id =  $row['category_id'];
+        $fDiscountFixedValue = $rowDiscount['discount_fixed_value'];
+        $discountValue = $rowDiscount['discount_value'];
+        $classId =  $rowDiscount['category_id'];
 
-        if($row['discount_type_id'] == 1 ){ //	Fixed Credit
+        //	Fixed Credit
+        if($rowDiscount['discount_type_id'] == 1 ){
             $disAmountRemain = $fDiscountFixedValue;
             $aDiscountDate = array();
             foreach($aProducts as $key => $aProduct){
-                if($row['manufacturer_id']>0 &&  $aProduct[6]==$row['manufacturer_id'])
-                {
+                if($rowDiscount['manufacturer_id']>0 &&  $aProduct[6]==$rowDiscount['manufacturer_id']) {
                     if($fDiscountFixedValue > 0){
                         $amount = $aProduct[4];
                         if ($amount >= $disAmountRemain){
                             $aDiscountDate[$aProduct[8]] += $disAmountRemain;
                             $disAmountRemain = 0;
-                        }else{
+                        }
+                        else{
                             $aDiscountDate[$aProduct[8]] +=  $amount;
                             $disAmountRemain = $disAmountRemain - $amount;
                         }
                     }
                 }
-                else
-                {
-                    if($fDiscountFixedValue > 0 && ($row['manufacturer_id']<=0 || $row['manufacturer_id']=="")){
+                else{
+                    if($fDiscountFixedValue > 0 && ($rowDiscount['manufacturer_id']<=0 || $rowDiscount['manufacturer_id']=="")){
                         $amount = $aProduct[4];
                         if ($amount >= $disAmountRemain){
                             $aDiscountDate[$aProduct[8]] += $disAmountRemain;
                             $disAmountRemain = 0;
-                        }else{
+                        }
+                        else{
                             $aDiscountDate[$aProduct[8]] +=  $amount;
                             $disAmountRemain = $disAmountRemain - $amount;
                         }
@@ -584,153 +554,187 @@ public function destroyProductsSession(){
             foreach($aDiscountDate as $date => $discountAmount){
                 if($discountAmount > 0){
                     $deliveryDate = str_replace("_", "-", $date);
-                    $query_discount="INSERT INTO items (".($sOrderNo !='' ? " order_no " : "order_id ") .", cust_id, qty, next_delivery, ref_id, active, discount_code, price, confirmed) VALUES (".($sOrderNo !='' ? " '$sOrderNo' " : " '$iOrderId' ") .", ".($sOrderNo !='' ? " '$cust_id' " : " '-1' ") .",  1, '$deliveryDate', '', 'Y', '$discountCode', '-$discountAmount', '$confirmed')";
-                    $resultInsertDiscount=mysql_query($query_discount) or die( 'Add discount as a new entry error:  $query_discount'. mysql_error());
-                    //echo '<script language="javascript">alert("you have got $'.$discountAmount.' discount on non-sales item"); </script>';
+                    $queryDiscount = "INSERT INTO items ( order_no, cust_id, qty, next_delivery, ref_id, active, discount_code, price, confirmed) VALUES (?,?,  1, ?, '', 'Y', ?, '-$discountAmount',?)";
+                    return $CI->db->query($queryDiscount,array($orderNumber,$customerId,$deliveryDate,$discountCode,$confirmed));
                 }
             }
-        }else if($row[discount_type_id] == 2){  //Percent Discount
+        }
+        //Percent Discount
+        else if($rowDiscount['discount_type_id'] == 2){
             $aDiscountDate = array();
-            $discountparcentage=(1-$discount_value)*100;
-            if($aProducts)
-                foreach($aProducts as $key => $aProduct){
-                    if($row['manufacturer_id']>0)
-                    {
-                        if ($aProduct[4] > 0 &&  $aProduct[6]==$row['manufacturer_id']){
-                            $aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
+            $discountPercentage = (1-$discountValue)*100;
+            if($aProducts) {
+                foreach ($aProducts as $key => $aProduct) {
+                    if ($rowDiscount['manufacturer_id'] > 0) {
+                        if ($aProduct[4] > 0 && $aProduct[6] == $rowDiscount['manufacturer_id']) {
+                            $aDiscountDate[$aProduct[8]] += sprintf("%01.2f", ($aProduct[4] * (1 - $discountValue)));
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // echo $aProduct[4];
-                        if($easydiscount==1 && $aProduct[4] > 0)
-                            $aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
-                        else if ($aProduct[4] > 0 && $discountCode!='EASY' ){
-                            $aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
+                        if ($easyDiscount == 1 && $aProduct[4] > 0)
+                            $aDiscountDate[$aProduct[8]] += sprintf("%01.2f", ($aProduct[4] * (1 - $discountValue)));
+                        else if ($aProduct[4] > 0 && $discountCode != 'EASY') {
+                            $aDiscountDate[$aProduct[8]] += sprintf("%01.2f", ($aProduct[4] * (1 - $discountValue)));
                         }
                     }
                 }
+            }
 
             foreach($aDiscountDate as $date => $discountAmount){
                 if($discountAmount > 0){
                     $deliveryDate = str_replace("_", "-", $date);
-                    $query_discount="INSERT INTO items (".($sOrderNo !='' ? " order_no " : "order_id ") .", cust_id, qty, next_delivery, ref_id, active, discount_code, price, confirmed) VALUES (".($sOrderNo !='' ? " '$sOrderNo' " : " '$iOrderId' ") .", ".($sOrderNo !='' ? " '$cust_id' " : " '-1' ") .",  1, '$deliveryDate', '', 'Y', '$discountCode', '-$discountAmount', '$confirmed')";
-                    $resultInsertDiscount=mysql_query($query_discount) or die( 'Add discount as a new entry error:  $query_discount'. mysql_error());
-                    //echo '<script language="javascript">alert("you have got '.$discountparcentage.'% discount on non-sales item"); </script>';
+                    $queryDiscount = "INSERT INTO items ( order_no, cust_id, qty, next_delivery, ref_id, active, discount_code, price, confirmed) VALUES (?,?,  1, ?, '', 'Y', ?, '-$discountAmount',?)";
+                    return $CI->db->query($queryDiscount,array($orderNumber,$customerId,$deliveryDate,$discountCode,$confirmed));
                 }
             }
-        }else if($row[discount_type_id] == 3){ // Discount On First Item
-            $discount_product_id = 0;
-            $product_price = 0;
-            $discount_date = '';
-            $discount_item_id = '';
+        }
+        // Discount On First Item
+        else if($rowDiscount['discount_type_id'] == 3){
+            $discountProductId = 0;
+            $productPrice = 0;
+            $discountDate = '';
+            $discountItemId = '';
             foreach($aProducts as $key => $aProduct){
-                //if ($aProduct[5] == $class_id ){
-                if($aProduct[3] > $product_price ){
-                    $product_price = $aProduct[3];
-                    $discount_product_id = $aProduct[0];
-                    $discount_date = $aProduct[7];
-                    $discount_item_id = $aProduct[9];
+                if($aProduct[3] > $productPrice ){
+                    $productPrice = $aProduct[3];
+                    $discountProductId = $aProduct[0];
+                    $discountDate = $aProduct[7];
+                    $discountItemId = $aProduct[9];
                 }
-                //}
             }
-            if($discount_product_id > 0){
-                $discountAmount = sprintf("%01.2f",($product_price*(1-$discount_value)));
-                $query_discount="INSERT INTO items (".($sOrderNo !='' ? " order_no " : "order_id ") .", cust_id, qty, next_delivery, ref_id, active, discount_code, price, ref_item, confirmed ) VALUES (".($sOrderNo !='' ? " '$sOrderNo' " : " '$iOrderId' ") .", ".($sOrderNo !='' ? " '$cust_id' " : " '-1' ") .",  1, '$discount_date', '$discount_product_id', 'Y', '$discountCode', '-$discountAmount', '$discount_item_id', '$confirmed')";
-                $resultInsertDiscount=mysql_query($query_discount) or die( 'Add discount as a new entry error:  $query_discount'. mysql_error());
-                echo '<script language="javascript">alert("you have got $'.$discountAmount.' discount on  non-sales item"); </script>';
+            if($discountProductId > 0){
+                $discountAmount = sprintf("%01.2f",($productPrice*(1-$discountValue)));
+                $queryDiscount="INSERT INTO items (order_no, cust_id, qty, next_delivery, ref_id, active, discount_code, price, ref_item, confirmed ) VALUES ( ?,?,  1, ?, ?, 'Y', '$discountCode', '-$discountAmount', ?, ?)";
+                return $CI->db->query($queryDiscount,array($orderNumber,$customerId,$discountDate,$discountProductId,$discountCode,$discountItemId,$confirmed));
             }
-        }else if($row[discount_type_id] == 4 || $row[discount_type_id]==6){ //type=4 free bag discount
-            $discount_product_id = 0;
-            $product_price = 0;
-            $discount_date = '';
-            $discount_item_id = '';
+        }
+        //type=4 free bag discount
+        else if($rowDiscount['discount_type_id'] == 4 || $rowDiscount['discount_type_id']==6){
+            $discountProductId = 0;
+            $productPrice = 0;
+            $discountDate = '';
+            $discountItemId = '';
             foreach($aProducts as $key => $aProduct){
-                if ($aProduct[0] == $row['buy_product_id'] &&  $aProduct[2]>=$row['buy_qty']){
-                    $discount_date = $aProduct[7];
-                    $discount_item_id = $aProduct[9];
-                    $freeProductPrice=getvalue("price","price","product_id='".(dbsafe($row['free_product_id']))."'");
-                    $freeBagManufacturerId=getvalue("distinct manufacturer_id","combos","product_id='".(dbsafe($row['free_product_id']))."'");
-                    $queryAddFreeBag="INSERT INTO items (".($sOrderNo !='' ? " order_no " : "order_id ") .", cust_id, qty, next_delivery, product_id, active, confirmed, locked,manufacturer_id,  price, item_type_msg,discount_code,ref_id ) VALUES (".($sOrderNo !='' ? " '$sOrderNo' " : " '$iOrderId' ") .", ".($sOrderNo !='' ? " '$cust_id' " : " '-1' ") .",  '".$row['free_qty']."', '$discount_date', '".$row['free_product_id']."', 'Y','P',1, '$freeBagManufacturerId', '$freeProductPrice','".$row['product_line_msg']."','','$discount_item_id')";
-                    $resultAddFreeBag=mysql_query($queryAddFreeBag) or die( 'queryAddFreeBag entry error:  $queryAddFreeBag'. mysql_error());
+                if ($aProduct[0] == $rowDiscount['buy_product_id'] &&  $aProduct[2]>=$rowDiscount['buy_qty']){
+                    $discountDate = $aProduct[7];
+                    $discountItemId = $aProduct[9];
+                    $freeProductPrice = $this->getValue("price","price","product_id='".$rowDiscount['free_product_id']."'");
+                    $freeBagManufacturerId = $this->getValue("distinct manufacturer_id","combos","product_id='".$rowDiscount['free_product_id']."'");
+
+
+                    $queryAddFreeBag="INSERT INTO items ( order_no, cust_id, qty, next_delivery, product_id, active, confirmed, locked,manufacturer_id,  price, item_type_msg,discount_code,ref_id ) VALUES ( ?, ?, ?, ?, ?, 'Y','P',1, ?, ?,?,'',?)";
+                    return $CI->db->query($queryAddFreeBag,array($orderNumber,$customerId,$rowDiscount['free_qty'],$discountDate, $rowDiscount['free_product_id'], $freeBagManufacturerId, $freeProductPrice,$rowDiscount['product_line_msg'],'',$discountItemId));
+
                     //add a discount line for that free product
-                    $queryAddDiscountBag="INSERT INTO items (".($sOrderNo !='' ? " order_no " : "order_id ") .", cust_id, qty, next_delivery, ref_item, active, confirmed, discount_code, price, locked ) VALUES (".($sOrderNo !='' ? " '$sOrderNo' " : " '$iOrderId' ") .", ".($sOrderNo !='' ? " '$cust_id' " : " '-1' ") .",  '".$row['free_qty']."', '$discount_date', '".$row['free_product_id']."', 'Y', '$confirmed', '$discountCode', '-$freeProductPrice', 1)";
-                    $resultAddDiscountBag=mysql_query($queryAddDiscountBag) or die( 'queryAddDiscountBag error:  $queryAddDiscountBag'. mysql_error());
+                    $queryAddDiscountBag="INSERT INTO items (order_no, cust_id, qty, next_delivery, ref_item, active, confirmed, discount_code, price, locked ) VALUES ( ?, ?, ?, ?, ?, 'Y', ?, ?, '-$freeProductPrice', 1)";
+                    return $CI->db->query($queryAddDiscountBag,array($orderNumber,$customerId,$rowDiscount['free_qty'],$discountDate, $rowDiscount['free_product_id'], $confirmed, $discountCode));
+
                 }
             }
-            echo '<script language="javascript">alert("you have got discount on non-sales item"); </script>';
-
-        }else if($row[discount_type_id] == 5){ // customer will get % discount on a particular manufacturers food
-            $discountManufacturerId = $row['manufacturer_id'];
-            $departmentId= $row['department_id'];
+        }
+        // customer will get % discount on a particular manufacturers food
+        else if($rowDiscount['discount_type_id'] == 5){
+            $discountManufacturerId = $rowDiscount['manufacturer_id'];
+            $departmentId= $rowDiscount['department_id'];
             $aDiscountManufacturerId = array();
-            if($row[manufacturer_ids] !='' ){
-                $aDiscountManufacturerId = explode(",", $row[manufacturer_ids]);
-
+            if($rowDiscount['manufacturer_ids'] !='' ){
+                $aDiscountManufacturerId = explode(",", $rowDiscount['manufacturer_ids']);
             }
 
-
-            //$cust_class_id = $rowCustomerDiscount[class_id];
             $aDiscountDate = array();
-            if($aProducts)
-                foreach($aProducts as $key => $aProduct){
-                    if ( $discountManufacturerId == $aProduct[6] ){ //$aProduct[5] == $cust_class_id &&
-                        if($departmentId==$aProduct[10])
-                        {
-                            if($class_id==$aProduct[5])
-                            {
-                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
-                            }else if($class_id<=0)
-                            {
-                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
+            if($aProducts) {
+                foreach ($aProducts as $key => $aProduct) {
+                    if ($discountManufacturerId == $aProduct[6]) { //$aProduct[5] == $cust_class_id &&
+                        if ($departmentId == $aProduct[10]) {
+                            if ($classId == $aProduct[5]) {
+                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f", ($aProduct[4] * (1 - $discountValue)));
+                            }
+                            else if ($classId <= 0) {
+                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f", ($aProduct[4] * (1 - $discountValue)));
                             }
 
-                        }else if($departmentId<=0)
-                        {
-                            if($class_id==$aProduct[5])
-                            {
-                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
-                            }else if($class_id<=0)
-                            {
-                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
+                        }
+                        else if ($departmentId <= 0) {
+                            if ($classId == $aProduct[5]) {
+                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f", ($aProduct[4] * (1 - $discountValue)));
+                            }
+                            else if ($classId <= 0) {
+                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f", ($aProduct[4] * (1 - $discountValue)));
                             }
                         }
-                    }else if( in_array($aProduct[6], $aDiscountManufacturerId) && is_array($aDiscountManufacturerId)){
-                        if($departmentId==$aProduct[10])
-                        {
-                            if($class_id==$aProduct[5])
-                            {
-                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
-                            }else if($class_id<=0)
-                            {
-                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
+                    }
+                    else if (in_array($aProduct[6], $aDiscountManufacturerId) && is_array($aDiscountManufacturerId)) {
+                        if ($departmentId == $aProduct[10]) {
+                            if ($classId == $aProduct[5]) {
+                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f", ($aProduct[4] * (1 - $discountValue)));
+                            }
+                            else if ($classId <= 0) {
+                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f", ($aProduct[4] * (1 - $discountValue)));
                             }
 
-                        }else if($departmentId<=0)
-                        {
-                            if($class_id==$aProduct[5])
-                            {
-                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
-                            }else if($class_id<=0)
-                            {
-                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
+                        } else if ($departmentId <= 0) {
+                            if ($classId == $aProduct[5]) {
+                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f", ($aProduct[4] * (1 - $discountValue)));
+                            }
+                            else if ($classId <= 0) {
+                                $aDiscountDate[$aProduct[8]] += sprintf("%01.2f", ($aProduct[4] * (1 - $discountValue)));
                             }
                         }
-                        //$aDiscountDate[$aProduct[8]] += sprintf("%01.2f",($aProduct[4]*(1-$discount_value)));
                     }
                 }
+            }
             foreach($aDiscountDate as $date => $discountAmount){
                 if($discountAmount > 0){
                     $deliveryDate = str_replace("_", "-", $date);
-                    $query_discount="INSERT INTO items (".($sOrderNo !='' ? " order_no " : "order_id ") .", cust_id, qty, next_delivery, ref_id, active, discount_code, price, confirmed) VALUES (".($sOrderNo !='' ? " '$sOrderNo' " : " '$iOrderId' ") .", ".($sOrderNo !='' ? " '$cust_id' " : " '-1' ") .",  1, '$deliveryDate', '', 'Y', '$discountCode', '-$discountAmount', '$confirmed')";
-                    $resultInsertDiscount=mysql_query($query_discount) or die( 'Add discount as a new entry error:  $query_discount'. mysql_error());
+                    $queryDiscount="INSERT INTO items ( order_no, cust_id, qty, next_delivery, ref_id, active, discount_code, price, confirmed) VALUES ( ?, ?,  1, ?, '', 'Y', ?, '-$discountAmount', ?)";
+                    return $CI->db->query($queryDiscount,array($orderNumber,$customerId,$deliveryDate,$discountCode,$confirmed));
                 }
-                echo '<script language="javascript">alert("you have got discount on non-sales item"); </script>';
             }
-            //echo '<script language="javascript">alert("you have got discount on non-sales item"); </script>';
-        }else if($row[discount_type_id] == 8){ //type=8
+        }
+        //type=8
+        else if($rowDiscount [discount_type_id] == 8){
             //code will be write here
         }
+    }
+
+    public function getFoodDiscount($cartItemList)
+    {
+        $discountAmount = 0;
+        $foodItemsTotal = 0;
+
+        if(is_array($cartItemList)){
+            foreach($cartItemList as $itemRow){
+                $isFoodItems = $this->getValue("class_id","combos","product_id='".$itemRow["group_id"]."' and class_id !=0");
+                $totalPrice = $itemRow["price"]*$itemRow["qty"];
+                if(( $isFoodItems == 22 || $isFoodItems == 31 )  ) {
+                    if($foodItemsTotal < $itemRow["price"])
+                        $foodItemsTotal = $itemRow["price"];
+                    if($itemRow["qty"] >= 2){
+                        $heighestProductId = $this->getValue("products.product_id","products left join price on `products`.product_id=price.product_id","products.group_id='".$itemRow["group_id"]."' order by price DESC limit 1");
+                        if($itemRow["product_id"] ==  $heighestProductId ){
+                            $discountAmount +=  $this->getValue("page_discount_parcent/100","product_page_discount","page_discount_id=2")*$totalPrice;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $discountAmount;
+    }
+
+    public function getRecurringDiscount($cartItemList)
+    {
+        $discountAmount = 0;
+
+        if(is_array($cartItemList)){
+            foreach($cartItemList as $itemRow){
+                $totalPrice = $itemRow["price"]*$itemRow["qty"];
+                if( $itemRow["frequency_id"] !=0 && $itemRow["frequency_id"] !=14 )
+                    $discountAmount += $this->getValue("page_discount_parcent/100","product_page_discount","page_discount_id=1")*$totalPrice;
+            }
+        }
+
+        return $discountAmount;
     }
 
 
