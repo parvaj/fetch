@@ -17,11 +17,10 @@ class Signup_model extends CI_Model{
         $sql = "select user_name from users where user_name='".$emailAddress."'";
         $query = $this->db->query($sql);
         if($query->num_rows()>0){
-            //$row = $query->row_array();
-            $resultValue = $query->num_rows();
+           $resultValue = $query->num_rows();
         }else
             $resultValue = 0;
-        //return $query->result_array();
+
         return $resultValue;
     }
     public function addUser($emailAddress, $zipCode){
