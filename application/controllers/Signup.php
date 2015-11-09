@@ -9,6 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Signup extends CI_Controller{
 
     public function __construct(){
+
         parent::__construct();
         $this->load->library('session');
         $this->load->helper('url');
@@ -17,13 +18,14 @@ class Signup extends CI_Controller{
         $this->load->model('Checkout_model');
         $this->fetchfunctions->getSessionID();
         $this->load->model('Signup_model');
-
     }
 
     public function index(){
+
         $data['title'] = "my title";
         $this->template->load('default','signup',$data);
     }
+
     public function checkzip(){
 
         $this->load->library('fetchfunctions');
@@ -41,28 +43,28 @@ class Signup extends CI_Controller{
         $zipCode = $this->security->xss_clean($this->input->get('zip_code'));
         $checkUser =  $this->Signup_model->checkUserInfo($emailAddress);
 
-            if( $checkUser > 0){
-                $data['success'] ="exist";
+        if( $checkUser > 0){
+            $data['success'] ="exist";
+        }
+        else if(!empty($emailAddress)  && empty($checkUser)){
+            $customerId = $this->Signup_model->addUser( $emailAddress, $zipCode );
+            if( !empty($custId)){
+                $data = array(
+                    'customerId' => $customerId,
+                    'username'  => $emailAddress,
+                    'user_type'  => 'customer',
+                    'logged_in'  => TRUE
+                );
+                $this->session->set_userdata($data);
+                $data['success'] ='yes';
             }
-            else if(!empty($emailAddress)  && empty($checkUser))
-            {
-                $custId = $this->Signup_model->addUser( $emailAddress, $zipCode );
-                if( !empty($custId)) {
-                    $data = array(
-                        'customerId' => $custId,
-                        'username'  => $emailAddress,
-                        'user_type'  => 'customer',
-                        'logged_in'  => TRUE
-                    );
-                    $this->session->set_userdata($data);
-                    $data['success'] ='yes';
-                }else
-                {
-                    $data['success'] ='no';
-                }
-            }else{
+            else{
                 $data['success'] ='no';
             }
+        }
+        else{
+            $data['success'] ='no';
+        }
         echo json_encode($data);
         exit;
     }

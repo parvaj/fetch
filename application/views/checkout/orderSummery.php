@@ -4,9 +4,7 @@
             <div class="shopping-cart text-center">
                 Order Summery
             </div>
-
         </div>
-
     </div>
     <div class="row">
         <div class="col-md-4">
@@ -14,9 +12,12 @@
                 SHIPPING INFo
             </div>
             <div class="text-center">
-                Customer Name
-                Addres Line 1<br/>
-                Addres Line 2<br/>
+                <?php
+                    echo $customerDetails[0]['firstname']." ".$customerDetails[0]['surname']."<br />";
+                    echo $customerDetails[0]['address']." ".$customerDetails[0]['unit']."<br />";
+                    echo $customerDetails[0]['city']." ".$customerDetails[0]['state']." ".$customerDetails[0]['zipcode'];
+                ?>
+                <br /><a href="#" style="color: #990000; font-weight: bold;">(edit)</a>
             </div>
         </div>
         <div class="col-md-4">
@@ -24,9 +25,12 @@
                 BILLING INFo
             </div>
             <div class="text-center">
-                Customer Name
-                Addres Line 1<br/>
-                Addres Line 2<br/>
+                <?php
+                    echo $customerDetails[0]['firstname']." ".$customerDetails[0]['surname']."<br />";
+                    echo $customerDetails[0]['address2']." ".$customerDetails[0]['unit2']."<br />";
+                    echo $customerDetails[0]['city2']." ".$customerDetails[0]['state2']." ".$customerDetails[0]['zip2'];
+                ?>
+                <br /><a href="#" style="color: #990000; font-weight: bold;">(edit)</a>
             </div>
 
         </div>
@@ -35,9 +39,11 @@
                 CREDIT CARD INFo
             </div>
             <div class="text-center">
-                Customer Name
-                Addres Line 1<br/>
-                Addres Line 2<br/>
+                <?php
+                    echo $customerDetails[0]['cc_type']."<br />";
+                    echo "************".$customerDetails[0]['cc4']."<br /> ".substr($customerDetails[0]['exp_enc'], 0,2)."/".substr($customerDetails[0]['exp_enc'], 2,2);
+                ?>
+                <br /><a href="#" style="color: #990000; font-weight: bold;">(edit)</a>
             </div>
 
         </div>
@@ -47,18 +53,19 @@
     if(!empty($itemDetails)) {
         $subtotal = 0;
         $tax = 0;
-        ?>
+    ?>
         <div class="row">
             <div class="customer-info text-center">
-                This products will be delivered on <?php
-                $tmpDate = strtotime($itemDetails[0]['next_delivery']);
-                $currentTmpDate = strtotime(date("Y-m-d"));
-                $dayRemaining = $tmpDate - $currentTmpDate;
-                $dno = round($dayRemaining / 86400 )==1?round($dayRemaining / 86400 )." Day":round($dayRemaining / 86400 )." Days";
+                This products will be delivered on
+                <?php
+                    $tmpDate = strtotime($itemDetails[0]['next_delivery']);
+                    $currentTmpDate = strtotime(date("Y-m-d"));
+                    $dayRemaining = $tmpDate - $currentTmpDate;
+                    $dno = round($dayRemaining / 86400 )==1?round($dayRemaining / 86400 )." Day":round($dayRemaining / 86400 )." Days";
+                    $sDeliveryDate_day = date("l, m/d/Y",$tmpDate)." (".$dno.")";
 
-                $sDeliveryDate_day = date("l, m/d/Y",$tmpDate)." (".$dno.")"; //date("m-d-Y (l)",$tmpDate);
-
-                echo $sDeliveryDate_day ;?>
+                    echo $sDeliveryDate_day ;
+                ?>
             </div>
         </div>
 
@@ -166,8 +173,7 @@
                     <?php
                     foreach ($deliveryDayList as $deliveryDay) {
                     ?>
-                        <option
-                            value='<?php echo $deliveryDay["dateValue"]; ?>' <?php echo $deliveryDay["dateValue"] == $items['next_delivery'] ? "Selected" : ""; ?> ><?php echo $deliveryDay["dateDisplay"]; ?></option>
+                        <option value='<?php echo $deliveryDay["dateValue"]; ?>' <?php echo $deliveryDay["dateValue"] == $items['next_delivery'] ? "Selected" : ""; ?> ><?php echo $deliveryDay["dateDisplay"]; ?></option>
                     <?php
                     }
                     if ($items['frequency_id'] == 0) {
@@ -183,8 +189,7 @@
                     <?php
                     foreach ($frequencyList as $frequency) {
                         ?>
-                        <option
-                            value='<?php echo $frequency["frequency_id"]; ?>' <?php echo $frequency["frequency_id"] == $items['frequency_id'] ? "Selected" : ""; ?> ><?php echo $frequency["frequency"]; ?></option>
+                        <option value='<?php echo $frequency["frequency_id"]; ?>' <?php echo $frequency["frequency_id"] == $items['frequency_id'] ? "Selected" : ""; ?> ><?php echo $frequency["frequency"]; ?></option>
                         <?php
                     }
                     if ($items['frequency_id'] == 0) {
@@ -207,7 +212,7 @@
         </script>
 
     <?php
-    $subtotal += $items['price'] * $items['qty'];
+        $subtotal += $items['price'] * $items['qty'];
     }
     $tax = $subtotal * 0.0740;
     $total = $subtotal + $tax + $deliveryFee;
@@ -232,14 +237,10 @@
             </div>
             <div class="col-md-2">
                 <span>
-                    <input type="text" class="card-info-box" name="customerCardName" id="customerCardName"
-                           value=""/></br>
-                    <input type="text" class="card-info-box" name="customerCardName" id="customerCardName"
-                           value=""/></br>
-                    <input type="text" class="card-info-box" name="customerCardName" id="customerCardName"
-                           value=""/></br>
-                    <input type="text" class="card-info-box" name="customerCardName" id="customerCardName"
-                           value=""/></br>
+                    <input type="text" class="card-info-box" name="customerCardName" id="customerCardName" value=""/></br>
+                    <input type="text" class="card-info-box" name="customerCardName" id="customerCardName" value=""/></br>
+                    <input type="text" class="card-info-box" name="customerCardName" id="customerCardName" value=""/></br>
+                    <input type="text" class="card-info-box" name="customerCardName" id="customerCardName" value=""/></br>
                 </span>
             </div>
             <div class="col-md-2">
@@ -248,17 +249,20 @@
             <div class="col-md-4 font-bold">
                 <div style="">
                     <div style="float: left;margin: 8px 22px;">Enter Discount Code</div>
-                    <input type="text" class="credit-info-box" name="customerCardName" id="customerCardName" value=""/>
+                    <input type="text" class="discount-info-box" name="customerCardName" id="customerCardName" value=""/>
+                    <button name="total" value="" class="btn-discount">APPLY</button>
                 </div>
                 </br>
                 <div style="">
                     <div style="width:50%;float: left;margin-top: -10px;"> Available <br> Gift Certificate Credit</div>
-                    <input type="text" class="credit-info-box" name="customerCardName" id="customerCardName" value=""/>
+                    <input type="text" class="discount-info-box" name="customerCardName" id="customerCardName" value=""/>
+                    <button name="total" value="" class="btn-discount">APPLY</button>
                 </div>
                 </br>
                 <div style="">
                     <div style="width:50%;float: left;margin-top: -10px;">Available <br> Account Credit</div>
-                    <input type="text" class="credit-info-box" name="customerCardName" id="customerCardName" value=""/>
+                    <input type="text" class="discount-info-box" name="customerCardName" id="customerCardName" value=""/>
+                    <button name="total" value="" class="btn-discount">APPLY</button>
                 </div>
                 </br>
             </div>

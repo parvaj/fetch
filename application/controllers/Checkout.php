@@ -13,6 +13,7 @@ class Checkout extends CI_Controller{
         $this->load->helper('url');
         $this->load->library('fetchfunctions');
         $this->load->model('Checkout_model');
+        $this->load->model('Signup_model');
         $this->fetchfunctions->getSessionID();
     }
 
@@ -46,14 +47,13 @@ class Checkout extends CI_Controller{
         $customerId = $this->session->userdata('customerId');
         $data['customerDelivery']= $deliveryDate = $this->fetchfunctions->getDeliveryDate();
         if (!isset($customerId)) {
-
             $customerId = '-1';
             $orderNo= $this->session->userdata('sessionNumber');
         }
         else{
             $orderNo= $this->Checkout_model->getOrderNo($customerId);
             // put the product to customer cart
-            $this->Checkout_model->updateCurrentOrderDate($orderNo,$deliveryDate);
+            //$this->Checkout_model->updateCurrentOrderDate($orderNo,$deliveryDate);
         }
         $data["loginMessage"]=$loginData;
         $data['cartCount'] = $this->Checkout_model->cartAmount($customerId,$orderNo );
@@ -77,7 +77,8 @@ class Checkout extends CI_Controller{
         else {
 
             $orderNo = $this->Checkout_model->getOrderNo($customerId);
-            //$this->Checkout_model->updateCurrentOrderDate($orderNo, $deliveryDate);
+
+            $data['customerDetails'] = $this->Signup_model->getCustomerDetails($customerId);
             $data['deliveryFee'] = $this->fetchfunctions->calculateDeliveryFee($customerId,$deliveryDate,"'P', 'N'");
             $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
             $data['orderNo'] = $orderNo;
@@ -92,15 +93,17 @@ class Checkout extends CI_Controller{
     }
     public function removeItems($itemRwoId)
     {
-        $this->Checkout_model->removeOrederItems($itemRwoId);
-        redirect($_SERVER['HTTP_REFERER']);
-
+        if($this->session->userdata('sessionNumber')) {
+            $this->Checkout_model->removeOrederItems($itemRwoId);
+            redirect($_SERVER['HTTP_REFERER']);
+        }
     }
 
 
     public function updateOrderItems()
     {
-        if($_POST){
+        $customerId = $this->session->userdata('customerId');
+        if($_POST && $customerId > 2){
             $itemRowId = $this->security->xss_clean($this->input->post('itemRowId'));
             $itemQuantity = $this->security->xss_clean($this->input->post('itemQuantity'));
             $deliveryDate = $this->security->xss_clean($this->input->post('deliveryDate'));
@@ -108,7 +111,7 @@ class Checkout extends CI_Controller{
             $data = array("qty" => $itemQuantity,"next_delivery" => $deliveryDate,"frequency_id" => $itemFrequency);
             echo $this->Checkout_model->updateOrderItems($itemRowId,$data);
             exit();
-            //redirect($_SERVER['HTTP_REFERER']);
+
         }
 
     }

@@ -27,7 +27,7 @@ class Signup_model extends CI_Model{
     public function addUser($emailAddress, $zipCode){
         $sql = "insert into users set user_name='".$emailAddress."'";
         $query = $this->db->query($sql);
-        $custId =  $this->db->insert_id();
+        $customerId =  $this->db->insert_id();
         $insertCustomerQuery="insert into
 								customer
 								(
@@ -44,19 +44,31 @@ class Signup_model extends CI_Model{
 								)
 								values
 								(
-									'".($custId)."',
+									?,
 									'',
 									'',
-									'".$emailAddress."',
+									?,
 									'2',
 									'2'	,
 									now(),
-									'".($zipCode)."',
+									?,
 									'',
 									''
 								)";
-        $query = $this->db->query($insertCustomerQuery);
-        return $custId;
+        $query = $this->db->query($insertCustomerQuery,array($customerId,$emailAddress,$zipCode));
+        return $zipCode;
     }
+
+	public function getCustomerDetails($customerId)
+	{
+		$sql = "SELECT
+                   *
+                FROM
+                    customer
+                WHERE
+                    cust_id=?";
+		$query = $this->db->query($sql,array($customerId));
+		return $query->result_array();
+	}
 
 } 

@@ -622,6 +622,28 @@ a .image_hovor :hover {
     text-align: center;
     margin: 5px 0;
 }
+.discount-info-box{
+    width: 25%;
+    border-top-left-radius:8px;
+    border-bottom-left-radius: 8px;
+    border: 3px solid #253E7E;
+    text-align: center;
+    margin: 5px 0;
+}
+.btn-discount {
+    color: #fff;
+    border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: #253E7E;
+    border-color: #253E7E;;
+    text-transform: uppercase;
+    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 400;
+    transition: all .3s ease-in-out;
+    width: 20%;
+    margin-left: -5px;
+    height: 28px;
+}
 .delivery-date{
       font-size:11px;
 }
@@ -684,8 +706,6 @@ input[type='radio']:before {
     font-size: 40px;
     color: #fff;
     background: 0 0;
-    -webkit-transition: background .3s ease-in-out;
-    -moz-transition: background .3s ease-in-out;
     transition: background .3s ease-in-out;
 }
 
