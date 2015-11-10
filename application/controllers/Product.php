@@ -222,4 +222,17 @@ class Product extends CI_Controller {
            $this->template->load('default', 'products/stuffs', $data);
        }
     }
+    public function auto_search(){
+        $q = $this->security->xss_clean($this->input->get('q'));
+        if (!$q) {
+            echo false;
+            exit;
+        }
+        $keyValues = $this->Product_model->get_auto_keyword($q);
+
+        foreach($keyValues as $key){
+          echo  $key['description'];
+        }
+
+    }
 } 

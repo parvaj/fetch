@@ -1,6 +1,6 @@
 <div class="container-fluid" style="margin: 15px 0 0;">
     <div class="container">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="row">
                 <div class="col-md-12">
                     <div class="choice-title"> <?php echo (!empty($flag)?"So many choices!":$departmentName." "."Stuff"); ?>  </div>
@@ -59,9 +59,9 @@
             <input type="hidden" name="deptId" id="deptId" value="<?php echo $urlSegment['deptSection'];?>">
             <button type="button" style="margin:10px;" id="submit" class="btn-add"> SUBMIT </button>
         </div>
-        <div class="col-md-6" style="margin-top:15px;">
+        <div class="col-md-5">
             <?php   if(empty($flag)){ ?>
-                        <a href="<?php echo base_url();?>product/pets"><img class="img-responsive img-center" src="<?php echo base_url();?>img/pets/<?php echo $images;?>" alt="<?php echo $departmentName; ?> departments"/></a>
+                        <a href="<?php echo base_url();?>product/pets"><img class="img-responsive img-left" src="<?php echo base_url();?>img/pets/<?php echo $images;?>" alt="<?php echo $departmentName; ?> departments"/></a>
             <?php   }else
                     { ?>
                             <button type="submit" id="department" value="department" class="btn-add target_button" onclick="removeClassId();"><?php echo $departmentName ;?> </button>
@@ -134,6 +134,7 @@
     $groupId = "";
     $largePrice = "";
     $classId = "";
+    $imageLnk = '';
     foreach($products as $product ){
 
         if($groupId != $product['group_id'] ) {
@@ -204,10 +205,19 @@
         <div class="col-md-10">
             <div class="row" style="border: 1px #c0c0c0 solid;padding: 8px;">
                 <div class="col-md-3">
+                    <?php
+                        if( file_exists("http://www.fetchdelivers.com/images/LAR-INV/".$product['img']."") )
+                        {
+                            $imageLnk = "http://www.fetchdelivers.com/images/".$product['img']."";
+                        }
+                        else
+                        {
+                            $imageLnk = "http://www.fetchdelivers.com/localimages/nopicture.jpg";
+                        }
+                    ?>
+
                     <a href="<?php echo base_url() . "product/item/" . $product['group_id']; ?>">
-                        <img class="img-responsive img-center"
-                             src="http://www.fetchdelivers.com/images/<?php echo $product['img']?>"
-                             alt="products for fetchdelivers">
+                        <img class="img-responsive img-center" src="<?php echo "http://www.fetchdelivers.com/images/".$product['img'].""; ?>" alt="products for fetchdelivers.com">
                     </a>
 
                     <div class="p-ratings">

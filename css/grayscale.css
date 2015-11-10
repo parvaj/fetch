@@ -319,6 +319,13 @@ a .image_hovor :hover {
     margin:20px;
     padding: 20px;
 }
+
+.pic-round:hover{
+    border-radius: 100%;
+    width: 180px;
+    height: 180px;
+    background-color: #B8CBF0;
+}
 .brand-round{
     width: 160px;
     height: 160px;
@@ -326,6 +333,13 @@ a .image_hovor :hover {
     float:left;
     margin:20px;
     padding: 20px;
+}
+
+.brand-round:hover {
+    border-radius: 100%;
+    width: 160px;
+    height: 160px;
+    background-color: #B8CBF0;
 }
 .pet-round{
     width: 160px;
@@ -335,11 +349,10 @@ a .image_hovor :hover {
     margin:20px;
     padding: 20px;
 }
-.pets:hover {
-    /*border: 1px solid #000;*/
+.pet-round:hover {
     border-radius: 100%;
-    width: 100px;
-    height: 100px;
+    width: 160px;
+    height: 160px;
     background-color: #B8CBF0;
 }
 .margin-5{

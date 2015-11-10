@@ -20,9 +20,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/frequency/sexy-combo.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/frequency/frequency.css">
 
-    <!--link rel="stylesheet" type="text/css" href="<?php //echo base_url(); ?>css/brand/sexy-combo.css"-->
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/brand/brand.css">
+    <!--link rel="stylesheet" type="text/css" href="<?php //echo base_url(); ?>css/jquery.ui.autocomplete.css"-->
+
     <!-- Custom CSS -->
+
     <script type = "text/javascript" src = "//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js" ></script>
     <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
@@ -36,17 +37,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <![endif]-->
 
     <!-- jQuery -->
+
     <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery.js"></script>
     <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
     <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery.easing.min.js"></script>
     <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&sensor=false"></script>
+    <!--script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&sensor=false"></script-->
     <!--script type='text/javascript' src="<?php //echo base_url(); ?>js/jquery.sexy-combo-min.js"></script-->
     <script type='text/javascript' src="<?php echo base_url(); ?>js/grayscale.js"></script>
 
     <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery-1.3.2.min.js"></script>
     <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery.sexy-combo.js"></script>
-
+    <script type='text/javascript' src="<?php echo base_url(); ?>js/jquery.autocomplete.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/jquery.autocomplete.css">
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 <!-- Navigation -->
@@ -160,14 +163,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </li>
 
                         <li class="search-bar">
-                            <input type="text" value=""><img src="<?php echo base_url();?>img/search_icon_white.png">
+                            <input type="text" name="kws" id="kws" value="" class=""><img src="<?php echo base_url();?>img/search_icon_white.png">
                         </li>
                     </ul>
 
            </div>
         </div>
         <div class="row">
-            <div class="col-md-7" >
+            <div class="col-md-8" >
                 <div class="sub-menu">
                     <?php
                     $segments = $this->uri->segment(3);
@@ -192,7 +195,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
 
 
-            <div class="col-md-5" >
+            <div class="col-md-4" >
                 <div class="row fetch-login">
                     <div class="col-sm-12 col-md-12 col-lg-12">
                         <?php echo form_open(base_url().'login/process_login');?>

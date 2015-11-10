@@ -3,8 +3,10 @@
  * Code licensed under the Apache License v2.0.
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
-
 // jQuery to collapse the navbar on scroll
+//var fetchurl = "http://stage.fetchdelivers.com/fetch_ci/";
+var fetchurl = "http://localhost/fetch/";
+
 $(window).scroll(function() {
     var a = $(window).width();
     //alert(a);
@@ -23,7 +25,27 @@ $(window).scroll(function() {
        /* $('.intro').css('margin-top','155px'); */
     }
 });
-var fetchurl = "http://localhost/fetch/";
+$(document).ready(function(){
+
+    $("#loginButton").click(function(){
+        //  $('.fetch-login').css('display','block');
+        $(".fetch-login").toggle();
+    });
+    $(".fetch-login").hide();
+    $(".page-scroll").click(function(){
+
+        $(".sub-menu").toggle();
+    });
+
+    $("#kws").autocomplete(fetchurl+"product/auto_search/", {
+        matchContains: true,
+        multiple: false,
+        selectFirst: false,
+        max: 0
+    });
+
+});
+
 /*
 $(function () {
     $('.fetch-menu li ul').hide().removeClass('fallback');
@@ -85,18 +107,6 @@ function addLPrice(productId,groupId){
     var price = $( "#pLprice"+productId ).html();
     $("#currentPrice_"+groupId).text('$ '+price);
 }
-$(document).ready(function(){
-
-    $("#loginButton").click(function(){
-       //  $('.fetch-login').css('display','block');
-        $(".fetch-login").toggle();
-    });
-    $(".fetch-login").hide();
-    $(".page-scroll").click(function(){
-
-        $(".sub-menu").toggle();
-    });
- });
 
 $(function(){
     $("#mytest").sexyCombo({
@@ -233,15 +243,10 @@ $(function() {
                 complete: function (data)
                 {
                     userdata = JSON.parse(data.responseText);
-
                     if(userdata.success =='no'){
                         $("#errprmsg" ).html('Please enter valid email address.');
-                        //$("#errorflash").fadeOut('slow');
                     }else if(userdata.success =='exist') {
                         $("#errprmsg").html('Exist this user name. Please chose another user name.');
-                        //$("#errprmsg").fadeOut('slow');
-                        //$( "#errprmsg" ).html('Your are successfully subscribed our mail list.');
-                        //window.location.href = "http://localhost/fetch/signup/";
                     }else if(userdata.success =='yes') {
                         $("#errprmsg").html('Your have successfully subscribed our mail list.');
                         window.location.href = "http://localhost/fetch/product/pets";
@@ -297,7 +302,7 @@ function sendClassId(id){
         complete: function (data)
         {
            if(data.responseText == 1){
-               window.location.href = "http://localhost/fetch/product/brands/";
+               window.location.href = fetchurl+"product/brands/";
            }
         }
     });
@@ -324,7 +329,7 @@ function sendBrandId(id){
         {
 
             if(data.responseText == 1){
-                window.location.href = "http://localhost/fetch/product/products/";
+                window.location.href = fetchurl+"product/products/";
             }
         }
     });
