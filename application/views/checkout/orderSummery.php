@@ -13,7 +13,8 @@
             </div>
             <div class="text-center">
                 <?php
-                    $taxRate = number_format($customerDetails[0]['combinedrate'],5);
+                    $taxRate = $customerDetails[0]['taxable']==0?"0.0":number_format($customerDetails[0]['combinedrate'],5);
+
                     echo $customerDetails[0]['firstname']." ".$customerDetails[0]['surname']."<br />";
                     echo $customerDetails[0]['address']." ".$customerDetails[0]['unit']."<br />";
                     echo $customerDetails[0]['city']." ".$customerDetails[0]['state']." ".$customerDetails[0]['zipcode'];
