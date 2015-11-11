@@ -209,10 +209,13 @@ class Checkout_model extends CI_Model{
                     `products`.`unit`,
                      products.taxable,
                     `manufacturer`.`manufacturer_name`,
-                    `frequency`.`frequency`
+                    `frequency`.`frequency`,
+                    `manufacturer`.`manufacturer_id`,
+                    combos.class_id,combos.department_id
                 FROM `items`
                     LEFT JOIN `customer` ON `items`.`cust_id` = `customer`.`cust_id`
                     INNER JOIN `products` ON `items`.`product_id` = `products`.`product_id`
+                    inner JOIN combos on combos.product_id=products.group_id
                     INNER JOIN `manufacturer` ON `items`.`manufacturer_id` = `manufacturer`.`manufacturer_id`
                     INNER JOIN `frequency` ON `items`.`frequency_id` = `frequency`.`frequency_id`
 

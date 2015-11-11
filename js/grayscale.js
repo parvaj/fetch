@@ -344,8 +344,6 @@ function updateOrderItem(itemRowId) {
     var itemQuantity = $("#number_qty_" + itemRowId).val();
     var deliveryDate = $("#deliveryDate_" + itemRowId).val();
     var itemFrequency = $("#frequency_" + itemRowId).val();
-    // alert(itemQuantity);
-
     $.ajax({
         type: "POST",
         url: fetchurl + "checkout/updateOrderItems/",
@@ -356,10 +354,36 @@ function updateOrderItem(itemRowId) {
             itemFrequency: itemFrequency
         },
         complete: function (data) {
-            // alert(data.responseText);
             if (data.responseText == 1) {
                 window.location.href = fetchurl + "checkout/orderSummery";
             }
         }
     });
+}
+
+function setDiscountInOrder() {
+    var discountCode = $("#discountCode").val();
+    if(discountCode.length == 0){
+        alert("Enter a discount Code");
+    }
+    else {
+        $.ajax({
+            type: "POST",
+            url: fetchurl + "checkout/applyDiscountToOrder/",
+            data: {
+                discountCode: discountCode
+            },
+            complete: function (data) {
+                //alert(data.responseText);
+                if (data.responseText == 1) {
+                    alert("Congratulation!! Discount added Successfully In this order!!! ");
+                }
+                else{
+                    alert(data.responseText);
+                }
+                window.location.href = fetchurl + "checkout/orderSummery";
+
+            }
+        });
+    }
 }

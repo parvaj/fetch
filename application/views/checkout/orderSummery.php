@@ -250,19 +250,19 @@
             <div class="col-md-4 font-bold">
                 <div style="">
                     <div style="float: left;margin: 8px 22px;">Enter Discount Code</div>
-                    <input type="text" class="discount-info-box" name="customerCardName" id="customerCardName" value=""/>
-                    <button name="total" value="" class="btn-discount">APPLY</button>
+                    <input type="text" class="discount-info-box" name="discountCode" id="discountCode" value=""/>
+                    <button name="total" value="" class="btn-discount" onclick="setDiscountInOrder()">APPLY</button>
                 </div>
                 </br>
                 <div style="">
                     <div style="width:50%;float: left;margin-top: -10px;"> Available <br> Gift Certificate Credit</div>
-                    <input type="text" class="discount-info-box" name="customerCardName" id="customerCardName" value=""/>
+                    <input type="text" class="discount-info-box" name="giftCertificateCredit" id="giftCertificateCredit" value=""/>
                     <button name="total" value="" class="btn-discount">APPLY</button>
                 </div>
                 </br>
                 <div style="">
                     <div style="width:50%;float: left;margin-top: -10px;">Available <br> Account Credit</div>
-                    <input type="text" class="discount-info-box" name="customerCardName" id="customerCardName" value=""/>
+                    <input type="text" class="discount-info-box" name="accountCredit" id="accountCredit" value=""/>
                     <button name="total" value="" class="btn-discount">APPLY</button>
                 </div>
                 </br>
@@ -276,6 +276,12 @@
                     <span class="cart-text">  TAX  $<?php echo number_format($tax, 2); ?> </span><br>
                     <span class="cart-text"> DELIVERY FEE $<?php echo number_format($deliveryFee,2); ?> </span><br>
                     <?php
+                        if($codeDiscount >0 ){
+                    ?>
+                            <span class="cart-text"> DISCOUNT $<?php echo number_format($codeDiscount,2); ?> </span><br>
+                    <?php
+                            $total = $total-$codeDiscount;
+                        }
                         if($foodDiscount > 0){
                     ?>
                             <span class="cart-text"> FOOD DISCOUNT $<?php echo number_format($foodDiscount,2); ?> </span><br>

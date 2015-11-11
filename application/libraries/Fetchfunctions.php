@@ -339,6 +339,8 @@ public function destroyProductsSession(){
     }
     public function setDeliveryFee($customerId,$deliveryDate)
     {
+        $CI = &get_instance();
+        $CI->load->database();
         // delete existing delivery fee
         $deleteDeliveryFee = "delete from items where items.cust_id=? and next_delivery = ? and product_id=10834";
         $CI->db->query($deleteDeliveryFee,array($customerId,$deliveryDate));
@@ -383,14 +385,14 @@ public function destroyProductsSession(){
         $sql = "DELETE FROM items WHERE   order_no = ? AND cust_id = ? and discount_code !='' ";
         $CI->db->query($sql,array($orderNumber,$customerId));
         if($CI->db->affected_rows() == 0){
-            return $Error;
+            //return $Error;
         }
 
         // delete Free food discount
         $sqlDeleteFreeFood = "DELETE FROM items WHERE locked = 1 and order_no = ?";
         $CI->db->query($sqlDeleteFreeFood,array($orderNumber));
         if($CI->db->affected_rows() == 0){
-            return $Error;
+            //return $Error;
         }
 
         if($discountCode == '' ){
@@ -404,13 +406,13 @@ public function destroyProductsSession(){
                     discount
                 WHERE
                     LCASE(code) = LCASE(?) and status = 1";
-        $discountDetails=$CI->db->query($sqlDiscountDetails,array($discountCode));
-        if($CI->db->num_rows() == 0){
+        $discountDetails = $CI->db->query($sqlDiscountDetails,array($discountCode));
+        if($discountDetails->num_rows() == 0){
             return $Error;
         }
 
-        $rowDiscount = $discountDetails->result_array();
-
+        $rowDiscountArray = $discountDetails->result_array();
+        $rowDiscount = $rowDiscountArray[0];
         //check active/inactive discount code
         if($rowDiscount['status'] == 0){
             $sError = 'Inactive discount code';
@@ -480,8 +482,7 @@ public function destroyProductsSession(){
         }
 
         //get all product list of that order
-        $itemDetails = $this->Checkout_model->getItemInCart($customerId,$orderNumber);
-
+        $itemDetails = $CI->Checkout_model->getItemInCart($customerId,$orderNumber);
         $n=0;
         $easyDiscount=0;
         $orderTotal=0;
@@ -523,15 +524,16 @@ public function destroyProductsSession(){
             $disAmountRemain = $fDiscountFixedValue;
             $aDiscountDate = array();
             foreach($aProducts as $key => $aProduct){
+                $aDiscountDate[$aProduct[8]] = 0;
                 if($rowDiscount['manufacturer_id']>0 &&  $aProduct[6]==$rowDiscount['manufacturer_id']) {
                     if($fDiscountFixedValue > 0){
                         $amount = $aProduct[4];
                         if ($amount >= $disAmountRemain){
-                            $aDiscountDate[$aProduct[8]] += $disAmountRemain;
+                            $aDiscountDate["{$aProduct[8]}"] += $disAmountRemain;
                             $disAmountRemain = 0;
                         }
                         else{
-                            $aDiscountDate[$aProduct[8]] +=  $amount;
+                            $aDiscountDate["{$aProduct[8]}"]  +=  $amount;
                             $disAmountRemain = $disAmountRemain - $amount;
                         }
                     }
@@ -551,6 +553,7 @@ public function destroyProductsSession(){
                 }
             }
 
+
             foreach($aDiscountDate as $date => $discountAmount){
                 if($discountAmount > 0){
                     $deliveryDate = str_replace("_", "-", $date);
@@ -558,6 +561,7 @@ public function destroyProductsSession(){
                     return $CI->db->query($queryDiscount,array($orderNumber,$customerId,$deliveryDate,$discountCode,$confirmed));
                 }
             }
+
         }
         //Percent Discount
         else if($rowDiscount['discount_type_id'] == 2){
@@ -695,6 +699,42 @@ public function destroyProductsSession(){
         else if($rowDiscount [discount_type_id] == 8){
             //code will be write here
         }
+    }
+
+    public function getDiscount($customerId,$orderNumber,$deliveryDate)
+    {
+        $CI =& get_instance();
+        $CI->load->database();
+        $totalDiscount = 0;
+        $sqlDiscount = "SELECT
+                            b.code, b.discount_value, b.discount_fixed_value, b.msg, c.weight, c.unit, c.product_name, a.price
+                        FROM
+                            discount b
+                            inner join items as a on b.code = a.discount_code
+                            left join products c on c.product_id = a.ref_id
+                        WHERE
+                            a.cust_id = ?
+							AND a.order_no = ?
+							AND a.`removed` != 'Y'
+							AND a.`next_delivery` = ?
+							and a.invoiced <> 'Y'
+							AND a.`active` = 'Y'
+							and b.status=1
+                        ";
+        $discountDetails = $CI->db->query($sqlDiscount,array($customerId,$orderNumber,$deliveryDate));
+        if($discountDetails->num_rows() > 0){
+            $resultDiscount = $discountDetails->result_array();
+            foreach($resultDiscount as $rowDiscount){
+                if ($rowDiscount['weight']!='' || $rowDiscount['unit']!='')
+                    $rowDiscount[product_name]=displaysafe($rowDiscount["product_name"])."(".displaysafe($rowDiscount['weight']).' '.displaysafe($rowDiscount['unit']).")";
+                //$msgDiscount = str_replace('[product]', $rowDiscount["product_name"] , $rowDiscount['msg']);
+                //$msgDiscount = str_replace('[code]', $rowDiscount["code"] , $msgDiscount);
+                $fDiscount = abs($rowDiscount["price"]);
+
+                $totalDiscount += $fDiscount;
+            }
+        }
+        return $totalDiscount;
     }
 
     public function getFoodDiscount($cartItemList)

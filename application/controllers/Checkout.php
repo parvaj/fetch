@@ -75,16 +75,16 @@ class Checkout extends CI_Controller{
         }
         else {
 
-            $orderNo = $this->Checkout_model->getOrderNo($customerId);
-
+            $orderNumber = $this->Checkout_model->getOrderNo($customerId);
             $data['customerDetails'] = $this->Signup_model->getCustomerDetails($customerId);
             $data['deliveryFee'] = $this->fetchfunctions->calculateDeliveryFee($customerId,$deliveryDate,"'P', 'N'");
-            $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNo);
-            $data['orderNo'] = $orderNo;
+            $data['cartCount'] = $this->Checkout_model->cartAmount($customerId, $orderNumber);
+            $data['orderNo'] = $orderNumber;
             $data['deliveryDayList'] = $this->fetchfunctions->listDeliveryDate();
             $data['frequencyList'] = $this->fetchfunctions->frequencyList();
-            $data['itemDetails'] = $itemDetails =  $this->Checkout_model->getItemInCart($customerId, $orderNo);
+            $data['itemDetails'] = $itemDetails =  $this->Checkout_model->getItemInCart($customerId, $orderNumber);
             $data['foodDiscount'] = $this->fetchfunctions->getFoodDiscount($itemDetails);
+            $data['codeDiscount'] = $this->fetchfunctions->getDiscount($customerId,$orderNumber,$deliveryDate);
             $data['recurringDiscount'] = $this->fetchfunctions->getRecurringDiscount($itemDetails);
             $data['username'] = array('id' => 'username', 'name' => 'username');
             $data['password'] = array('id' => 'password', 'name' => 'password');
@@ -114,7 +114,16 @@ class Checkout extends CI_Controller{
             exit();
 
         }
-
+    }
+    public function applyDiscountToOrder()
+    {
+        $customerId = $this->session->userdata('customerId');
+        if( $customerId > 2) {
+            $orderNumber = $this->Checkout_model->getOrderNo($customerId);
+            $discountCode = $this->security->xss_clean($this->input->post('discountCode'));
+            echo $this->fetchfunctions->setDiscount($customerId, $orderNumber, $confirmed = 'Y', $discountCode);
+            exit();
+        }
     }
 
 }
