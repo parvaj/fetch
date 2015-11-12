@@ -775,4 +775,29 @@ public function destroyProductsSession(){
         }
         return $discountAmount;
     }
+
+    public function getFetchCreditBalance($customerId)
+    {
+        $balanceCredits = 0;
+        $customerReferralCode = $this->getValue("code","sales_reps","cust_id='".$customerId."' and is_customer=1");
+
+        if(!empty($customerReferralCode)){
+            $fetchCredit = $this->getValue("ifnull(sum(customerCredit.paid_amount),0)","(SELECT  cr.`paid_amount` FROM `customer_credits` as cr WHERE cr.cust_rep_code='".$customerReferralCode."' and cr.rescueID='0' and cr.is_paid='0' union all 	SELECT rc.`paid_amount` FROM `referral_credits` as rc WHERE rc.rescueID='".$customerReferralCode."' )  as customerCredit","");
+            $usedFetchCredit = $this->getValue("ifnull(sum(credits),0)","customer_used_credits","cust_id='".$customerId."'");
+            $balanceCredits = $fetchCredit - $usedFetchCredit;
+        }
+        return $balanceCredits;
+    }
+
+    public function getGiftCreditBalance($customerId)
+    {
+        $giftBalanceCredits = 0;
+        $giftAmount = $this->getValue("SUM(qty*gift_amount)","gift_certificates","converted_by = '".$customerId."' and status = 1 ");
+        $usedAmount = $this->getValue("sum(dgc.gift_amount)","gift_certificates as gc inner join details_gift_certificates	as dgc on dgc.gift_id = gc.gift_id","gc.status = 1 and gc.converted_by = '".$customerId."' group by gc.converted_by ");
+
+        $giftBalanceCredits = $giftAmount - $usedAmount;
+
+        return $giftBalanceCredits;
+    }
+
 }

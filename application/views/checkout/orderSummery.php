@@ -255,15 +255,15 @@
                 </div>
                 </br>
                 <div style="">
-                    <div style="width:50%;float: left;margin-top: -10px;"> Available <br> Gift Certificate Credit</div>
+                    <div style="width:50%;float: left;margin-top: -10px;"> Available <br> Gift Certificate Credit $<span id="giftCreditBalance"><?php echo number_format($giftCreditBalance,2);?></span></div>
                     <input type="text" class="discount-info-box" name="giftCertificateCredit" id="giftCertificateCredit" value=""/>
-                    <button name="total" value="" class="btn-discount">APPLY</button>
+                    <button name="total" value="" class="btn-discount" onclick="applyGiftCredit()">APPLY</button>
                 </div>
                 </br>
                 <div style="">
-                    <div style="width:50%;float: left;margin-top: -10px;">Available <br> Account Credit</div>
-                    <input type="text" class="discount-info-box" name="accountCredit" id="accountCredit" value=""/>
-                    <button name="total" value="" class="btn-discount">APPLY</button>
+                    <div style="width:50%;float: left;margin-top: -10px;">Available <br> Account Credit $<span id="fetchCreditBalance"><?php echo number_format($fetchCreditBalance,2);?></span></div>
+                    <input type="text" class="discount-info-box" name="accountCredit" id="fetchCredit" value=""/>
+                    <button name="total" value="" class="btn-discount" onclick="applyFetchCredit()">APPLY</button>
                 </div>
                 </br>
             </div>
@@ -271,7 +271,7 @@
                 <button style="width:100%" name="total" value="" class="btn-add">TOTAL</button>
                 <br>
 
-                <div class="cart-summary ">
+                <div class="cart-summary" id="cartTotalInfo">
                     <span class="cart-text"> SUBTOTAL $<?php echo $subtotal; ?> </span><br>
                     <span class="cart-text">  TAX  $<?php echo number_format($tax, 2); ?> </span><br>
                     <span class="cart-text"> DELIVERY FEE $<?php echo number_format($deliveryFee,2); ?> </span><br>
@@ -296,7 +296,10 @@
                             $total = $total-$recurringDiscount;
                         }
                     ?>
-                    <span class="cart-text text-color"> TOTAL $<?php echo number_format($total, 2); ?> </span>
+                    <span class='cart-text' id="giftCredit"></span>
+                    <span class='cart-text' id="fetchCreditInfo"></span>
+                    <span class="cart-text text-color"> TOTAL $<span id="orderTotal"><?php echo number_format($total, 2); ?></span>
+                    <input type="hidden" id="grandOrdertotal" value="<?php echo number_format($total, 2); ?>"></span>
                 </div>
                 <button type="button" style="width:100%" name="checkout" id="checkout" value=""
                         class="btn-add checkout-btn"

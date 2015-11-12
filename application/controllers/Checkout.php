@@ -85,6 +85,8 @@ class Checkout extends CI_Controller{
             $data['itemDetails'] = $itemDetails =  $this->Checkout_model->getItemInCart($customerId, $orderNumber);
             $data['foodDiscount'] = $this->fetchfunctions->getFoodDiscount($itemDetails);
             $data['codeDiscount'] = $this->fetchfunctions->getDiscount($customerId,$orderNumber,$deliveryDate);
+            $data['giftCreditBalance'] = $this->fetchfunctions->getGiftCreditBalance($customerId);
+            $data['fetchCreditBalance'] = $this->fetchfunctions->getFetchCreditBalance($customerId);
             $data['recurringDiscount'] = $this->fetchfunctions->getRecurringDiscount($itemDetails);
             $data['username'] = array('id' => 'username', 'name' => 'username');
             $data['password'] = array('id' => 'password', 'name' => 'password');

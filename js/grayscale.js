@@ -387,3 +387,52 @@ function setDiscountInOrder() {
         });
     }
 }
+
+function applyGiftCredit()
+{
+    var usedGiftAmount = $("#giftCertificateCredit").val();
+    var giftBalance = $("#giftCreditBalance").html();
+    var orderTotal = $("#grandOrdertotal").val() ;
+    var usedFetchAmount = $("#fetchCredit").val() == ''? "0.0":$("#fetchCredit").val();
+
+    if( parseFloat(usedGiftAmount) == '' || parseFloat(usedGiftAmount) == 0 || usedGiftAmount!= parseFloat(usedGiftAmount) || usedGiftAmount < 0  ){
+        alert("Please Insert a valid amount");
+        $("#giftCertificateCredit").val("");
+    }
+    else if( parseFloat(usedGiftAmount) > parseFloat(giftBalance) || parseFloat(usedGiftAmount) > parseFloat(orderTotal)){
+        alert("Please type limit amount.");
+        $("#giftCertificateCredit").val("");
+
+    }
+    else{
+
+        orderTotal = orderTotal - (parseFloat(usedGiftAmount)+parseFloat(usedFetchAmount));
+        $("#giftCredit").html("Gift Credit: $"+parseFloat(usedGiftAmount).toFixed(2)+"");
+        $("#orderTotal").html(orderTotal);
+
+    }
+}
+
+function applyFetchCredit() {
+    var usedFetchAmount = $("#fetchCredit").val();
+    var fetchBalance = $("#fetchCreditBalance").html();
+    var orderTotal = $("#grandOrdertotal").val();
+    var usedGiftAmount = $("#giftCertificateCredit").val() == ''? "0.0":$("#giftCertificateCredit").val();
+
+    if( parseFloat(usedFetchAmount) == '' || parseFloat(usedFetchAmount) == 0 || usedFetchAmount!= parseFloat(usedFetchAmount) || usedFetchAmount < 0  ){
+        alert("Please Insert a valid amount");
+        $("#fetchCreditBalance").val("");
+    }
+    else if( parseFloat(usedFetchAmount) > parseFloat(fetchBalance) || parseFloat(usedFetchAmount) > parseFloat(orderTotal)){
+        alert("Please type limit amount.");
+        $("#fetchCreditBalance").val("");
+
+    }
+    else{
+
+        orderTotal = orderTotal -  (parseFloat(usedGiftAmount)+parseFloat(usedFetchAmount));
+        $("#fetchCreditInfo").html("Fetch Credit: $"+parseFloat(usedFetchAmount).toFixed(2)+"");
+        $("#orderTotal").html(orderTotal);
+
+    }
+}
