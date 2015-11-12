@@ -229,10 +229,12 @@ class Product extends CI_Controller {
             exit;
         }
         $keyValues = $this->Product_model->get_auto_keyword($q);
+       // echo "<pre>";
+       // print_r($keyValues);
 
         foreach($keyValues as $key){
-          echo  $key['description'];
+             echo  '<div style="float:left;margin:2px;"><img src="http://www.fetchdelivers.com/images/'.$key['img'].'" width="26" height="33"></div><div style="margin:2px;padding-left:2px;">'.$key['description']."</div>\n";
+            //echo $key['description']."\n";
         }
-
     }
 } 

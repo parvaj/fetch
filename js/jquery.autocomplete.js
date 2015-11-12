@@ -231,7 +231,12 @@ $.Autocompleter = function(input, options) {
 			return false;
 		
 		var v = selected.result;
-		previousValue = v;
+
+		var n = $(v);
+
+		var text1 = n.text();
+
+		previousValue = text1;
 		
 		if ( options.multiple ) {
 			var words = trimWords($input.val());
@@ -255,8 +260,15 @@ $.Autocompleter = function(input, options) {
 			v += options.multipleSeparator;
 		}
 		
-		$input.val(v);
+		$input.val(text1);
 		hideResultsNow();
+		//alert(selected.value);
+	/*	var s = selected.value;
+
+		var o = $(s);
+		var text = o.text();
+		alert(text);
+    */
 		$input.trigger("result", [selected.data, selected.value]);
 		return true;
 	}
@@ -303,7 +315,7 @@ $.Autocompleter = function(input, options) {
 		}
 		
 		var currentValue = $input.val();
-		
+
 		if ( !skipPrevCheck && currentValue == previousValue )
 			return;
 		
@@ -417,7 +429,7 @@ $.Autocompleter = function(input, options) {
 			$.each(options.extraParams, function(key, param) {
 				extraParams[key] = typeof param == "function" ? param() : param;
 			});
-			
+
 			$.ajax({
 				// try to leverage ajaxQueue plugin to abort previous requests
 				mode: "abort",
@@ -635,7 +647,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 	var CLASSES = {
 		ACTIVE: "ac_over"
 	};
-	
+
 	var listItems,
 		active = -1,
 		data,
@@ -643,7 +655,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		needsInit = true,
 		element,
 		list;
-	
+
 	// Create results
 	function init() {
 		if (!needsInit)
@@ -653,14 +665,15 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		.addClass(options.resultsClass)
 		.css("position", "absolute")
 		.appendTo(document.body);
-	
+
 		list = $("<ul/>").appendTo(element).mouseover( function(event) {
 			if(target(event).nodeName && target(event).nodeName.toUpperCase() == 'LI') {
 	            active = $("li", list).removeClass(CLASSES.ACTIVE).index(target(event));
-			    $(target(event)).addClass(CLASSES.ACTIVE);            
+			    $(target(event)).addClass(CLASSES.ACTIVE);
 	        }
 		}).click(function(event) {
 			$(target(event)).addClass(CLASSES.ACTIVE);
+
 			select();
 			// TODO provide option to avoid setting focus again after selection? useful for cleanup-on-focus
 			input.focus();
@@ -670,18 +683,20 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		}).mouseup(function() {
 			config.mouseDownOnSelect = false;
 		});
-		
+
 		if( options.width > 0 )
 			element.css("width", options.width);
-			
+
 		needsInit = false;
-	} 
-	
+	}
+
 	function target(event) {
 		var element = event.target;
+
 		while(element && element.tagName != "LI")
 			element = element.parentNode;
 		// more fun with IE, sometimes event.target is empty, just ignore it then
+
 		if(!element)
 			return [];
 		return element;
@@ -703,7 +718,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
             }
         }
 	};
-	
+
 	function movePosition(step) {
 		active += step;
 		if (active < 0) {
@@ -712,13 +727,13 @@ $.Autocompleter.Select = function (options, input, select, config) {
 			active = 0;
 		}
 	}
-	
+
 	function limitNumberOfItems(available) {
 		return options.max && options.max < available
 			? options.max
 			: available;
 	}
-	
+
 	function fillList() {
 		list.empty();
 		var max = limitNumberOfItems(data.length);
@@ -740,7 +755,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		if ( $.fn.bgiframe )
 			list.bgiframe();
 	}
-	
+
 	return {
 		display: function(d, q) {
 			init();
@@ -792,7 +807,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 					maxHeight: options.scrollHeight,
 					overflow: 'auto'
 				});
-				
+
                 if($.browser.msie && typeof document.body.style.maxHeight === "undefined") {
 					var listHeight = 0;
 					listItems.each(function() {
@@ -805,10 +820,11 @@ $.Autocompleter.Select = function (options, input, select, config) {
 						listItems.width( list.width() - parseInt(listItems.css("padding-left")) - parseInt(listItems.css("padding-right")) );
 					}
                 }
-                
+
             }
 		},
 		selected: function() {
+
 			var selected = listItems && listItems.filter("." + CLASSES.ACTIVE).removeClass(CLASSES.ACTIVE);
 			return selected && selected.length && $.data(selected[0], "ac_data");
 		},
@@ -820,7 +836,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		}
 	};
 };
-
+/*
 $.fn.selection = function(start, end) {
 	if (start !== undefined) {
 		return this.each(function() {
@@ -864,5 +880,5 @@ $.fn.selection = function(start, end) {
 		}
 	}
 };
-
+*/
 })(jQuery);

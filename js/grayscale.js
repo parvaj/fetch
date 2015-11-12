@@ -44,6 +44,17 @@ $(document).ready(function(){
         max: 0
     });
 
+
+    //alert(result);
+ /*   var s = "Hello World!By Mars";
+    var o = $(s);
+    var text = o.text();
+    alert(text);
+    var myContent = '<div id="test">Hello <span>world!</span></div>';
+    //var myContent = 'Hello world tet test';
+    alert($(myContent).text()); */
+
+
 });
 
 /*
@@ -55,7 +66,9 @@ $(function () {
 });
 */
 // jQuery for page scrolling feature - requires jQuery Easing plugin
-
+function autoSearch(obj){
+    //alert(obj);
+}
 $(function() {
     $('a.page-scroll').bind('click', function(event) {
         var $anchor = $(this);

@@ -163,7 +163,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </li>
 
                         <li class="search-bar">
-                            <input type="text" name="kws" id="kws" value="" class=""><img src="<?php echo base_url();?>img/search_icon_white.png">
+                            <input type="text" name="kws" id="kws" value="" class="" width="160px" onblur="autoSearch(this.value);"><img src="<?php echo base_url();?>img/search_icon_white.png">
                         </li>
                     </ul>
 

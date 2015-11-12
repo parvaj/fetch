@@ -82,11 +82,11 @@
         $("#submit").click(function(event) { //alert('heloo');
             //event.preventDefault();
             var category = $("#category").val();
-            alert(category+'ff');
+           // alert(category+'ff');
             var brand = $("#pp-brand").val();
-            alert(brand+'ff1');
+            //alert(brand+'ff1');
             var subclass = $("#petType").val();
-            alert(subclass);
+            //alert(subclass);
 
         });
         /*

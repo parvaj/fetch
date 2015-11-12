@@ -273,26 +273,24 @@ class Product_model extends CI_Model{
 
     }
     public function get_auto_keyword($q){
-            $sql = "select description
-                from
-                (
-                    select distinct concat('category: ',class_name) as description,'0' as searchrangk from class
-                    union
-                      select distinct concat('brand: ',manufacturer_name) as description,'1' as searchrangk from manufacturer
-                    union
-                      select distinct concat(manufacturer_name,' ',product_name) as description,'2' as searchrangk
-                    from products,combos,manufacturer
-                    where
-                      products.product_id=combos.product_id
-                    and
-                      products.product_status = 1
-                    and
-                      combos.manufacturer_id=manufacturer.manufacturer_id
-                )as temp
-                where 1
-                and description like '%{$q}%'
-                order by searchrangk,description";
-        $query = $this->db->query($sql);
-        return $query->result_array();
+            $sql = "SELECT description, img
+                        FROM (
+                        SELECT DISTINCT CONCAT(  'category: ', class_name ) AS description,  '' AS img,  '0' AS searchrangk
+                        FROM class
+                        UNION
+                        SELECT DISTINCT CONCAT(  'brand: ', manufacturer_name ) AS description,  '' AS img,  '1' AS searchrangk
+                        FROM manufacturer
+                        UNION
+                        SELECT DISTINCT CONCAT( manufacturer_name,  ' ', product_name ) AS description, img,  '2' AS searchrangk
+                        FROM products, combos, manufacturer
+                        WHERE products.product_id = combos.product_id
+                        AND products.product_status =1
+                        AND combos.manufacturer_id = manufacturer.manufacturer_id
+                        ) AS temp
+                    where 1
+                    and description like '%{$q}%'
+                    order by searchrangk,description";
+            $query = $this->db->query($sql);
+            return $query->result_array();
     }
 }
